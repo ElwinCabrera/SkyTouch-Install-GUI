@@ -51,9 +51,13 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../SkyTouchInstall/main.cpp \
-		../SkyTouchInstall/mainwindow.cpp moc_mainwindow.cpp
+		../SkyTouchInstall/mainwindow.cpp \
+		../SkyTouchInstall/pages.cpp qrc_recources.cpp \
+		moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		pages.o \
+		qrc_recources.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -109,6 +113,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		../SkyTouchInstall/.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -128,8 +133,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../SkyTouchInstall/SkyTouchInstall.pro ../SkyTouchInstall/mainwindow.h ../SkyTouchInstall/main.cpp \
-		../SkyTouchInstall/mainwindow.cpp
+		../SkyTouchInstall/SkyTouchInstall.pro ../SkyTouchInstall/mainwindow.h \
+		../SkyTouchInstall/pages.h ../SkyTouchInstall/main.cpp \
+		../SkyTouchInstall/mainwindow.cpp \
+		../SkyTouchInstall/pages.cpp
 QMAKE_TARGET  = SkyTouchInstall
 DESTDIR       = 
 TARGET        = SkyTouchInstall
@@ -195,6 +202,7 @@ Makefile: ../SkyTouchInstall/SkyTouchInstall.pro /usr/lib/x86_64-linux-gnu/qt5/m
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -215,6 +223,7 @@ Makefile: ../SkyTouchInstall/SkyTouchInstall.pro /usr/lib/x86_64-linux-gnu/qt5/m
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../SkyTouchInstall/SkyTouchInstall.pro \
+		../SkyTouchInstall/recources.qrc \
 		/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Core.prl
@@ -273,6 +282,7 @@ Makefile: ../SkyTouchInstall/SkyTouchInstall.pro /usr/lib/x86_64-linux-gnu/qt5/m
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -293,6 +303,7 @@ Makefile: ../SkyTouchInstall/SkyTouchInstall.pro /usr/lib/x86_64-linux-gnu/qt5/m
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 ../SkyTouchInstall/SkyTouchInstall.pro:
+../SkyTouchInstall/recources.qrc:
 /usr/lib/x86_64-linux-gnu/libQt5Widgets.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Core.prl:
@@ -310,9 +321,10 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/recources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.h ../SkyTouchInstall/pages.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/pages.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.ui $(DISTDIR)/
 
 
@@ -337,8 +349,16 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_recources.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_recources.cpp
+qrc_recources.cpp: ../SkyTouchInstall/recources.qrc \
+		/usr/lib/qt5/bin/rcc \
+		../SkyTouchInstall/images/query.png \
+		../SkyTouchInstall/images/update.png \
+		../SkyTouchInstall/images/config.png
+	/usr/lib/qt5/bin/rcc -name recources ../SkyTouchInstall/recources.qrc -o qrc_recources.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -368,7 +388,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -376,8 +396,15 @@ main.o: ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SkyTouchInstall/main.cpp
 
 mainwindow.o: ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/mainwindow.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../SkyTouchInstall/pages.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../SkyTouchInstall/mainwindow.cpp
+
+pages.o: ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/pages.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pages.o ../SkyTouchInstall/pages.cpp
+
+qrc_recources.o: qrc_recources.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_recources.o qrc_recources.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

@@ -3,20 +3,37 @@
 
 #include <QMainWindow>
 
-namespace Ui {
-class MainWindow;
-}
+#include <QDialog>
 
-class MainWindow : public QMainWindow
+QT_BEGIN_NAMESPACE
+class QListWidget;
+class QListWidgetItem;
+class QStackedWidget;
+QT_END_NAMESPACE
+
+/*namespace Ui {
+class MainWindow;
+}*/
+
+class MainWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    /*explicit */ MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void changePage(QListWidgetItem *current, QListWidgetItem *previous);
+
 private:
-    Ui::MainWindow *ui;
+    void createIcons();
+
+    QListWidget *contentsWidget;
+    QStackedWidget *pagesWidget;
+
+/*private:
+    Ui::MainWindow *ui;*/
 };
 
 #endif // MAINWINDOW_H
