@@ -1,6 +1,5 @@
 #include "actionhandler.h"
 
-ActionHandler::ActionHandler()
-{
+ActionHandler::ActionHandler(){
 
 }

@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
 
     setWindowTitle(tr("Config Dialog"));
 
+
 }
 
 MainWindow::~MainWindow()

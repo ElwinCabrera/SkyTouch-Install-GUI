@@ -3,9 +3,12 @@
 
 #include <QWidget>
 #include <QtWidgets>
+#include <QDebug>
 #include <vector>
+//#include<pair>
 
 using std::vector;
+using std::pair;
 
 
 class SoftwareInstallationPage : public QWidget {
@@ -14,7 +17,7 @@ public:
 
     QRadioButton* getInstallCRECheckBox() { return installCRERadioBtn; }
     QRadioButton* getInstallCRE64CheckBox() { return installCRE64RadioBtn; }
-    QPushButton* getStartInstallationButton() { return startInstallationButton; }
+    QPushButton* getStartInstallationButton() ;
 
    // ~SoftwareInstallationPage();
 public slots:
@@ -25,7 +28,8 @@ private:
     QRadioButton *installCRE64RadioBtn;
     QPushButton *startInstallationButton;
 
-    vector<QGroupBox *> markedForInstall;
+    vector<QGroupBox *> installGroups;
+    vector<pair<int, QString>> markedForInstall;
 };
 
 class ConfigurationPage : public QWidget

@@ -1,6 +1,7 @@
 
 
 #include "pages.h"
+#include "actionhandler.h"
 
 
 
@@ -15,6 +16,8 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
     installCRERadioBtn = new QRadioButton(tr("Install CRE"));
     installCRE64RadioBtn = new QRadioButton(tr("Install CRE x64"));
     installCRE64RadioBtn->setChecked(true);
+
+    installGroups.push_back(installCREGroup);
 
 
     //QCheckBox *docsCheckBox = new QCheckBox(tr("Update documentation"));
@@ -51,15 +54,28 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
     mainLayout->addWidget(startInstallationButton);
     mainLayout->addStretch(1);
     setLayout(mainLayout);
+
+    connect(startInstallationButton, &QPushButton::clicked, this, &SoftwareInstallationPage::onStartInstallationButtonCliked);
 }
 
 void SoftwareInstallationPage::onStartInstallationButtonCliked(){
-    if (installCRE64RadioBtn->isChecked() && installCRERadioBtn->isChecked()) {
+    for(uint i = 0; i < installGroups.size(); ++i){
+        if(installGroups.at(i)->isChecked()) {
 
-    } else {
-
+            int j = 0;
+            for(QRadioButton *rb : installGroups.at(i)->findChildren<QRadioButton*> ()){
+                if(rb->isChecked()) break;
+                j++;
+            }
+            QString version = (j == 0) ? "32":"64";
+            markedForInstall.push_back({i, version});
+            qDebug() << i <<" "<< version << " marked for installation";
+        }
     }
+
 }
+
+QPushButton* SoftwareInstallationPage::getStartInstallationButton() { return startInstallationButton; }
 
 
 
