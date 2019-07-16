@@ -18,6 +18,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -35,6 +36,8 @@ public:
     QWidget *page_2;
     QPushButton *pushButton;
     QListWidget *listWidget_2;
+    QRadioButton *radioButton;
+    QRadioButton *radioButton_2;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -67,6 +70,12 @@ public:
         listWidget_2 = new QListWidget(centralWidget);
         listWidget_2->setObjectName(QStringLiteral("listWidget_2"));
         listWidget_2->setGeometry(QRect(80, 150, 161, 141));
+        radioButton = new QRadioButton(centralWidget);
+        radioButton->setObjectName(QStringLiteral("radioButton"));
+        radioButton->setGeometry(QRect(320, 140, 112, 23));
+        radioButton_2 = new QRadioButton(centralWidget);
+        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
+        radioButton_2->setGeometry(QRect(320, 170, 112, 23));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -88,6 +97,8 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "Close", Q_NULLPTR));
+        radioButton->setText(QApplication::translate("MainWindow", "RadioButton", Q_NULLPTR));
+        radioButton_2->setText(QApplication::translate("MainWindow", "RadioButton", Q_NULLPTR));
     } // retranslateUi
 
 };

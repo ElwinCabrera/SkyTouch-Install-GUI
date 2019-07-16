@@ -52,11 +52,13 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../SkyTouchInstall/main.cpp \
 		../SkyTouchInstall/mainwindow.cpp \
-		../SkyTouchInstall/pages.cpp qrc_recources.cpp \
+		../SkyTouchInstall/pages.cpp \
+		../SkyTouchInstall/actionhandler.cpp qrc_recources.cpp \
 		moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		pages.o \
+		actionhandler.o \
 		qrc_recources.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -134,9 +136,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../SkyTouchInstall/SkyTouchInstall.pro ../SkyTouchInstall/mainwindow.h \
-		../SkyTouchInstall/pages.h ../SkyTouchInstall/main.cpp \
+		../SkyTouchInstall/pages.h \
+		../SkyTouchInstall/actionhandler.h ../SkyTouchInstall/main.cpp \
 		../SkyTouchInstall/mainwindow.cpp \
-		../SkyTouchInstall/pages.cpp
+		../SkyTouchInstall/pages.cpp \
+		../SkyTouchInstall/actionhandler.cpp
 QMAKE_TARGET  = SkyTouchInstall
 DESTDIR       = 
 TARGET        = SkyTouchInstall
@@ -323,8 +327,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../SkyTouchInstall/recources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.h ../SkyTouchInstall/pages.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/pages.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.h ../SkyTouchInstall/pages.h ../SkyTouchInstall/actionhandler.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/actionhandler.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.ui $(DISTDIR)/
 
 
@@ -402,6 +406,9 @@ mainwindow.o: ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/mainwindow.h 
 
 pages.o: ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/pages.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pages.o ../SkyTouchInstall/pages.cpp
+
+actionhandler.o: ../SkyTouchInstall/actionhandler.cpp ../SkyTouchInstall/actionhandler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o actionhandler.o ../SkyTouchInstall/actionhandler.cpp
 
 qrc_recources.o: qrc_recources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_recources.o qrc_recources.cpp

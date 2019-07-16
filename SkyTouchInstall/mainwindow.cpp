@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
     pagesWidget->addWidget(new SoftwareInstallationPage);
     pagesWidget->addWidget(new ConfigurationPage);
 
+   //QCheckBox *cb =  SoftwareInstallationPage::getInstallCRE64CheckBox();
+   //cb->setChecked(true);
 
     QPushButton *closeButton = new QPushButton(tr("Close"));
 
@@ -62,11 +64,11 @@ void MainWindow::createIcons(){
     updateButton->setTextAlignment(Qt::AlignHCenter);
     updateButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-    QListWidgetItem *queryButton = new QListWidgetItem(contentsWidget);
+    /*QListWidgetItem *queryButton = new QListWidgetItem(contentsWidget);
     queryButton->setIcon(QIcon(":/images/query.png"));
     queryButton->setText(tr("Query"));
     queryButton->setTextAlignment(Qt::AlignHCenter);
-    queryButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    queryButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);*/
 
     connect(contentsWidget, &QListWidget::currentItemChanged, this, &MainWindow::changePage);
 }

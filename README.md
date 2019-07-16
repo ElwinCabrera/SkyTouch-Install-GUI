@@ -1,1 +1,1 @@
-echo # SkyTouch-Install-GUI
+ # SkyTouch-Install-GUI

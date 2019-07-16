@@ -1,9 +1,69 @@
-#include <QtWidgets>
+
 
 #include "pages.h"
 
-ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent)
-{
+
+
+SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(parent){
+
+    QGroupBox *installCREGroup = new QGroupBox(tr("CRE"));
+    installCREGroup->setCheckable(true);
+    installCREGroup->blockSignals(true);
+    installCREGroup->setChecked(true);
+    installCREGroup->blockSignals(false);
+
+    installCRERadioBtn = new QRadioButton(tr("Install CRE"));
+    installCRE64RadioBtn = new QRadioButton(tr("Install CRE x64"));
+    installCRE64RadioBtn->setChecked(true);
+
+
+    //QCheckBox *docsCheckBox = new QCheckBox(tr("Update documentation"));
+
+
+
+    /*QGroupBox *packageGroup = new QGroupBox(tr("Existing packages"));
+
+    QListWidget *packageList = new QListWidget;
+    QListWidgetItem *qtItem = new QListWidgetItem(packageList);
+    qtItem->setText(tr("Qt"));
+    QListWidgetItem *qsaItem = new QListWidgetItem(packageList);
+    qsaItem->setText(tr("QSA"));
+    QListWidgetItem *teamBuilderItem = new QListWidgetItem(packageList);
+    teamBuilderItem->setText(tr("Teambuilder"));*/
+
+    startInstallationButton = new QPushButton(tr("Start Installation"));
+
+    QHBoxLayout *installLayout = new QHBoxLayout;
+    installLayout->addWidget(installCRERadioBtn);
+    installLayout->addWidget(installCRE64RadioBtn);
+    installCREGroup->setLayout(installLayout);
+
+
+
+    /*QVBoxLayout *packageLayout = new QVBoxLayout;
+    packageLayout->addWidget(packageList);
+    packageGroup->setLayout(packageLayout);*/
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(installCREGroup);
+    //mainLayout->addWidget(packageGroup);
+    mainLayout->addSpacing(200);
+    mainLayout->addWidget(startInstallationButton);
+    mainLayout->addStretch(1);
+    setLayout(mainLayout);
+}
+
+void SoftwareInstallationPage::onStartInstallationButtonCliked(){
+    if (installCRE64RadioBtn->isChecked() && installCRERadioBtn->isChecked()) {
+
+    } else {
+
+    }
+}
+
+
+
+ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
     QGroupBox *configGroup = new QGroupBox(tr("Server configuration"));
 
     QLabel *serverLabel = new QLabel(tr("Server:"));
@@ -24,44 +84,6 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(configGroup);
-    mainLayout->addStretch(1);
-    setLayout(mainLayout);
-}
-
-SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(parent)
-{
-    QGroupBox *updateGroup = new QGroupBox(tr("Package selection"));
-    QCheckBox *systemCheckBox = new QCheckBox(tr("Update system"));
-    QCheckBox *appsCheckBox = new QCheckBox(tr("Update applications"));
-    QCheckBox *docsCheckBox = new QCheckBox(tr("Update documentation"));
-
-    QGroupBox *packageGroup = new QGroupBox(tr("Existing packages"));
-
-    QListWidget *packageList = new QListWidget;
-    QListWidgetItem *qtItem = new QListWidgetItem(packageList);
-    qtItem->setText(tr("Qt"));
-    QListWidgetItem *qsaItem = new QListWidgetItem(packageList);
-    qsaItem->setText(tr("QSA"));
-    QListWidgetItem *teamBuilderItem = new QListWidgetItem(packageList);
-    teamBuilderItem->setText(tr("Teambuilder"));
-
-    QPushButton *startUpdateButton = new QPushButton(tr("Start update"));
-
-    QVBoxLayout *updateLayout = new QVBoxLayout;
-    updateLayout->addWidget(systemCheckBox);
-    updateLayout->addWidget(appsCheckBox);
-    updateLayout->addWidget(docsCheckBox);
-    updateGroup->setLayout(updateLayout);
-
-    QVBoxLayout *packageLayout = new QVBoxLayout;
-    packageLayout->addWidget(packageList);
-    packageGroup->setLayout(packageLayout);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(updateGroup);
-    mainLayout->addWidget(packageGroup);
-    mainLayout->addSpacing(12);
-    mainLayout->addWidget(startUpdateButton);
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 }
