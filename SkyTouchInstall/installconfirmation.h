@@ -23,6 +23,7 @@ public:
 
 private:
      QListWidget *softwareListWidget;
+      vector<QString> URLs;
 };
 
 #endif // INSTALLCONFIRMATION_H

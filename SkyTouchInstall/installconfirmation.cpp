@@ -3,12 +3,13 @@
 
 InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> installGroups,  vector<QString> getURLs){
     resize(QSize(600, 300));
+    for(QString s: getURLs) URLs.push_back(s);
 
     QGroupBox *confirmInstallGroup = new QGroupBox(tr("Programs to be Installed..."));
     softwareListWidget = new QListWidget;
     softwareListWidget->setViewMode(QListView::ListMode);
 
-    softwareListWidget->setMaximumWidth(3000);
+    softwareListWidget->setMaximumWidth(650);
 
     QString listEntry = "";
     int getURLIdx = 0;
@@ -25,12 +26,11 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
         }
     }
 
-    //QGroupBox *buttonGroup = new QGroupBox;
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    //buttonBox->setLayout(QDialogButtonBox::WinLayout);
-    //QPushButton *closeButton = new QPushButton(tr("Close"));
-    //QPushButton *confirmButton = new QPushButton(tr("Confirm"));
+    QLabel *totalSizeLabel = new QLabel;
+    totalSizeLabel->setText("Total Size: 600Mb");
 
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QWidget::close);
@@ -39,16 +39,19 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
     confirmInstallLayout->addWidget(softwareListWidget);
     confirmInstallGroup->setLayout(confirmInstallLayout);
 
+    QHBoxLayout *sizeLabelLayout = new QHBoxLayout;
+    sizeLabelLayout->addStretch(1);
+    sizeLabelLayout->addWidget(totalSizeLabel);
+
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(buttonBox);
-    //buttonLayout->addWidget(closeButton);
-    //buttonLayout->addWidget(confirmButton);
-    //buttonGroup->setLayout(buttonLayout);
+
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(confirmInstallGroup);
     //mainLayout->addStretch(1000);
+    mainLayout->addLayout(sizeLabelLayout);
     mainLayout->addLayout(buttonLayout);
 
 

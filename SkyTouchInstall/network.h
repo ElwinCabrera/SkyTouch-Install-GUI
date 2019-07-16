@@ -1,13 +1,35 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#define URL_CRE "http://download2.pcamerica.com/12.9/CRE_Setup.exe"
-#define URL_CRE64 "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe"
+#include <QObject>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QAuthenticator>
+#include <QtNetwork/QNetworkProxy>
 
-class Network
-{
+class Network {
 public:
     Network();
+
+public slots:
+    void get(QString url);
+    void post(QString url, QByteArray data);
+
+public slots:
+    void readyRead();
+    void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
+    void encrypted(QNetworkReply *reply);
+    void finished(QNetworkReply *reply);
+    void networkAccessChanged(QNetworkAccessManager::NetworkAccessibility accessable);
+    void preSharedKeyAuthenticationRequired(QNetworkReply *reply, QSslPreSharedKeyAuthenticator *authenticator);
+    void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator);
+    void sslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
+    void error();
+
+private:
+    QNetworkAccessManager manager;
+
 
 
 };
