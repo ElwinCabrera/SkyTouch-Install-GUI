@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
@@ -38,6 +39,7 @@ public:
     QListWidget *listWidget_2;
     QRadioButton *radioButton;
     QRadioButton *radioButton_2;
+    QDialogButtonBox *buttonBox;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -76,6 +78,10 @@ public:
         radioButton_2 = new QRadioButton(centralWidget);
         radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
         radioButton_2->setGeometry(QRect(320, 170, 112, 23));
+        buttonBox = new QDialogButtonBox(centralWidget);
+        buttonBox->setObjectName(QStringLiteral("buttonBox"));
+        buttonBox->setGeometry(QRect(290, 300, 166, 25));
+        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));

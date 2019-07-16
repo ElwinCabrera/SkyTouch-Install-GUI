@@ -2,7 +2,7 @@
 
 #include "pages.h"
 #include "actionhandler.h"
-
+#include "installconfirmation.h"
 
 
 SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(parent){
@@ -17,7 +17,7 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
     installCRE64RadioBtn = new QRadioButton(tr("Install CRE x64"));
     installCRE64RadioBtn->setChecked(true);
 
-    installGroups.push_back(installCREGroup);
+    installGroups.push_back({installCREGroup,"CRE"});
 
 
     //QCheckBox *docsCheckBox = new QCheckBox(tr("Update documentation"));
@@ -59,23 +59,31 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
 }
 
 void SoftwareInstallationPage::onStartInstallationButtonCliked(){
+    ActionHandler actionHandler;
+
     for(uint i = 0; i < installGroups.size(); ++i){
-        if(installGroups.at(i)->isChecked()) {
+        if(installGroups.at(i).first->isChecked()) {
 
             int j = 0;
-            for(QRadioButton *rb : installGroups.at(i)->findChildren<QRadioButton*> ()){
+            for(QRadioButton *rb : installGroups.at(i).first->findChildren<QRadioButton*> ()){
                 if(rb->isChecked()) break;
                 j++;
             }
-            QString version = (j == 0) ? "32":"64";
-            markedForInstall.push_back({i, version});
-            qDebug() << i <<" "<< version << " marked for installation";
+            QString bitVersion = (j == 0) ? "32":"64";
+            QString url = actionHandler.getDownloadUrl(installGroups.at(i).second, "12.9" ,bitVersion);
+            getURLs.push_back(url);
+            qDebug() << installGroups.at(i).second << bitVersion << " marked for installation";
+            qDebug() << "URL: " << url;
         }
     }
+    InstallConfirmation *confirmWindow = new InstallConfirmation(installGroups, getURLs);
+    confirmWindow->setModal(true);
+    confirmWindow->exec();
+
+    actionHandler.installAll(getURLs);
 
 }
 
-QPushButton* SoftwareInstallationPage::getStartInstallationButton() { return startInstallationButton; }
 
 
 

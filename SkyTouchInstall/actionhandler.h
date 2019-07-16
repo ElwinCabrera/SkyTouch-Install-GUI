@@ -11,7 +11,9 @@ using std::pair;
 class ActionHandler{
 public:
     ActionHandler();
-    void installAll(vector<pair<int, QString>> markedForInstall);
+    void installAll(vector<QString> getURLs);
+    QString getDownloadUrl(QString softwareName, QString version, QString bitVersion);
+
 };
 
 #endif // ACTIONHANDLER_H

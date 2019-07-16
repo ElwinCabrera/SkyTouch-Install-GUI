@@ -27,12 +27,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     pages.cpp \
-    actionhandler.cpp
+    actionhandler.cpp \
+    network.cpp \
+    installconfirmation.cpp
 
 HEADERS += \
         mainwindow.h \
     pages.h \
-    actionhandler.h
+    actionhandler.h \
+    network.h \
+    installconfirmation.h
 
 FORMS += \
         mainwindow.ui

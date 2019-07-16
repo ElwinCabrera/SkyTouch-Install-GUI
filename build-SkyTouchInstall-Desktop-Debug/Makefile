@@ -53,14 +53,20 @@ OBJECTS_DIR   = ./
 SOURCES       = ../SkyTouchInstall/main.cpp \
 		../SkyTouchInstall/mainwindow.cpp \
 		../SkyTouchInstall/pages.cpp \
-		../SkyTouchInstall/actionhandler.cpp qrc_recources.cpp \
-		moc_mainwindow.cpp
+		../SkyTouchInstall/actionhandler.cpp \
+		../SkyTouchInstall/network.cpp \
+		../SkyTouchInstall/installconfirmation.cpp qrc_recources.cpp \
+		moc_mainwindow.cpp \
+		moc_installconfirmation.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		pages.o \
 		actionhandler.o \
+		network.o \
+		installconfirmation.o \
 		qrc_recources.o \
-		moc_mainwindow.o
+		moc_mainwindow.o \
+		moc_installconfirmation.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -137,10 +143,14 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../SkyTouchInstall/SkyTouchInstall.pro ../SkyTouchInstall/mainwindow.h \
 		../SkyTouchInstall/pages.h \
-		../SkyTouchInstall/actionhandler.h ../SkyTouchInstall/main.cpp \
+		../SkyTouchInstall/actionhandler.h \
+		../SkyTouchInstall/network.h \
+		../SkyTouchInstall/installconfirmation.h ../SkyTouchInstall/main.cpp \
 		../SkyTouchInstall/mainwindow.cpp \
 		../SkyTouchInstall/pages.cpp \
-		../SkyTouchInstall/actionhandler.cpp
+		../SkyTouchInstall/actionhandler.cpp \
+		../SkyTouchInstall/network.cpp \
+		../SkyTouchInstall/installconfirmation.cpp
 QMAKE_TARGET  = SkyTouchInstall
 DESTDIR       = 
 TARGET        = SkyTouchInstall
@@ -327,8 +337,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../SkyTouchInstall/recources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.h ../SkyTouchInstall/pages.h ../SkyTouchInstall/actionhandler.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/actionhandler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.h ../SkyTouchInstall/pages.h ../SkyTouchInstall/actionhandler.h ../SkyTouchInstall/network.h ../SkyTouchInstall/installconfirmation.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/actionhandler.cpp ../SkyTouchInstall/network.cpp ../SkyTouchInstall/installconfirmation.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.ui $(DISTDIR)/
 
 
@@ -369,13 +379,18 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_installconfirmation.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_installconfirmation.cpp
 moc_mainwindow.cpp: ../SkyTouchInstall/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/elwin/Documents/Qt/SkyTouchApp/SkyTouchInstall -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SkyTouchInstall/mainwindow.h -o moc_mainwindow.cpp
+
+moc_installconfirmation.cpp: ../SkyTouchInstall/installconfirmation.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/elwin/Documents/Qt/SkyTouchApp/SkyTouchInstall -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SkyTouchInstall/installconfirmation.h -o moc_installconfirmation.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -404,17 +419,28 @@ mainwindow.o: ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/mainwindow.h 
 		../SkyTouchInstall/pages.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../SkyTouchInstall/mainwindow.cpp
 
-pages.o: ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/pages.h
+pages.o: ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/pages.h \
+		../SkyTouchInstall/actionhandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pages.o ../SkyTouchInstall/pages.cpp
 
-actionhandler.o: ../SkyTouchInstall/actionhandler.cpp ../SkyTouchInstall/actionhandler.h
+actionhandler.o: ../SkyTouchInstall/actionhandler.cpp ../SkyTouchInstall/actionhandler.h \
+		../SkyTouchInstall/network.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o actionhandler.o ../SkyTouchInstall/actionhandler.cpp
+
+network.o: ../SkyTouchInstall/network.cpp ../SkyTouchInstall/network.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o network.o ../SkyTouchInstall/network.cpp
+
+installconfirmation.o: ../SkyTouchInstall/installconfirmation.cpp ../SkyTouchInstall/installconfirmation.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o installconfirmation.o ../SkyTouchInstall/installconfirmation.cpp
 
 qrc_recources.o: qrc_recources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_recources.o qrc_recources.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_installconfirmation.o: moc_installconfirmation.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_installconfirmation.o moc_installconfirmation.cpp
 
 ####### Install
 

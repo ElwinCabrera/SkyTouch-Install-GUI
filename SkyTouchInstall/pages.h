@@ -14,12 +14,9 @@ using std::pair;
 class SoftwareInstallationPage : public QWidget {
 public:
     SoftwareInstallationPage(QWidget *parent = 0);
-
-    QRadioButton* getInstallCRECheckBox() { return installCRERadioBtn; }
-    QRadioButton* getInstallCRE64CheckBox() { return installCRE64RadioBtn; }
-    QPushButton* getStartInstallationButton() ;
-
    // ~SoftwareInstallationPage();
+
+
 public slots:
     void onStartInstallationButtonCliked();
 
@@ -28,15 +25,18 @@ private:
     QRadioButton *installCRE64RadioBtn;
     QPushButton *startInstallationButton;
 
-    vector<QGroupBox *> installGroups;
-    vector<pair<int, QString>> markedForInstall;
+    vector<pair<QGroupBox *,QString>> installGroups;
+    vector<QString> getURLs;
 };
 
-class ConfigurationPage : public QWidget
-{
+
+
+class ConfigurationPage : public QWidget{
 public:
     ConfigurationPage(QWidget *parent = 0);
     //~ConfigurationPage();
 };
+
+
 
 #endif // PAGES_H
