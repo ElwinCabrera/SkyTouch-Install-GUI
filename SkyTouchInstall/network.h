@@ -8,13 +8,16 @@
 #include <QtNetwork/QAuthenticator>
 #include <QtNetwork/QNetworkProxy>
 
-class Network {
+class Network : public QObject
+{
+    Q_OBJECT
 public:
-    Network();
+    Network(QWidget *parent = nullptr);
 
 public slots:
     void get(QString url);
     void post(QString url, QByteArray data);
+    void head(QString url);
 
 public slots:
     void readyRead();
@@ -28,7 +31,7 @@ public slots:
     void error();
 
 private:
-    QNetworkAccessManager manager;
+    QNetworkAccessManager *manager;
 
 
 
