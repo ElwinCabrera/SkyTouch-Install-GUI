@@ -38,13 +38,15 @@ void Network::post(QString url, QByteArray data)
 
 void Network::head(QString url)
 {
-    qDebug() << "getting head form server";
+    qDebug() << "getting header form server";
     QNetworkReply *reply = manager->head(QNetworkRequest(QUrl(url)));
-    connect(reply, &QNetworkReply::readyRead, this, &Network::readyRead);
+    connect(reply, &QNetworkReply::finished, this, &Network::readyRead);
+
 }
 
 void Network::readyRead()
 {
+    qDebug() << "Got some data and ready to read";
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender()); // alternative way to get reply without a paremeter
     if(reply){
         //we have a reply
@@ -52,7 +54,7 @@ void Network::readyRead()
     }
     if(reply->operation() == QNetworkAccessManager::HeadOperation){
         int fileLength = reply->header(QNetworkRequest::ContentLengthHeader).toInt();
-        qDebug() << fileLength;
+        qDebug() << "File lenght is: "<< fileLength;
     }
 
 
