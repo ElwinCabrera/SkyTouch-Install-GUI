@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Network_t {
-    QByteArrayData data[27];
-    char stringdata0[365];
+    QByteArrayData data[28];
+    char stringdata0[379];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -58,7 +58,8 @@ QT_MOC_LITERAL(22, 319, 5), // "proxy"
 QT_MOC_LITERAL(23, 325, 9), // "sslErrors"
 QT_MOC_LITERAL(24, 335, 16), // "QList<QSslError>"
 QT_MOC_LITERAL(25, 352, 6), // "errors"
-QT_MOC_LITERAL(26, 359, 5) // "error"
+QT_MOC_LITERAL(26, 359, 5), // "error"
+QT_MOC_LITERAL(27, 365, 13) // "getFileLength"
 
     },
     "Network\0get\0\0url\0post\0data\0head\0"
@@ -71,7 +72,7 @@ QT_MOC_LITERAL(26, 359, 5) // "error"
     "QSslPreSharedKeyAuthenticator*\0"
     "proxyAuthenticationRequired\0QNetworkProxy\0"
     "proxy\0sslErrors\0QList<QSslError>\0"
-    "errors\0error"
+    "errors\0error\0getFileLength"
 };
 #undef QT_MOC_LITERAL
 
@@ -81,7 +82,7 @@ static const uint qt_meta_data_Network[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -89,18 +90,19 @@ static const uint qt_meta_data_Network[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   74,    2, 0x0a /* Public */,
-       4,    2,   77,    2, 0x0a /* Public */,
-       6,    1,   82,    2, 0x0a /* Public */,
-       7,    0,   85,    2, 0x0a /* Public */,
-       8,    2,   86,    2, 0x0a /* Public */,
-      13,    1,   91,    2, 0x0a /* Public */,
-      14,    1,   94,    2, 0x0a /* Public */,
-      15,    1,   97,    2, 0x0a /* Public */,
-      18,    2,  100,    2, 0x0a /* Public */,
-      20,    2,  105,    2, 0x0a /* Public */,
-      23,    2,  110,    2, 0x0a /* Public */,
-      26,    0,  115,    2, 0x0a /* Public */,
+       1,    1,   79,    2, 0x0a /* Public */,
+       4,    2,   82,    2, 0x0a /* Public */,
+       6,    1,   87,    2, 0x0a /* Public */,
+       7,    0,   90,    2, 0x0a /* Public */,
+       8,    2,   91,    2, 0x0a /* Public */,
+      13,    1,   96,    2, 0x0a /* Public */,
+      14,    1,   99,    2, 0x0a /* Public */,
+      15,    1,  102,    2, 0x0a /* Public */,
+      18,    2,  105,    2, 0x0a /* Public */,
+      20,    2,  110,    2, 0x0a /* Public */,
+      23,    2,  115,    2, 0x0a /* Public */,
+      26,    0,  120,    2, 0x0a /* Public */,
+      27,    0,  121,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -115,6 +117,7 @@ static const uint qt_meta_data_Network[] = {
     QMetaType::Void, 0x80000000 | 21, 0x80000000 | 11,   22,   12,
     QMetaType::Void, 0x80000000 | 9, 0x80000000 | 24,   10,   25,
     QMetaType::Void,
+    QMetaType::Int,
 
        0        // eod
 };
@@ -137,6 +140,8 @@ void Network::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 9: _t->proxyAuthenticationRequired((*reinterpret_cast< const QNetworkProxy(*)>(_a[1])),(*reinterpret_cast< QAuthenticator*(*)>(_a[2]))); break;
         case 10: _t->sslErrors((*reinterpret_cast< QNetworkReply*(*)>(_a[1])),(*reinterpret_cast< const QList<QSslError>(*)>(_a[2]))); break;
         case 11: _t->error(); break;
+        case 12: { int _r = _t->getFileLength();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -217,13 +222,13 @@ int Network::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     }
     return _id;
 }

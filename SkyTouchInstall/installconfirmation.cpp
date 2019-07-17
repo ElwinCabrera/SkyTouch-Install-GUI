@@ -1,5 +1,7 @@
 #include "installconfirmation.h"
+
 #include <QtWidgets>
+
 
 InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> installGroups,  vector<QString> getURLs){
     resize(QSize(600, 300));
@@ -27,7 +29,7 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
     }
 
     QLabel *totalSizeLabel = new QLabel;
-    totalSizeLabel->setText("Total Size: 600Mb");
+    totalSizeLabel->setText("Total Size: " + QString::number(totalFileSize()) + "MB");
 
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -57,6 +59,20 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
 
 
     setLayout(mainLayout);
+
+
+}
+
+int InstallConfirmation::totalFileSize()
+{
+    Network network;
+    int totalSize = 0;
+    for(QString url: URLs){
+        network.head(url);
+
+        totalSize += network.getFileLength();
+    }
+    return totalSize / (1024 * 1024); // converting to megabytes
 
 
 }

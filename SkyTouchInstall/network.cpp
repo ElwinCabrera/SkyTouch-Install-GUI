@@ -4,6 +4,7 @@
 Network::Network(QWidget *parent):  QObject(parent)
 {
     manager = new QNetworkAccessManager(this);
+    lastFileLength = -1;
     connect(manager, &QNetworkAccessManager::authenticationRequired, this, &Network::authenticationRequired);
     connect(manager, &QNetworkAccessManager::encrypted, this, &Network::encrypted);
     connect(manager, &QNetworkAccessManager::networkAccessibleChanged, this, &Network::networkAccessChanged);
@@ -40,7 +41,40 @@ void Network::head(QString url)
 {
     qDebug() << "getting header form server";
     QNetworkReply *reply = manager->head(QNetworkRequest(QUrl(url)));
-    connect(reply, &QNetworkReply::finished, this, &Network::readyRead);
+
+   // connect(reply, &QNetworkReply::finished, this, &Network::readyRead);
+
+
+
+    QTimer timer;
+    timer.setSingleShot(true);
+
+    QEventLoop loop;
+    connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    timer.start(30000);   // 30 secs. timeout
+    loop.exec();
+
+    if(timer.isActive()) {
+        timer.stop();
+        if(reply->error() > 0) {
+           // handle error
+        } else {
+          int v = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+          if (v >= 200 && v < 300) {  // Success
+              lastFileLength = reply->header(QNetworkRequest::ContentLengthHeader).toInt();
+              qDebug() << "File lenght is: "<< lastFileLength;
+          }
+        }
+    } else {
+       // timeout
+       disconnect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+
+       reply->abort();
+    }
+
+
 
 }
 
@@ -53,8 +87,8 @@ void Network::readyRead()
         qDebug() << reply->readAll();
     }
     if(reply->operation() == QNetworkAccessManager::HeadOperation){
-        int fileLength = reply->header(QNetworkRequest::ContentLengthHeader).toInt();
-        qDebug() << "File lenght is: "<< fileLength;
+        lastFileLength = reply->header(QNetworkRequest::ContentLengthHeader).toInt();
+        qDebug() << "File lenght is: "<< lastFileLength;
     }
 
 
@@ -98,6 +132,12 @@ void Network::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 
 void Network::error()
 {
+
+}
+
+int Network::getFileLength()
+{
+    return lastFileLength;
 
 }
 

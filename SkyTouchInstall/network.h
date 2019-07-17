@@ -30,8 +30,11 @@ public slots:
     void sslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
     void error();
 
+    int getFileLength();
+
 private:
     QNetworkAccessManager *manager;
+    int lastFileLength;
 
 
 
