@@ -5,6 +5,8 @@ Network::Network(QWidget *parent):  QObject(parent)
 {
     manager = new QNetworkAccessManager(this);
     lastFileLength = -1;
+    lastReply = nullptr;
+
     connect(manager, &QNetworkAccessManager::authenticationRequired, this, &Network::authenticationRequired);
     connect(manager, &QNetworkAccessManager::encrypted, this, &Network::encrypted);
     connect(manager, &QNetworkAccessManager::networkAccessibleChanged, this, &Network::networkAccessChanged);
@@ -14,14 +16,31 @@ Network::Network(QWidget *parent):  QObject(parent)
     connect(manager, &QNetworkAccessManager::proxyAuthenticationRequired, this, &Network::proxyAuthenticationRequired);
 
 
+
 }
 
 void Network::get(QString url)
 {
     qDebug() << "getting form server";
     //QNetworkRequest *request(QUrl(url));
+
+    QString targetFolder = "/home/elwin/Downloads";
+    QString fileName = "TEST_CRE.exe";
+    mFile = new QFile( targetFolder + QDir::separator() + fileName);
+    // Trying to open the file
+    if (!mFile->open(QIODevice::WriteOnly)){
+        qDebug() << "Could not open file";
+        delete mFile;
+        mFile = nullptr;
+    }
     QNetworkReply *reply = manager->get(QNetworkRequest(QUrl(url)));
-    connect(reply, &QNetworkReply::readyRead, this, &Network::readyRead);
+
+    //reply->setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    lastReply = reply;
+    replys.push_back(reply);
+    //connect(reply, &QNetworkReply::readyRead, this, &Network::readyRead);
+    connect(reply, SIGNAL(finished()), this, SLOT(finished()));
+
 
 
 }
@@ -73,6 +92,7 @@ void Network::head(QString url)
 
        reply->abort();
     }
+    reply->deleteLater();
 
 
 
@@ -85,10 +105,11 @@ void Network::readyRead()
     if(reply){
         //we have a reply
         qDebug() << reply->readAll();
-    }
-    if(reply->operation() == QNetworkAccessManager::HeadOperation){
-        lastFileLength = reply->header(QNetworkRequest::ContentLengthHeader).toInt();
-        qDebug() << "File lenght is: "<< lastFileLength;
+        if(mFile->isOpen()) {
+            mFile->write(reply->readAll());
+            mFile->flush();
+            mFile->close();
+        }
     }
 
 
@@ -97,47 +118,103 @@ void Network::readyRead()
 
 void Network::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
+    Q_UNUSED(reply);
+    Q_UNUSED(authenticator);
+
+    qDebug() << "Authentication Requred";
 
 }
 
 void Network::encrypted(QNetworkReply *reply)
 {
+    Q_UNUSED(reply);
+
+    qDebug() << "Encrypted";
 
 }
 
-void Network::finished(QNetworkReply *reply)
+void Network::finished()
 {
+
+    qDebug() << "Finished";
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender()); // alternative way to get reply without a paremeter
+    if(reply){
+        //we have a reply
+        //qDebug() << reply->readAll();
+        if(mFile) {
+            qDebug() << "file is open attempting to write";
+            mFile->write(reply->readAll());
+            mFile->flush();
+            mFile->close();
+            qDebug() << "Finished writing to file, file closed";
+        }
+    }
+
+
+    reply->deleteLater();
 
 }
 
 void Network::networkAccessChanged(QNetworkAccessManager::NetworkAccessibility accessable)
 {
 
+    Q_UNUSED(accessable);
+
+    qDebug() << "Network Access Changed";
+
 }
 
 void Network::preSharedKeyAuthenticationRequired(QNetworkReply *reply, QSslPreSharedKeyAuthenticator *authenticator)
 {
+    Q_UNUSED(reply);
+    Q_UNUSED(authenticator);
+
+    qDebug() << "Pre Shared Key Authentication Required";
 
 }
 
 void Network::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
+    Q_UNUSED(proxy);
+    Q_UNUSED(authenticator);
+    qDebug() << "Proxy Authentication Required";
 
 }
 
 void Network::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 {
+    Q_UNUSED(reply);
+    Q_UNUSED(errors);
+
+    qDebug() << "SSL Errors";
 
 }
 
 void Network::error()
 {
-
+    qDebug() << "error";
 }
 
 int Network::getFileLength()
 {
     return lastFileLength;
+
+}
+
+QNetworkAccessManager *Network::getAccessManager()
+{
+ return manager;
+}
+
+QNetworkReply *Network::getLastReply()
+{
+    return lastReply;
+
+}
+
+vector<QNetworkReply *> Network::getReplys()
+{
+    return replys;
 
 }
 

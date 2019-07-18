@@ -21,13 +21,18 @@ class InstallConfirmation : public QDialog
 
 public:
     InstallConfirmation(vector<pair<QGroupBox *,QString>> installGroups,  vector<QString> getURLs);
-
     int totalFileSize();
+    bool getConfirmation() {return confirm; }
 
 
 private:
      QListWidget *softwareListWidget;
      vector<QString> URLs;
+     bool confirm ;
+     Network network;
+
+     void okButtonCliked();
+     void cancelButtonClicked();
 };
 
 #endif // INSTALLCONFIRMATION_H

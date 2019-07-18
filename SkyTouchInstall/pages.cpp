@@ -2,7 +2,7 @@
 
 #include "pages.h"
 #include "actionhandler.h"
-#include "installconfirmation.h"
+
 
 
 SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(parent){
@@ -34,7 +34,9 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
     QListWidgetItem *teamBuilderItem = new QListWidgetItem(packageList);
     teamBuilderItem->setText(tr("Teambuilder"));*/
 
-    startInstallationButton = new QPushButton(tr("Start Installation"));
+    startInstallationButton = new QPushButton(tr("Start Download"));
+
+
 
     QHBoxLayout *installLayout = new QHBoxLayout;
     installLayout->addWidget(installCRERadioBtn);
@@ -47,7 +49,7 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
     packageLayout->addWidget(packageList);
     packageGroup->setLayout(packageLayout);*/
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout = new QVBoxLayout;
     mainLayout->addWidget(installCREGroup);
     //mainLayout->addWidget(packageGroup);
     mainLayout->addSpacing(200);
@@ -60,10 +62,11 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
 
 void SoftwareInstallationPage::onStartInstallationButtonCliked(){
     ActionHandler actionHandler;
+    bool minimumOneChecked = false;
 
     for(uint i = 0; i < installGroups.size(); ++i){
         if(installGroups.at(i).first->isChecked()) {
-
+            minimumOneChecked = true;
             int j = 0;
             for(QRadioButton *rb : installGroups.at(i).first->findChildren<QRadioButton*> ()){
                 if(rb->isChecked()) break;
@@ -71,16 +74,78 @@ void SoftwareInstallationPage::onStartInstallationButtonCliked(){
             }
             QString bitVersion = (j == 0) ? "32":"64";
             QString url = actionHandler.getDownloadUrl(installGroups.at(i).second, "12.9" ,bitVersion);
+            //QString url = "https://postman-echo.com/get?foo1=bar1&foo2=bar2";
             getURLs.push_back(url);
             qDebug() << installGroups.at(i).second << bitVersion << " marked for installation";
             qDebug() << "URL: " << url;
         }
     }
-    InstallConfirmation *confirmWindow = new InstallConfirmation(installGroups, getURLs);
-    confirmWindow->setModal(true);
-    confirmWindow->exec();
+    //getURLs.push_back("http://download2.pcamerica.com/12.9/CRE_Setup.exe");
+    if(minimumOneChecked){
+        confirmWindow = new InstallConfirmation(installGroups, getURLs);
+        confirmWindow->setModal(true);
+        confirmWindow->exec();
 
-    actionHandler.installAll(getURLs);
+        if(confirmWindow->getConfirmation()) {
+            qDebug() << "download confirmed";
+
+            showDownloadProgress();
+            startDownloads();
+        }
+        if(!confirmWindow->getConfirmation()) qDebug() << "download  NOT confirmed";
+    }
+
+
+}
+
+void SoftwareInstallationPage::showDownloadProgress(){
+    vector<QHBoxLayout*> layouts;
+    vector<QGroupBox*> downlowdGroups;
+
+    for(pair<QGroupBox *, QString> p: installGroups){
+        if(p.first->isChecked()){
+            QString s = "Downloading " + p.second;
+            QGroupBox *groupBox = new QGroupBox(s);
+            QProgressBar *bar = new QProgressBar;
+
+            ProgressListenner *pl = new ProgressListenner;
+            pl->pBar = bar;
+
+
+            QHBoxLayout *layout = new QHBoxLayout;
+            layout->addWidget(bar);
+            groupBox->setLayout(layout);
+
+            downlowdGroups.push_back(groupBox);
+            pBars.push_back(bar);
+            layouts.push_back(layout);
+
+            pListeners.push_back(pl);
+
+        }
+    }
+
+    QPushButton *stopDownload = new QPushButton(tr("Stop Download"));
+
+    clearWidgetsAndLayouts(mainLayout);
+    mainLayout = new QVBoxLayout;
+    for(QGroupBox *gb: downlowdGroups) mainLayout->addWidget(gb);
+    mainLayout->addSpacing(200);
+    mainLayout->addWidget(stopDownload);
+    mainLayout->addStretch(1);
+    setLayout(mainLayout);
+
+
+}
+
+void SoftwareInstallationPage::startDownloads()
+{
+    for(int i = 0 ; i<getURLs.size(); ++i){
+        network.get(getURLs.at(i));
+        QNetworkReply *r = network.getLastReply();
+        ProgressListenner *pl = pListeners.at(i);
+        connect(r, &QNetworkReply::downloadProgress, pl, &ProgressListenner::onDownloadProgress);
+    }
 
 }
 
@@ -110,4 +175,14 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
     mainLayout->addWidget(configGroup);
     mainLayout->addStretch(1);
     setLayout(mainLayout);
+}
+
+void clearWidgetsAndLayouts(QLayout * layout) {
+   if (! layout)
+      return;
+   while (auto item = layout->takeAt(0)) {
+      delete item->widget();
+      clearWidgetsAndLayouts(item->layout());
+   }
+   delete layout;
 }

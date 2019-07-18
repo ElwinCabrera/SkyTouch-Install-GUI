@@ -18,6 +18,7 @@ QString ActionHandler::getDownloadUrl(QString softwareName, QString version, QSt
     if(softwareName == "CRE" && bitVersion == "32") url = "http://download2.pcamerica.com/"+version+"/CRE_Setup.exe";
     if(softwareName == "CRE" && bitVersion == "64") url = "http://download2.pcamerica.com/"+version+"/CRE_Setup_x64.exe";
 
+    //return "http://download2.pcamerica.com/Crystal_Reports_Setup.exe";
     return url;
 
 }

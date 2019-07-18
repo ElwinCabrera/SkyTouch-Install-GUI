@@ -34,8 +34,8 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QWidget::close);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &InstallConfirmation::okButtonCliked);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &InstallConfirmation::cancelButtonClicked);
 
     QHBoxLayout *confirmInstallLayout = new QHBoxLayout;
     confirmInstallLayout->addWidget(softwareListWidget);
@@ -65,7 +65,7 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
 
 int InstallConfirmation::totalFileSize()
 {
-    Network network;
+
     int totalSize = 0;
     for(QString url: URLs){
         network.head(url);
@@ -75,4 +75,15 @@ int InstallConfirmation::totalFileSize()
     return totalSize / (1024 * 1024); // converting to megabytes
 
 
+}
+
+void InstallConfirmation::okButtonCliked() {
+    confirm = true;
+    this->close();
+
+}
+
+void InstallConfirmation::cancelButtonClicked() {
+    confirm = false;
+    this->close();
 }
