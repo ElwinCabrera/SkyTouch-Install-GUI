@@ -91,6 +91,8 @@ void SoftwareInstallationPage::onStartInstallationButtonCliked(){
 
             showDownloadProgress();
             startDownloads();
+
+            //if all downloads are done then return to installation screen
         }
         if(!confirmWindow->getConfirmation()) qDebug() << "download  NOT confirmed";
     }
@@ -135,6 +137,8 @@ void SoftwareInstallationPage::showDownloadProgress(){
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
+    connect(stopDownload, &QPushButton::clicked, this, &SoftwareInstallationPage::stopDownloads);
+
 
 }
 
@@ -147,6 +151,11 @@ void SoftwareInstallationPage::startDownloads()
         connect(r, &QNetworkReply::downloadProgress, pl, &ProgressListenner::onDownloadProgress);
     }
 
+}
+
+void SoftwareInstallationPage::stopDownloads()
+{
+    network.closeAllConnections();
 }
 
 

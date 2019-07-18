@@ -56,8 +56,6 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
     mainLayout->addLayout(sizeLabelLayout);
     mainLayout->addLayout(buttonLayout);
 
-
-
     setLayout(mainLayout);
 
 

@@ -45,6 +45,7 @@ private:
 
     void showDownloadProgress();
     void startDownloads();
+    void stopDownloads();
 };
 
 

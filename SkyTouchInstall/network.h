@@ -45,6 +45,7 @@ public slots:
     QNetworkAccessManager* getAccessManager();
     QNetworkReply *getLastReply();
     vector<QNetworkReply*> getReplys();
+    void closeAllConnections();
 
 
 

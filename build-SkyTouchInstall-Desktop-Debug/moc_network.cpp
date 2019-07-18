@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Network_t {
-    QByteArrayData data[32];
-    char stringdata0[451];
+    QByteArrayData data[33];
+    char stringdata0[471];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -63,7 +63,8 @@ QT_MOC_LITERAL(27, 365, 16), // "getAccessManager"
 QT_MOC_LITERAL(28, 382, 22), // "QNetworkAccessManager*"
 QT_MOC_LITERAL(29, 405, 12), // "getLastReply"
 QT_MOC_LITERAL(30, 418, 9), // "getReplys"
-QT_MOC_LITERAL(31, 428, 22) // "vector<QNetworkReply*>"
+QT_MOC_LITERAL(31, 428, 22), // "vector<QNetworkReply*>"
+QT_MOC_LITERAL(32, 451, 19) // "closeAllConnections"
 
     },
     "Network\0get\0\0url\0post\0data\0head\0"
@@ -78,7 +79,8 @@ QT_MOC_LITERAL(31, 428, 22) // "vector<QNetworkReply*>"
     "proxy\0sslErrors\0QList<QSslError>\0"
     "errors\0error\0getAccessManager\0"
     "QNetworkAccessManager*\0getLastReply\0"
-    "getReplys\0vector<QNetworkReply*>"
+    "getReplys\0vector<QNetworkReply*>\0"
+    "closeAllConnections"
 };
 #undef QT_MOC_LITERAL
 
@@ -88,7 +90,7 @@ static const uint qt_meta_data_Network[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      15,   14, // methods
+      16,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -96,21 +98,22 @@ static const uint qt_meta_data_Network[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   89,    2, 0x0a /* Public */,
-       4,    2,   92,    2, 0x0a /* Public */,
-       6,    1,   97,    2, 0x0a /* Public */,
-       7,    0,  100,    2, 0x0a /* Public */,
-       8,    2,  101,    2, 0x0a /* Public */,
-      13,    1,  106,    2, 0x0a /* Public */,
-      14,    0,  109,    2, 0x0a /* Public */,
-      15,    1,  110,    2, 0x0a /* Public */,
-      18,    2,  113,    2, 0x0a /* Public */,
-      20,    2,  118,    2, 0x0a /* Public */,
-      23,    2,  123,    2, 0x0a /* Public */,
-      26,    0,  128,    2, 0x0a /* Public */,
-      27,    0,  129,    2, 0x0a /* Public */,
-      29,    0,  130,    2, 0x0a /* Public */,
-      30,    0,  131,    2, 0x0a /* Public */,
+       1,    1,   94,    2, 0x0a /* Public */,
+       4,    2,   97,    2, 0x0a /* Public */,
+       6,    1,  102,    2, 0x0a /* Public */,
+       7,    0,  105,    2, 0x0a /* Public */,
+       8,    2,  106,    2, 0x0a /* Public */,
+      13,    1,  111,    2, 0x0a /* Public */,
+      14,    0,  114,    2, 0x0a /* Public */,
+      15,    1,  115,    2, 0x0a /* Public */,
+      18,    2,  118,    2, 0x0a /* Public */,
+      20,    2,  123,    2, 0x0a /* Public */,
+      23,    2,  128,    2, 0x0a /* Public */,
+      26,    0,  133,    2, 0x0a /* Public */,
+      27,    0,  134,    2, 0x0a /* Public */,
+      29,    0,  135,    2, 0x0a /* Public */,
+      30,    0,  136,    2, 0x0a /* Public */,
+      32,    0,  137,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -128,6 +131,7 @@ static const uint qt_meta_data_Network[] = {
     0x80000000 | 28,
     0x80000000 | 9,
     0x80000000 | 31,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -156,6 +160,7 @@ void Network::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
             if (_a[0]) *reinterpret_cast< QNetworkReply**>(_a[0]) = std::move(_r); }  break;
         case 14: { vector<QNetworkReply*> _r = _t->getReplys();
             if (_a[0]) *reinterpret_cast< vector<QNetworkReply*>*>(_a[0]) = std::move(_r); }  break;
+        case 15: _t->closeAllConnections(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -229,13 +234,13 @@ int Network::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 15)
+        if (_id < 16)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 16;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 15)
+        if (_id < 16)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 16;
     }
     return _id;
 }

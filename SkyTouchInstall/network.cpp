@@ -40,6 +40,7 @@ void Network::get(QString url)
     replys.push_back(reply);
     //connect(reply, &QNetworkReply::readyRead, this, &Network::readyRead);
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
+    connect(this, SIGNAL(cancelDownload()), reply, SLOT(abort()));
 
 
 
@@ -147,6 +148,8 @@ void Network::finished()
             mFile->flush();
             mFile->close();
             qDebug() << "Finished writing to file, file closed";
+
+            //set a flag to start a process to execute the exe file
         }
     }
 
@@ -216,6 +219,13 @@ vector<QNetworkReply *> Network::getReplys()
 {
     return replys;
 
+}
+
+void Network::closeAllConnections()
+{
+    for(QNetworkReply *reply: replys){
+        reply->abort();
+    }
 }
 
 
