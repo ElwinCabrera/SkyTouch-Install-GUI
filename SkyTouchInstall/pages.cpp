@@ -75,6 +75,7 @@ void SoftwareInstallationPage::onStartInstallationButtonCliked(){
     ActionHandler actionHandler;
     bool minimumOneChecked = false;
 
+    //got to make sure im not pushing more into getURLs with repeated calls to this functin (user clicks this then cancels the confirmation)
     for(uint i = 0; i < installGroups.size(); ++i){
         if(installGroups.at(i).first->isChecked()) {
             minimumOneChecked = true;
@@ -93,22 +94,26 @@ void SoftwareInstallationPage::onStartInstallationButtonCliked(){
     }
     //getURLs.push_back("http://download2.pcamerica.com/12.9/CRE_Setup.exe");
     if(minimumOneChecked){
-        confirmWindow = new InstallConfirmation(installGroups, getURLs);
+        InstallConfirmation *confirmWindow = new InstallConfirmation(installGroups, getURLs);
         confirmWindow->setModal(true);
         confirmWindow->exec();
 
         if(confirmWindow->getConfirmation()) {
             qDebug() << "download confirmed";
-
+            lastConfirmation = true;
             showDownloadProgress();
             startDownloads();
 
             //if all downloads are done then return to installation screen
         }
-        if(!confirmWindow->getConfirmation()) qDebug() << "download  NOT confirmed";
+        if(!confirmWindow->getConfirmation()) {
+            qDebug() << "download  NOT confirmed";
+            lastConfirmation = false;
+        }
+
+        delete confirmWindow;
     }
-
-
+    getURLs.clear();
 }
 
 void SoftwareInstallationPage::showDownloadProgress(){
@@ -172,16 +177,11 @@ void SoftwareInstallationPage::stopDownloads()
     if(warning->getOkButtonCliked()) {
 
 
-        for(int i = 0 ; i<getURLs.size(); ++i){
-            vector<QNetworkReply*> rs = network.getReplys();
-            ProgressListenner *pl = pListeners.at(i);
-            disconnect(rs.at(i), &QNetworkReply::downloadProgress, pl, &ProgressListenner::onDownloadProgress);
-        }
+
         network.closeAllConnections();
         setMainLayout(false);
     }
-    //clearWidgetsAndLayouts(mainLayout);
-    //SoftwareInstallationPage(nullptr);
+
 }
 
 

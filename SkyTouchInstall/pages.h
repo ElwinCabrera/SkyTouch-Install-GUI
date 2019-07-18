@@ -36,7 +36,8 @@ private:
     QVBoxLayout *mainLayout;
     QVBoxLayout *mainLayout2;
 
-    InstallConfirmation *confirmWindow;
+    bool lastConfirmation;
+
     Network network;
 
 
