@@ -31,14 +31,16 @@ SOURCES += \
     pages.cpp \
     actionhandler.cpp \
     network.cpp \
-    installconfirmation.cpp
+    installconfirmation.cpp \
+    canceldownloadswarning.cpp
 
 HEADERS += \
         mainwindow.h \
     pages.h \
     actionhandler.h \
     network.h \
-    installconfirmation.h
+    installconfirmation.h \
+    canceldownloadswarning.h
 
 FORMS += \
         mainwindow.ui

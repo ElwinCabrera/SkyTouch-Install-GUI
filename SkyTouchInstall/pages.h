@@ -17,9 +17,11 @@ using std::pair;
 
 
 class SoftwareInstallationPage : public QWidget {
+    Q_OBJECT
 public:
     SoftwareInstallationPage(QWidget *parent = 0);
    // ~SoftwareInstallationPage();
+    void setMainLayout(bool firstTimeLoad);
 
 
 public slots:
@@ -32,6 +34,7 @@ private:
     //QPushButton *stopDownload;
     //QProgressBar *pBar;
     QVBoxLayout *mainLayout;
+    QVBoxLayout *mainLayout2;
 
     InstallConfirmation *confirmWindow;
     Network network;

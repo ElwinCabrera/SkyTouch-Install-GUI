@@ -2,10 +2,19 @@
 
 #include "pages.h"
 #include "actionhandler.h"
+#include "canceldownloadswarning.h"
 
 
 
 SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(parent){
+    mainLayout = nullptr;
+    setMainLayout(true);
+
+}
+
+void SoftwareInstallationPage::setMainLayout(bool firstTimeLoad)
+{
+    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
 
     QGroupBox *installCREGroup = new QGroupBox(tr("CRE"));
     installCREGroup->setCheckable(true);
@@ -17,7 +26,7 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
     installCRE64RadioBtn = new QRadioButton(tr("Install CRE x64"));
     installCRE64RadioBtn->setChecked(true);
 
-    installGroups.push_back({installCREGroup,"CRE"});
+    if(firstTimeLoad) installGroups.push_back({installCREGroup,"CRE"});
 
 
     //QCheckBox *docsCheckBox = new QCheckBox(tr("Update documentation"));
@@ -58,6 +67,8 @@ SoftwareInstallationPage::SoftwareInstallationPage(QWidget *parent) : QWidget(pa
     setLayout(mainLayout);
 
     connect(startInstallationButton, &QPushButton::clicked, this, &SoftwareInstallationPage::onStartInstallationButtonCliked);
+
+
 }
 
 void SoftwareInstallationPage::onStartInstallationButtonCliked(){
@@ -130,6 +141,7 @@ void SoftwareInstallationPage::showDownloadProgress(){
     QPushButton *stopDownload = new QPushButton(tr("Stop Download"));
 
     clearWidgetsAndLayouts(mainLayout);
+    disconnect(startInstallationButton, &QPushButton::clicked, this, &SoftwareInstallationPage::onStartInstallationButtonCliked);
     mainLayout = new QVBoxLayout;
     for(QGroupBox *gb: downlowdGroups) mainLayout->addWidget(gb);
     mainLayout->addSpacing(200);
@@ -155,7 +167,21 @@ void SoftwareInstallationPage::startDownloads()
 
 void SoftwareInstallationPage::stopDownloads()
 {
-    network.closeAllConnections();
+    CancelDownloadsWarning *warning = new CancelDownloadsWarning;
+    warning->exec();
+    if(warning->getOkButtonCliked()) {
+
+
+        for(int i = 0 ; i<getURLs.size(); ++i){
+            vector<QNetworkReply*> rs = network.getReplys();
+            ProgressListenner *pl = pListeners.at(i);
+            disconnect(rs.at(i), &QNetworkReply::downloadProgress, pl, &ProgressListenner::onDownloadProgress);
+        }
+        network.closeAllConnections();
+        setMainLayout(false);
+    }
+    //clearWidgetsAndLayouts(mainLayout);
+    //SoftwareInstallationPage(nullptr);
 }
 
 

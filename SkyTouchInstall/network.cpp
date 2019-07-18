@@ -40,7 +40,7 @@ void Network::get(QString url)
     replys.push_back(reply);
     //connect(reply, &QNetworkReply::readyRead, this, &Network::readyRead);
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
-    connect(this, SIGNAL(cancelDownload()), reply, SLOT(abort()));
+    //connect(this, SIGNAL(cancelDownload()), reply, SLOT(abort()));
 
 
 
