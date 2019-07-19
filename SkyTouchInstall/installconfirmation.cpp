@@ -3,9 +3,8 @@
 #include <QtWidgets>
 
 
-InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> installGroups,  vector<QString> getURLs){
+InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> softwareL) {
     resize(QSize(600, 300));
-    for(QString s: getURLs) URLs.push_back(s);
 
     QGroupBox *confirmInstallGroup = new QGroupBox(tr("Programs to be Installed..."));
     softwareListWidget = new QListWidget;
@@ -13,23 +12,20 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
 
     softwareListWidget->setMaximumWidth(650);
 
-    QString listEntry = "";
-    int getURLIdx = 0;
-    for(pair<QGroupBox *,QString> p: installGroups){
-        if(p.first->isChecked()) {
+    for(SoftwareInfo *si: softwareL){
+        if(si->markedForDownlaod) {
             //Creating a new list widget item whose parent is the softwareListWidget itself
             QListWidgetItem *item = new QListWidgetItem(softwareListWidget);
-            item->setText(p.second + ": " + getURLs.at(getURLIdx));
+            if(si->version32Bit) item->setText(si->softwareName + ": " + si->url32BitVersion);
+            if(si->version64Bit) item->setText(si->softwareName + ": " + si->url64BitVersion);
 
             //Adding the item to the softwareListWidget
             softwareListWidget->addItem(item);
-
-            getURLIdx++;
         }
     }
 
     QLabel *totalSizeLabel = new QLabel;
-    totalSizeLabel->setText("Total Size: " + QString::number(totalFileSize()) + "MB");
+    totalSizeLabel->setText("Total Size: " + QString::number(totalFileSize(softwareL)) + "MB");
 
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -61,13 +57,13 @@ InstallConfirmation::InstallConfirmation(vector<pair<QGroupBox *,QString>> insta
 
 }
 
-int InstallConfirmation::totalFileSize()
+int InstallConfirmation::totalFileSize(vector<SoftwareInfo*> softwareL)
 {
 
     int totalSize = 0;
-    for(QString url: URLs){
-        network.head(url);
-
+    for(SoftwareInfo *si: softwareL){
+        if(si->version32Bit) network.head(si->url32BitVersion);
+        if(si->version64Bit) network.head(si->url64BitVersion);
         totalSize += network.getFileLength();
     }
     return totalSize / (1024 * 1024); // converting to megabytes

@@ -53,10 +53,10 @@ OBJECTS_DIR   = ./
 SOURCES       = ../SkyTouchInstall/main.cpp \
 		../SkyTouchInstall/mainwindow.cpp \
 		../SkyTouchInstall/pages.cpp \
-		../SkyTouchInstall/actionhandler.cpp \
 		../SkyTouchInstall/network.cpp \
 		../SkyTouchInstall/installconfirmation.cpp \
-		../SkyTouchInstall/canceldownloadswarning.cpp qrc_recources.cpp \
+		../SkyTouchInstall/canceldownloadswarning.cpp \
+		../SkyTouchInstall/helper.cpp qrc_recources.cpp \
 		moc_mainwindow.cpp \
 		moc_pages.cpp \
 		moc_network.cpp \
@@ -65,10 +65,10 @@ SOURCES       = ../SkyTouchInstall/main.cpp \
 OBJECTS       = main.o \
 		mainwindow.o \
 		pages.o \
-		actionhandler.o \
 		network.o \
 		installconfirmation.o \
 		canceldownloadswarning.o \
+		helper.o \
 		qrc_recources.o \
 		moc_mainwindow.o \
 		moc_pages.o \
@@ -151,16 +151,17 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../SkyTouchInstall/SkyTouchInstall.pro ../SkyTouchInstall/mainwindow.h \
 		../SkyTouchInstall/pages.h \
-		../SkyTouchInstall/actionhandler.h \
 		../SkyTouchInstall/network.h \
 		../SkyTouchInstall/installconfirmation.h \
-		../SkyTouchInstall/canceldownloadswarning.h ../SkyTouchInstall/main.cpp \
+		../SkyTouchInstall/canceldownloadswarning.h \
+		../SkyTouchInstall/global.h \
+		../SkyTouchInstall/helper.h ../SkyTouchInstall/main.cpp \
 		../SkyTouchInstall/mainwindow.cpp \
 		../SkyTouchInstall/pages.cpp \
-		../SkyTouchInstall/actionhandler.cpp \
 		../SkyTouchInstall/network.cpp \
 		../SkyTouchInstall/installconfirmation.cpp \
-		../SkyTouchInstall/canceldownloadswarning.cpp
+		../SkyTouchInstall/canceldownloadswarning.cpp \
+		../SkyTouchInstall/helper.cpp
 QMAKE_TARGET  = SkyTouchInstall
 DESTDIR       = 
 TARGET        = SkyTouchInstall
@@ -349,8 +350,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../SkyTouchInstall/recources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.h ../SkyTouchInstall/pages.h ../SkyTouchInstall/actionhandler.h ../SkyTouchInstall/network.h ../SkyTouchInstall/installconfirmation.h ../SkyTouchInstall/canceldownloadswarning.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/actionhandler.cpp ../SkyTouchInstall/network.cpp ../SkyTouchInstall/installconfirmation.cpp ../SkyTouchInstall/canceldownloadswarning.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.h ../SkyTouchInstall/pages.h ../SkyTouchInstall/network.h ../SkyTouchInstall/installconfirmation.h ../SkyTouchInstall/canceldownloadswarning.h ../SkyTouchInstall/global.h ../SkyTouchInstall/helper.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/network.cpp ../SkyTouchInstall/installconfirmation.cpp ../SkyTouchInstall/canceldownloadswarning.cpp ../SkyTouchInstall/helper.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../SkyTouchInstall/mainwindow.ui $(DISTDIR)/
 
 
@@ -395,13 +396,18 @@ moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 compiler_moc_header_make_all: moc_mainwindow.cpp moc_pages.cpp moc_network.cpp moc_installconfirmation.cpp moc_canceldownloadswarning.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp moc_pages.cpp moc_network.cpp moc_installconfirmation.cpp moc_canceldownloadswarning.cpp
-moc_mainwindow.cpp: ../SkyTouchInstall/mainwindow.h \
+moc_mainwindow.cpp: ../SkyTouchInstall/pages.h \
+		../SkyTouchInstall/network.h \
+		../SkyTouchInstall/installconfirmation.h \
+		../SkyTouchInstall/global.h \
+		../SkyTouchInstall/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/elwin/Documents/Qt/SkyTouchApp/SkyTouchInstall -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SkyTouchInstall/mainwindow.h -o moc_mainwindow.cpp
 
 moc_pages.cpp: ../SkyTouchInstall/network.h \
 		../SkyTouchInstall/installconfirmation.h \
+		../SkyTouchInstall/global.h \
 		../SkyTouchInstall/pages.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -443,26 +449,26 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 main.o: ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.h \
-		../SkyTouchInstall/network.h
+		../SkyTouchInstall/pages.h \
+		../SkyTouchInstall/network.h \
+		../SkyTouchInstall/installconfirmation.h \
+		../SkyTouchInstall/global.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SkyTouchInstall/main.cpp
 
 mainwindow.o: ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/mainwindow.h \
-		ui_mainwindow.h \
 		../SkyTouchInstall/pages.h \
 		../SkyTouchInstall/network.h \
-		../SkyTouchInstall/installconfirmation.h
+		../SkyTouchInstall/installconfirmation.h \
+		../SkyTouchInstall/global.h \
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../SkyTouchInstall/mainwindow.cpp
 
 pages.o: ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/pages.h \
 		../SkyTouchInstall/network.h \
 		../SkyTouchInstall/installconfirmation.h \
-		../SkyTouchInstall/actionhandler.h \
+		../SkyTouchInstall/global.h \
 		../SkyTouchInstall/canceldownloadswarning.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pages.o ../SkyTouchInstall/pages.cpp
-
-actionhandler.o: ../SkyTouchInstall/actionhandler.cpp ../SkyTouchInstall/actionhandler.h \
-		../SkyTouchInstall/network.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o actionhandler.o ../SkyTouchInstall/actionhandler.cpp
 
 network.o: ../SkyTouchInstall/network.cpp ../SkyTouchInstall/network.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o network.o ../SkyTouchInstall/network.cpp
@@ -473,6 +479,9 @@ installconfirmation.o: ../SkyTouchInstall/installconfirmation.cpp ../SkyTouchIns
 
 canceldownloadswarning.o: ../SkyTouchInstall/canceldownloadswarning.cpp ../SkyTouchInstall/canceldownloadswarning.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canceldownloadswarning.o ../SkyTouchInstall/canceldownloadswarning.cpp
+
+helper.o: ../SkyTouchInstall/helper.cpp ../SkyTouchInstall/helper.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o helper.o ../SkyTouchInstall/helper.cpp
 
 qrc_recources.o: qrc_recources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_recources.o qrc_recources.cpp

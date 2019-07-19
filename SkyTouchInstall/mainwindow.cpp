@@ -2,10 +2,12 @@
 #include "ui_mainwindow.h"
 #include <QtWidgets>
 
-#include "pages.h"
 
 MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::MainWindow)*/ {
     //ui->setupUi(this);
+    SoftwareInfo *si= new SoftwareInfo("CRE", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe",true, false );
+    softwareList.push_back(si);
+
     contentsWidget = new QListWidget;
     contentsWidget->setViewMode(QListView::IconMode);
     contentsWidget->setIconSize(QSize(96, 84));
@@ -14,7 +16,10 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
     contentsWidget->setSpacing(12);
 
     pagesWidget = new QStackedWidget;
-    pagesWidget->addWidget(new SoftwareInstallationPage);
+    softwareDownloadPage = new SoftwareDownloadPage;
+    softwareDownloadPage->initPage(softwareList);
+
+    pagesWidget->addWidget(softwareDownloadPage);
     pagesWidget->addWidget(new ConfigurationPage);
 
    //QCheckBox *cb =  SoftwareInstallationPage::getInstallCRE64CheckBox();
@@ -43,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
     setLayout(mainLayout);
 
     setWindowTitle(tr("Config Dialog"));
+
+
 
 
 }

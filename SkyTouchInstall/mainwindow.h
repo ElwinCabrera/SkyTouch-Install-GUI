@@ -4,6 +4,8 @@
 #include <QMainWindow>
 
 #include <QDialog>
+#include "pages.h"
+#include "global.h"
 
 QT_BEGIN_NAMESPACE
 class QListWidget;
@@ -14,6 +16,8 @@ QT_END_NAMESPACE
 /*namespace Ui {
 class MainWindow;
 }*/
+
+
 
 class MainWindow : public QDialog
 {
@@ -31,6 +35,8 @@ private:
 
     QListWidget *contentsWidget;
     QStackedWidget *pagesWidget;
+    SoftwareDownloadPage *softwareDownloadPage;
+    vector< SoftwareInfo*> softwareList;
 
 /*private:
     Ui::MainWindow *ui;*/

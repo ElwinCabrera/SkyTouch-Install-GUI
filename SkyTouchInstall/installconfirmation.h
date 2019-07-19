@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <vector>
 #include "network.h"
+#include "global.h"
 
 using std::pair;
 using std::vector;
@@ -20,14 +21,13 @@ class InstallConfirmation : public QDialog
     Q_OBJECT
 
 public:
-    InstallConfirmation(vector<pair<QGroupBox *,QString>> installGroups,  vector<QString> getURLs);
-    int totalFileSize();
+    InstallConfirmation(QWidget *parent , vector<SoftwareInfo*> softwareL);
+    int totalFileSize(vector<SoftwareInfo*> softwareL);
     bool getConfirmation() {return confirm; }
 
 
 private:
      QListWidget *softwareListWidget;
-     vector<QString> URLs;
      bool confirm ;
      Network network;
 

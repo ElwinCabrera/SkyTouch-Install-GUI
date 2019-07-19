@@ -29,18 +29,19 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     pages.cpp \
-    actionhandler.cpp \
     network.cpp \
     installconfirmation.cpp \
-    canceldownloadswarning.cpp
+    canceldownloadswarning.cpp \
+    helper.cpp
 
 HEADERS += \
         mainwindow.h \
     pages.h \
-    actionhandler.h \
     network.h \
     installconfirmation.h \
-    canceldownloadswarning.h
+    canceldownloadswarning.h \
+    global.h \
+    helper.h
 
 FORMS += \
         mainwindow.ui

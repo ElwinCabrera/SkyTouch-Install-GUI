@@ -10,46 +10,41 @@
 
 #include "network.h"
 #include "installconfirmation.h"
+#include "global.h"
 //#include<pair>
 
 using std::vector;
 using std::pair;
 
 
-class SoftwareInstallationPage : public QWidget {
+class SoftwareDownloadPage : public QWidget {
     Q_OBJECT
 public:
-    SoftwareInstallationPage(QWidget *parent = 0);
-   // ~SoftwareInstallationPage();
-    void setMainLayout(bool firstTimeLoad);
+    SoftwareDownloadPage(QWidget *parent = 0);
+    void initPage(vector<SoftwareInfo*> softwareL);
 
+   // ~SoftwareInstallationPage();
 
 public slots:
-    void onStartInstallationButtonCliked();
+    void downloadButtonCliked();
 
 private:
-    QRadioButton *installCRERadioBtn;
-    QRadioButton *installCRE64RadioBtn;
-    QPushButton *startInstallationButton;
-    //QPushButton *stopDownload;
-    //QProgressBar *pBar;
+
+    //QPushButton *downloadButton;
     QVBoxLayout *mainLayout;
-    QVBoxLayout *mainLayout2;
-
-    bool lastConfirmation;
-
-    Network network;
+    Network *network;
 
 
-    vector<pair<QGroupBox *,QString>> installGroups;
-    vector<QString> getURLs;
+    vector<SoftwareInfo*> softwareList;
     vector<QProgressBar*> pBars;
     vector<QNetworkReply*> replys;
     vector<ProgressListenner*> pListeners;
 
+    //void setupDownloadListOnUI();
     void showDownloadProgress();
     void startDownloads();
     void stopDownloads();
+
 };
 
 

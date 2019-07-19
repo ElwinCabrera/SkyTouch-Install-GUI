@@ -20,28 +20,28 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_SoftwareInstallationPage_t {
+struct qt_meta_stringdata_SoftwareDownloadPage_t {
     QByteArrayData data[3];
-    char stringdata0[58];
+    char stringdata0[43];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_SoftwareInstallationPage_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_SoftwareDownloadPage_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_SoftwareInstallationPage_t qt_meta_stringdata_SoftwareInstallationPage = {
+static const qt_meta_stringdata_SoftwareDownloadPage_t qt_meta_stringdata_SoftwareDownloadPage = {
     {
-QT_MOC_LITERAL(0, 0, 24), // "SoftwareInstallationPage"
-QT_MOC_LITERAL(1, 25, 31), // "onStartInstallationButtonCliked"
-QT_MOC_LITERAL(2, 57, 0) // ""
+QT_MOC_LITERAL(0, 0, 20), // "SoftwareDownloadPage"
+QT_MOC_LITERAL(1, 21, 20), // "downloadButtonCliked"
+QT_MOC_LITERAL(2, 42, 0) // ""
 
     },
-    "SoftwareInstallationPage\0"
-    "onStartInstallationButtonCliked\0"
+    "SoftwareDownloadPage\0downloadButtonCliked\0"
+    ""
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_SoftwareInstallationPage[] = {
+static const uint qt_meta_data_SoftwareDownloadPage[] = {
 
  // content:
        7,       // revision
@@ -63,39 +63,39 @@ static const uint qt_meta_data_SoftwareInstallationPage[] = {
        0        // eod
 };
 
-void SoftwareInstallationPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void SoftwareDownloadPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        SoftwareInstallationPage *_t = static_cast<SoftwareInstallationPage *>(_o);
+        SoftwareDownloadPage *_t = static_cast<SoftwareDownloadPage *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->onStartInstallationButtonCliked(); break;
+        case 0: _t->downloadButtonCliked(); break;
         default: ;
         }
     }
     Q_UNUSED(_a);
 }
 
-const QMetaObject SoftwareInstallationPage::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_SoftwareInstallationPage.data,
-      qt_meta_data_SoftwareInstallationPage,  qt_static_metacall, nullptr, nullptr}
+const QMetaObject SoftwareDownloadPage::staticMetaObject = {
+    { &QWidget::staticMetaObject, qt_meta_stringdata_SoftwareDownloadPage.data,
+      qt_meta_data_SoftwareDownloadPage,  qt_static_metacall, nullptr, nullptr}
 };
 
 
-const QMetaObject *SoftwareInstallationPage::metaObject() const
+const QMetaObject *SoftwareDownloadPage::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *SoftwareInstallationPage::qt_metacast(const char *_clname)
+void *SoftwareDownloadPage::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_SoftwareInstallationPage.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_SoftwareDownloadPage.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }
 
-int SoftwareInstallationPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int SoftwareDownloadPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
