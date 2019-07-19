@@ -5,6 +5,7 @@
 
 MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::MainWindow)*/ {
     //ui->setupUi(this);
+    network = new Network;
     SoftwareInfo *si= new SoftwareInfo("CRE", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe",true, false );
     softwareList.push_back(si);
 
@@ -17,13 +18,12 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
 
     pagesWidget = new QStackedWidget;
     softwareDownloadPage = new SoftwareDownloadPage;
-    softwareDownloadPage->initPage(softwareList);
+    softwareDownloadPage->initPage(softwareList, network);
 
     pagesWidget->addWidget(softwareDownloadPage);
     pagesWidget->addWidget(new ConfigurationPage);
 
-   //QCheckBox *cb =  SoftwareInstallationPage::getInstallCRE64CheckBox();
-   //cb->setChecked(true);
+
 
     QPushButton *closeButton = new QPushButton(tr("Close"));
 

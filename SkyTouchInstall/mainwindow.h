@@ -6,6 +6,7 @@
 #include <QDialog>
 #include "pages.h"
 #include "global.h"
+#include "network.h"
 
 QT_BEGIN_NAMESPACE
 class QListWidget;
@@ -36,7 +37,10 @@ private:
     QListWidget *contentsWidget;
     QStackedWidget *pagesWidget;
     SoftwareDownloadPage *softwareDownloadPage;
+
+    Network *network;
     vector< SoftwareInfo*> softwareList;
+
 
 /*private:
     Ui::MainWindow *ui;*/

@@ -11,12 +11,14 @@ SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
 
 }
 
-void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL)
+void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL, Network *network)
 {
-
-    for(SoftwareInfo *si: softwareL){
-        //SoftwareInfo *s = new SoftwareInfo(si->softwareName, si->url32BitVersion, si->url64BitVersion, si->markedForDownlaod, si->markedForInstall);
-        this->softwareList.push_back(si);
+    this->network = network;
+    if(!softwareL.empty()){
+        for(SoftwareInfo *si: softwareL){
+            //SoftwareInfo *s = new SoftwareInfo(si->softwareName, si->url32BitVersion, si->url64BitVersion, si->markedForDownlaod, si->markedForInstall);
+            this->softwareList.push_back(si);
+        }
     }
 
     bool firstIter = true;
@@ -26,7 +28,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL)
 
         if(firstIter){
             downloadGroup->blockSignals(true);
-            downloadGroup->setChecked(true);
+            downloadGroup->setChecked(si->markedForDownlaod);
             downloadGroup->blockSignals(false);
             firstIter = false;
         }
@@ -96,46 +98,43 @@ void SoftwareDownloadPage::downloadButtonCliked(){
 
 
 void SoftwareDownloadPage::showDownloadProgress(){
-   /* vector<QHBoxLayout*> layouts;
-    vector<QGroupBox*> downlowdGroups;
 
-    for(pair<QGroupBox *, QString> p: installGroups){
-        if(p.first->isChecked()){
-            QString s = "Downloading " + p.second;
+    clearWidgetsAndLayouts(mainLayout);
+    mainLayout = new QVBoxLayout;
+    //disconnect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::onStartInstallationButtonCliked);
+    disconnect(this,0,0,0);
+
+    for(SoftwareInfo *si: softwareList){
+        if(si->markedForDownlaod){
+
+            QString s = "Downloading " + si->softwareName;
             QGroupBox *groupBox = new QGroupBox(s);
-            QProgressBar *bar = new QProgressBar;
+            QProgressBar *pBar = new QProgressBar;
 
             ProgressListenner *pl = new ProgressListenner;
-            pl->pBar = bar;
-
+            pl->pBar = pBar;
 
             QHBoxLayout *layout = new QHBoxLayout;
-            layout->addWidget(bar);
+            layout->addWidget(pBar);
             groupBox->setLayout(layout);
 
-            downlowdGroups.push_back(groupBox);
-            pBars.push_back(bar);
-            layouts.push_back(layout);
-
             pListeners.push_back(pl);
+            mainLayout->addWidget(groupBox);
+            disconnect(si, 0,0,0);
+
 
         }
     }
 
     QPushButton *stopDownload = new QPushButton(tr("Stop Download"));
 
-    clearWidgetsAndLayouts(mainLayout);
 
-    disconnect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::onStartInstallationButtonCliked);
-    mainLayout = new QVBoxLayout;
-    for(QGroupBox *gb: downlowdGroups) mainLayout->addWidget(gb);
     mainLayout->addSpacing(200);
     mainLayout->addWidget(stopDownload);
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
-    connect(stopDownload, &QPushButton::clicked, this, &SoftwareDownloadPage::stopDownloads); */
-
+    connect(stopDownload, &QPushButton::clicked, this, &SoftwareDownloadPage::stopDownloads);
 
 }
 

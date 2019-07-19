@@ -21,7 +21,7 @@ class SoftwareDownloadPage : public QWidget {
     Q_OBJECT
 public:
     SoftwareDownloadPage(QWidget *parent = 0);
-    void initPage(vector<SoftwareInfo*> softwareL);
+    void initPage(vector<SoftwareInfo*> softwareL, Network *network);
 
    // ~SoftwareInstallationPage();
 
