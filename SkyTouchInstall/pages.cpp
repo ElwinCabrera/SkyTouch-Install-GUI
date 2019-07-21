@@ -7,60 +7,97 @@
 
 SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
 
-   mainLayout = new QVBoxLayout;
+
 
 }
 
 void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL, Network *network)
 {
-    this->network = network;
+
     if(!softwareL.empty()){
+
+        this->network = network;
+
         for(SoftwareInfo *si: softwareL){
             //SoftwareInfo *s = new SoftwareInfo(si->softwareName, si->url32BitVersion, si->url64BitVersion, si->markedForDownlaod, si->markedForInstall);
             this->softwareList.push_back(si);
         }
+
     }
 
-    bool firstIter = true;
-    for(SoftwareInfo *si :  softwareList){
-        QGroupBox *downloadGroup = new QGroupBox(si->softwareName);
-        downloadGroup->setCheckable(true);
+    QScrollArea *scrollArea = new QScrollArea;
 
-        if(firstIter){
-            downloadGroup->blockSignals(true);
-            downloadGroup->setChecked(si->markedForDownlaod);
-            downloadGroup->blockSignals(false);
-            firstIter = false;
-        }
-        QRadioButton *downloadRadioBtn = new QRadioButton("Download "+si->softwareName);
-        QRadioButton *download64RadioBtn = new QRadioButton("Download "+si->softwareName + "x64");
+    scrollArea->setFixedSize(QSize(350, 325));
+
+    mainLayout = new QVBoxLayout;
+    QWidget *scrollAreaWidget = new QWidget;
+    QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
+
+    for(SoftwareInfo *si :  softwareList){
+        QGroupBox *downloadGroup = new QGroupBox("Download "+si->softwareName);
+        downloadGroup->setFixedWidth(312.5);
+        downloadGroup->setCheckable(true);
+        downloadGroup->blockSignals(true);
+        downloadGroup->setChecked(si->markedForDownlaod);
+        downloadGroup->blockSignals(false);
+
+
+        QRadioButton *downloadRadioBtn = new QRadioButton("32 Bit");
+        QRadioButton *download64RadioBtn = new QRadioButton("64 Bit");
         download64RadioBtn->setChecked(true);
 
         QHBoxLayout *downloadLayout = new QHBoxLayout;
+        downloadLayout->addStretch(1);
         downloadLayout->addWidget(downloadRadioBtn);
         downloadLayout->addWidget(download64RadioBtn);
         downloadGroup->setLayout(downloadLayout);
 
         if( si->url32BitVersion == "") downloadRadioBtn->setCheckable(false);
         if( si->url64BitVersion == "") download64RadioBtn->setCheckable(false);
+        downloadRadioBtn->setChecked(si->version32Bit);
+        download64RadioBtn->setChecked(si->version64Bit);
 
         connect(downloadGroup, &QGroupBox::toggled, si, &SoftwareInfo::onDownloadCheckBoxClicked);
         connect(download64RadioBtn, &QRadioButton::toggled,si, &SoftwareInfo::onVersionSelect);
 
-         mainLayout->addWidget(downloadGroup);
+        //mainLayout->addWidget(downloadGroup);
+        scrollAreaLayout->addWidget(downloadGroup);
+
     }
+    scrollAreaWidget->setLayout(scrollAreaLayout);
+    scrollArea->setWidget(scrollAreaWidget);
 
-    //QCheckBox *docsCheckBox = new QCheckBox(tr("Update documentation"));
 
+
+    QPushButton *searchForLocalButton = new QPushButton(tr("Search For Local Files"));
+    QPushButton *viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
+    viewDownloadProgButton->setDisabled(true);
 
     QPushButton *downloadButton = new QPushButton(tr("Start Download(s)"));
+    downloadButton->setDefault(true);
+
+
+
+
     connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::downloadButtonCliked);
 
+    QHBoxLayout *buttonsLayout = new QHBoxLayout;
+    buttonsLayout->addWidget(searchForLocalButton);
+    buttonsLayout->addWidget(viewDownloadProgButton);
 
-    mainLayout->addSpacing(200);
+
+
+    //
+    mainLayout->addWidget(scrollArea);
+    //mainLayout->addWidget(downloadButton);
+    mainLayout->addLayout(buttonsLayout);
     mainLayout->addWidget(downloadButton);
     mainLayout->addStretch(1);
+   // mainLayout->addSpacing(200);
     setLayout(mainLayout);
+
+
+
 }
 
 
@@ -69,6 +106,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL, Network *ne
 void SoftwareDownloadPage::downloadButtonCliked(){
     qDebug() <<  "startDownloadClicked";
     bool minimumOneChecked = false;
+
     for(SoftwareInfo *si: softwareList){
         if(si->markedForDownlaod) {minimumOneChecked = true; break;}
     }
@@ -104,33 +142,60 @@ void SoftwareDownloadPage::showDownloadProgress(){
     //disconnect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::onStartInstallationButtonCliked);
     disconnect(this,0,0,0);
 
+
+    QScrollArea *scrollArea = new QScrollArea;
+    scrollArea->setFixedSize(QSize(350, 325));
+    QWidget *scrollAreaWidget = new QWidget;
+    QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
+
+
     for(SoftwareInfo *si: softwareList){
         if(si->markedForDownlaod){
 
             QString s = "Downloading " + si->softwareName;
             QGroupBox *groupBox = new QGroupBox(s);
+            //groupBox->setFixedWidth(312.5);
             QProgressBar *pBar = new QProgressBar;
+            pBar->setFixedWidth(300);
 
             ProgressListenner *pl = new ProgressListenner;
             pl->pBar = pBar;
 
             QHBoxLayout *layout = new QHBoxLayout;
             layout->addWidget(pBar);
+            layout->addStretch(1);
             groupBox->setLayout(layout);
 
             pListeners.push_back(pl);
-            mainLayout->addWidget(groupBox);
+
             disconnect(si, 0,0,0);
+
+            //mainLayout->addWidget(groupBox);
+            scrollAreaLayout->addWidget(groupBox);
+
 
 
         }
     }
+    scrollAreaWidget->setLayout(scrollAreaLayout);
+    scrollArea->setWidget(scrollAreaWidget);
+
+    QPushButton *backButton = new QPushButton(tr("Back"));
 
     QPushButton *stopDownload = new QPushButton(tr("Stop Download"));
+    QPalette pal = stopDownload->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::red));
+    stopDownload->setAutoFillBackground(true);
+    stopDownload->setPalette(pal);
+    stopDownload->update();
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(backButton);
+    buttonLayout->addWidget(stopDownload);
 
 
-    mainLayout->addSpacing(200);
-    mainLayout->addWidget(stopDownload);
+    mainLayout->addWidget(scrollArea);
+    mainLayout->addLayout(buttonLayout);
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
@@ -140,68 +205,37 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
 void SoftwareDownloadPage::startDownloads()
 {
-    /*for(uint i = 0 ; i<getURLs.size(); ++i){
-        network.get(getURLs.at(i));
-        QNetworkReply *r = network.getLastReply();
+    for(uint i = 0 ; i<softwareList.size(); ++i){
+        if(softwareList.at(i)->version32Bit) network->get(softwareList.at(i)->url32BitVersion);
+        if(softwareList.at(i)->version64Bit) network->get(softwareList.at(i)->url64BitVersion);
+
+        QNetworkReply *r = network->getLastReply();
         ProgressListenner *pl = pListeners.at(i);
         connect(r, &QNetworkReply::downloadProgress, pl, &ProgressListenner::onDownloadProgress);
-    }*/
+    }
 
 }
 
 void SoftwareDownloadPage::stopDownloads()
 {
-   /* CancelDownloadsWarning *warning = new CancelDownloadsWarning;
+    CancelDownloadsWarning *warning = new CancelDownloadsWarning;
+    warning->setModal(true);
     warning->exec();
     if(warning->getOkButtonCliked()) {
 
-        network.closeAllConnections();
+        network->closeAllConnections();
         clearWidgetsAndLayouts(mainLayout);
-        QGroupBox *installCREGroup = new QGroupBox(tr("CRE"));
-        installCREGroup->setCheckable(true);
-        installCREGroup->blockSignals(true);
-        installCREGroup->setChecked(true);
-        installCREGroup->blockSignals(false);
 
-        installCRERadioBtn = new QRadioButton(tr("Install CRE"));
-        installCRE64RadioBtn = new QRadioButton(tr("Install CRE x64"));
-        installCRE64RadioBtn->setChecked(true);
+        vector<SoftwareInfo*> a;
+        //could do stop checked downloads
+        for(ProgressListenner *pl: pListeners) {disconnect(pl,0,0,0); delete pl; }
+        pListeners.clear();
 
-        installGroups.push_back({installCREGroup,"CRE"});
+        initPage(a, NULL);
 
+    }
 
-        //QCheckBox *docsCheckBox = new QCheckBox(tr("Update documentation"));
-
-
-
-
-
-        downloadButton = new QPushButton(tr("Start Download"));
-
-
-
-        QHBoxLayout *installLayout = new QHBoxLayout;
-        installLayout->addWidget(installCRERadioBtn);
-        installLayout->addWidget(installCRE64RadioBtn);
-        installCREGroup->setLayout(installLayout);
-
-
-
-
-
-        mainLayout = new QVBoxLayout;
-        mainLayout->addWidget(installCREGroup);
-        //mainLayout->addWidget(packageGroup);
-        mainLayout->addSpacing(200);
-        mainLayout->addWidget(downloadButton);
-        mainLayout->addStretch(1);
-        setLayout(mainLayout);
-
-        connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::onStartInstallationButtonCliked);
-
-
-
-    }*/
+    delete warning;
 
 }
 

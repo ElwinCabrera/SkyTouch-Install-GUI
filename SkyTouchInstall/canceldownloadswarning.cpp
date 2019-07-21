@@ -12,7 +12,8 @@ CancelDownloadsWarning::CancelDownloadsWarning()
 
     //pic->show();
 
-    QLabel *warningLabel = new QLabel(tr("Are you sure you want to cancel all downloads?\nClick OK to confirm"));
+    QLabel *warningLabel = new QLabel(tr("Are you sure you want to cancel all downloads?\n"
+                                         "Click OK to confirm."));
 
     //QVBoxLayout *warningLayout = new QVBoxLayout;
     //warningLayout->addWidget(pic);

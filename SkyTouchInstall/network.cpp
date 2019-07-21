@@ -224,8 +224,16 @@ vector<QNetworkReply *> Network::getReplys()
 void Network::closeAllConnections()
 {
     for(QNetworkReply *reply: replys){
+        disconnect(reply, SIGNAL(finished()), this, SLOT(finished()));
         reply->abort();
+        reply->deleteLater();
     }
+    replys.clear();
+    if(mFile){
+        mFile->flush();
+        mFile->close();
+    }
+
 }
 
 

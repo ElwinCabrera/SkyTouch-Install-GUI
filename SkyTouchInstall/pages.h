@@ -30,17 +30,14 @@ public slots:
 
 private:
 
-    //QPushButton *downloadButton;
     QVBoxLayout *mainLayout;
     Network *network;
 
 
     vector<SoftwareInfo*> softwareList;
-    vector<QProgressBar*> pBars;
     vector<QNetworkReply*> replys;
     vector<ProgressListenner*> pListeners;
 
-    //void setupDownloadListOnUI();
     void showDownloadProgress();
     void startDownloads();
     void stopDownloads();
