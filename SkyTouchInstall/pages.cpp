@@ -69,14 +69,17 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL, Network *ne
 
 
 
-    QPushButton *searchForLocalButton = new QPushButton(tr("Search For Local Files"));
-    QPushButton *viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
+    searchForLocalButton = new QPushButton(tr("Search For Local Files"));
+
+
+    viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
     viewDownloadProgButton->setDisabled(true);
 
     QPushButton *downloadButton = new QPushButton(tr("Start Download(s)"));
     downloadButton->setDefault(true);
 
-
+    readyToInstallButton = new QPushButton(tr("Ready to Install"));
+    readyToInstallButton->setDisabled(true);
 
 
     connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::downloadButtonCliked);
@@ -87,11 +90,13 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL, Network *ne
 
 
 
+
     //
     mainLayout->addWidget(scrollArea);
     //mainLayout->addWidget(downloadButton);
     mainLayout->addLayout(buttonsLayout);
     mainLayout->addWidget(downloadButton);
+    mainLayout->addWidget(readyToInstallButton);
     mainLayout->addStretch(1);
    // mainLayout->addSpacing(200);
     setLayout(mainLayout);

@@ -33,6 +33,10 @@ private:
     QVBoxLayout *mainLayout;
     Network *network;
 
+    QPushButton *searchForLocalButton;
+    QPushButton *viewDownloadProgButton;
+    QPushButton *readyToInstallButton;
+
 
     vector<SoftwareInfo*> softwareList;
     vector<QNetworkReply*> replys;
