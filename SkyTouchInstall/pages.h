@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <vector>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
+
 
 #include "network.h"
 #include "installconfirmation.h"
@@ -30,8 +30,11 @@ public slots:
     void searchForLocalFiles();
     void viewDownloadProg();
     void showReadyToInstall();
+    void backToSoftwareList();
 
 private:
+    bool readyToInstall;
+    bool downloadConfirmed;
 
     QVBoxLayout *mainLayout;
     Network *network;
@@ -42,11 +45,11 @@ private:
 
     vector<SoftwareInfo*> softwareList;
     vector<QNetworkReply*> replys;
-    vector<ProgressListenner*> pListeners;
 
     void showDownloadProgress();
     void startDownloads();
     void stopDownloads();
+    bool isDownloadInProgress();
 
 
 

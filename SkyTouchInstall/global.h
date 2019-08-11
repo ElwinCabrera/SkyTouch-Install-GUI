@@ -3,6 +3,7 @@
 
 #include<QWidget>
 #include <QtWidgets>
+#include <QtNetwork/QNetworkReply>
 
 class ProgressListenner : public QObject
 {
@@ -43,6 +44,8 @@ public:
         this->markedForInstall = markedForInstall;
         this->version64Bit = true;
         this->version32Bit = false;
+        downloadInProg = false;
+        downloadSuccess = false;
     }
 
 
@@ -51,11 +54,13 @@ public:
   QString url64BitVersion;
   bool markedForDownlaod;
   bool markedForInstall;
-  bool downloadInProg;
+  bool downloadInProg ;
+  bool downloadSuccess;
   bool version64Bit ;
   bool version32Bit ;
 
   ProgressListenner *pl;
+  QNetworkReply *reply;
 
 public slots:
   void onDownloadCheckBoxClicked() {markedForDownlaod = !markedForDownlaod; debugInfo();}

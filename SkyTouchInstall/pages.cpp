@@ -6,7 +6,8 @@
 
 
 SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
-
+    downloadConfirmed = false;
+    readyToInstall = false;
 
 
 }
@@ -32,6 +33,12 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
         downloadGroup->setCheckable(true);
         downloadGroup->blockSignals(true);
         downloadGroup->setChecked(si->markedForDownlaod);
+
+        if(si->downloadInProg || si->downloadSuccess){
+            downloadGroup->setChecked(false);
+            downloadGroup->setDisabled(true);
+        }
+
         downloadGroup->blockSignals(false);
 
 
@@ -66,10 +73,13 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
 
 
     viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
-    viewDownloadProgButton->setDisabled(true);
+
+    //bool downloadInProgress = isDownloadInProgress();
+    //if(!downloadInProgress) viewDownloadProgButton->setDisabled(true);
 
     readyToInstallButton = new QPushButton(tr("Show Ready to Install"));
     readyToInstallButton->setDisabled(true);
+
 
     QPushButton *downloadButton = new QPushButton(tr("Start Download(s)"));
     downloadButton->setDefault(true);
@@ -116,20 +126,21 @@ void SoftwareDownloadPage::downloadButtonCliked(){
     }
 
     if(minimumOneChecked){
-        InstallConfirmation *confirmWindow = new InstallConfirmation(this, softwareList);
-        confirmWindow->setModal(true);
-        confirmWindow->exec();
+        InstallConfirmation confirmWindow(this, softwareList);
+        confirmWindow.setModal(true);
+        confirmWindow.exec();
 
-        if(confirmWindow->getConfirmation()) {
+        if(confirmWindow.getConfirmation()) {
+            downloadConfirmed = confirmWindow.getConfirmation();
             qDebug() << "download confirmed";
             showDownloadProgress();
             startDownloads();
 
             //if all downloads are done then return to installation screen
         }
-        if(!confirmWindow->getConfirmation()) qDebug() << "download  NOT confirmed";
+        if(!confirmWindow.getConfirmation()) qDebug() << "download  NOT confirmed";
 
-        delete confirmWindow;
+        //delete confirmWindow;
     }
 }
 
@@ -138,11 +149,26 @@ void SoftwareDownloadPage::searchForLocalFiles(){
 }
 
 void SoftwareDownloadPage::viewDownloadProg(){
+    //if(mainLayout) clearWidgetsAndLayouts(mainLayout);
 
+    showDownloadProgress();
 }
 
 void SoftwareDownloadPage::showReadyToInstall(){
 
+}
+
+void SoftwareDownloadPage::backToSoftwareList(){
+
+    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
+
+    if(downloadConfirmed){
+        for(SoftwareInfo *si: softwareList)
+            disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
+    }
+
+    vector<SoftwareInfo*> tmp;
+    initPage(tmp, NULL);
 }
 
 
@@ -153,6 +179,10 @@ void SoftwareDownloadPage::showReadyToInstall(){
 
 void SoftwareDownloadPage::showDownloadProgress(){
 
+    if(!mainLayout) {
+        qDebug() << "in function showDownloadProgres: mainLayout is NULL";
+        return;
+    }
     clearWidgetsAndLayouts(mainLayout);
     mainLayout = new QVBoxLayout;
     //disconnect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::onStartInstallationButtonCliked);
@@ -166,26 +196,30 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
 
     for(SoftwareInfo *si: softwareList){
-        if(si->markedForDownlaod){
+        if(si->markedForDownlaod && downloadConfirmed){
 
             QString s = "Downloading " + si->softwareName;
             QGroupBox *groupBox = new QGroupBox(s);
             //groupBox->setFixedWidth(312.5);
-            QProgressBar *pBar = new QProgressBar;
-            pBar->setFixedWidth(300);
 
-            si->pl = new ProgressListenner;
-            si->pl->pBar = pBar;
+            if(!si->downloadInProg){
+                si->pl = new ProgressListenner;
+            } else {
+                connect(si->reply, &QNetworkReply::downloadProgress, si->pl,&ProgressListenner::onDownloadProgress);
+            }
+
+            si->pl->pBar = new QProgressBar;
+            si->pl->pBar->setFixedWidth(300);
+
+
 
             QHBoxLayout *layout = new QHBoxLayout;
-            layout->addWidget(pBar);
+            layout->addWidget(si->pl->pBar);
             layout->addStretch(1);
             groupBox->setLayout(layout);
 
 
-            disconnect(si, 0,0,0);
 
-            //mainLayout->addWidget(groupBox);
             scrollAreaLayout->addWidget(groupBox);
 
         }
@@ -195,7 +229,10 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
     QPushButton *backButton = new QPushButton(tr("Back"));
 
+
     QPushButton *stopDownload = new QPushButton(tr("Stop Download"));
+    if(!downloadConfirmed) stopDownload->setDisabled(true);
+
     QPalette pal = stopDownload->palette();
     pal.setColor(QPalette::Button, QColor(Qt::red));
     stopDownload->setAutoFillBackground(true);
@@ -213,6 +250,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
     setLayout(mainLayout);
 
     connect(stopDownload, &QPushButton::clicked, this, &SoftwareDownloadPage::stopDownloads);
+    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToSoftwareList);
 
 }
 
@@ -223,6 +261,8 @@ void SoftwareDownloadPage::startDownloads()
         if(si->version64Bit) network->get(si->url64BitVersion);
 
         QNetworkReply *r = network->getLastReply();
+        si->reply = r;
+        si->downloadInProg = true;
 
         connect(r, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
     }
@@ -251,6 +291,12 @@ void SoftwareDownloadPage::stopDownloads()
 
     //delete warning;
 
+}
+
+bool SoftwareDownloadPage::isDownloadInProgress()
+{
+
+    return false;
 }
 
 
@@ -282,8 +328,8 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
 }
 
 void clearWidgetsAndLayouts(QLayout * layout) {
-   if (! layout)
-      return;
+   if (! layout) return;
+
    while (auto item = layout->takeAt(0)) {
       delete item->widget();
       clearWidgetsAndLayouts(item->layout());
