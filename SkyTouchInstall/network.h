@@ -62,26 +62,6 @@ private:
 
 };
 
-class ProgressListenner : public QObject
-{
-    Q_OBJECT
-public:
-   ProgressListenner() : _lastKnownReceived(0), _lastKnownTotal(0){}
 
-   qint64 _lastKnownReceived;
-   qint64 _lastKnownTotal;
-   QProgressBar *pBar;
-
-public slots:
-     void onDownloadProgress( qint64 bytesReceived, qint64 bytesTotal )
-      {
-          _lastKnownReceived = bytesReceived;
-          _lastKnownTotal = bytesTotal;
-
-          pBar->setRange(0,bytesTotal);
-          pBar->setValue(bytesReceived);
-          if(bytesTotal < 0) pBar->setValue(0);
-      }
-};
 
 #endif // NETWORK_H

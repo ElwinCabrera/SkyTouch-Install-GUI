@@ -11,19 +11,12 @@ SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
 
 }
 
-void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL, Network *network)
+void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *network)
 {
+    if(network) this->network = network;
+    if(!softwareL.empty()) this->softwareList = softwareL;
 
-    if(!softwareL.empty()){
 
-        this->network = network;
-
-        for(SoftwareInfo *si: softwareL){
-            //SoftwareInfo *s = new SoftwareInfo(si->softwareName, si->url32BitVersion, si->url64BitVersion, si->markedForDownlaod, si->markedForInstall);
-            this->softwareList.push_back(si);
-        }
-
-    }
 
     QScrollArea *scrollArea = new QScrollArea;
 
@@ -69,20 +62,25 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL, Network *ne
 
 
 
-    searchForLocalButton = new QPushButton(tr("Search For Local Files"));
+    QPushButton *searchForLocalButton = new QPushButton(tr("Search For Local Files"));
 
 
     viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
     viewDownloadProgButton->setDisabled(true);
 
+    readyToInstallButton = new QPushButton(tr("Show Ready to Install"));
+    readyToInstallButton->setDisabled(true);
+
     QPushButton *downloadButton = new QPushButton(tr("Start Download(s)"));
     downloadButton->setDefault(true);
 
-    readyToInstallButton = new QPushButton(tr("Ready to Install"));
-    readyToInstallButton->setDisabled(true);
+
 
 
     connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::downloadButtonCliked);
+    connect(searchForLocalButton, &QPushButton::clicked, this , &SoftwareDownloadPage::searchForLocalFiles);
+    connect(viewDownloadProgButton, &QPushButton::clicked, this, &SoftwareDownloadPage::viewDownloadProg);
+    connect(readyToInstallButton, &QPushButton::clicked, this, &SoftwareDownloadPage::showReadyToInstall);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addWidget(searchForLocalButton);
@@ -95,8 +93,9 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> softwareL, Network *ne
     mainLayout->addWidget(scrollArea);
     //mainLayout->addWidget(downloadButton);
     mainLayout->addLayout(buttonsLayout);
-    mainLayout->addWidget(downloadButton);
     mainLayout->addWidget(readyToInstallButton);
+    mainLayout->addWidget(downloadButton);
+
     mainLayout->addStretch(1);
    // mainLayout->addSpacing(200);
     setLayout(mainLayout);
@@ -134,6 +133,18 @@ void SoftwareDownloadPage::downloadButtonCliked(){
     }
 }
 
+void SoftwareDownloadPage::searchForLocalFiles(){
+
+}
+
+void SoftwareDownloadPage::viewDownloadProg(){
+
+}
+
+void SoftwareDownloadPage::showReadyToInstall(){
+
+}
+
 
 
 
@@ -163,22 +174,19 @@ void SoftwareDownloadPage::showDownloadProgress(){
             QProgressBar *pBar = new QProgressBar;
             pBar->setFixedWidth(300);
 
-            ProgressListenner *pl = new ProgressListenner;
-            pl->pBar = pBar;
+            si->pl = new ProgressListenner;
+            si->pl->pBar = pBar;
 
             QHBoxLayout *layout = new QHBoxLayout;
             layout->addWidget(pBar);
             layout->addStretch(1);
             groupBox->setLayout(layout);
 
-            pListeners.push_back(pl);
 
             disconnect(si, 0,0,0);
 
             //mainLayout->addWidget(groupBox);
             scrollAreaLayout->addWidget(groupBox);
-
-
 
         }
     }
@@ -210,37 +218,38 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
 void SoftwareDownloadPage::startDownloads()
 {
-    for(uint i = 0 ; i<softwareList.size(); ++i){
-        if(softwareList.at(i)->version32Bit) network->get(softwareList.at(i)->url32BitVersion);
-        if(softwareList.at(i)->version64Bit) network->get(softwareList.at(i)->url64BitVersion);
+    for(SoftwareInfo *si : softwareList){
+        if(si->version32Bit) network->get(si->url32BitVersion);
+        if(si->version64Bit) network->get(si->url64BitVersion);
 
         QNetworkReply *r = network->getLastReply();
-        ProgressListenner *pl = pListeners.at(i);
-        connect(r, &QNetworkReply::downloadProgress, pl, &ProgressListenner::onDownloadProgress);
+
+        connect(r, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
     }
 
 }
 
 void SoftwareDownloadPage::stopDownloads()
 {
-    CancelDownloadsWarning *warning = new CancelDownloadsWarning;
-    warning->setModal(true);
-    warning->exec();
-    if(warning->getOkButtonCliked()) {
+    CancelDownloadsWarning warning;
+    warning.setModal(true);
+    warning.exec();
+    if(warning.getOkButtonCliked()) {
 
         network->closeAllConnections();
         clearWidgetsAndLayouts(mainLayout);
 
-        vector<SoftwareInfo*> a;
-        //could do stop checked downloads
-        for(ProgressListenner *pl: pListeners) {disconnect(pl,0,0,0); delete pl; }
-        pListeners.clear();
 
+        //could do stop only checked(selected) downloads
+        for(SoftwareInfo *si: softwareList) {disconnect(si->pl,0,0,0); delete si->pl; }
+
+
+        vector<SoftwareInfo*> a;
         initPage(a, NULL);
 
     }
 
-    delete warning;
+    //delete warning;
 
 }
 

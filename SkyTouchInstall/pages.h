@@ -21,19 +21,21 @@ class SoftwareDownloadPage : public QWidget {
     Q_OBJECT
 public:
     SoftwareDownloadPage(QWidget *parent = 0);
-    void initPage(vector<SoftwareInfo*> softwareL, Network *network);
+    void initPage(vector<SoftwareInfo*> &softwareL, Network *network);
 
    // ~SoftwareInstallationPage();
 
 public slots:
     void downloadButtonCliked();
+    void searchForLocalFiles();
+    void viewDownloadProg();
+    void showReadyToInstall();
 
 private:
 
     QVBoxLayout *mainLayout;
     Network *network;
 
-    QPushButton *searchForLocalButton;
     QPushButton *viewDownloadProgButton;
     QPushButton *readyToInstallButton;
 
@@ -45,6 +47,8 @@ private:
     void showDownloadProgress();
     void startDownloads();
     void stopDownloads();
+
+
 
 };
 
