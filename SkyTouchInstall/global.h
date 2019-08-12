@@ -46,6 +46,7 @@ public:
         this->version32Bit = false;
         downloadInProg = false;
         downloadSuccess = false;
+        downloadInterrupted = false;
     }
 
 
@@ -56,6 +57,7 @@ public:
   bool markedForInstall;
   bool downloadInProg ;
   bool downloadSuccess;
+  bool downloadInterrupted;
   bool version64Bit ;
   bool version32Bit ;
 

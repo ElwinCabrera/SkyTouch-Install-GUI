@@ -131,7 +131,7 @@ void SoftwareDownloadPage::downloadButtonCliked(){
         confirmWindow.exec();
 
         if(confirmWindow.getConfirmation()) {
-            downloadConfirmed = confirmWindow.getConfirmation();
+            downloadConfirmed = true;
             qDebug() << "download confirmed";
             showDownloadProgress();
             startDownloads();
@@ -140,7 +140,6 @@ void SoftwareDownloadPage::downloadButtonCliked(){
         }
         if(!confirmWindow.getConfirmation()) qDebug() << "download  NOT confirmed";
 
-        //delete confirmWindow;
     }
 }
 
@@ -149,8 +148,6 @@ void SoftwareDownloadPage::searchForLocalFiles(){
 }
 
 void SoftwareDownloadPage::viewDownloadProg(){
-    //if(mainLayout) clearWidgetsAndLayouts(mainLayout);
-
     showDownloadProgress();
 }
 
@@ -162,10 +159,9 @@ void SoftwareDownloadPage::backToSoftwareList(){
 
     if(mainLayout) clearWidgetsAndLayouts(mainLayout);
 
-    if(downloadConfirmed){
-        for(SoftwareInfo *si: softwareList)
-            disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
-    }
+    downloadConfirmed = false;
+    for(SoftwareInfo *si: softwareList)
+        if(!si->downloadInProg) disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
 
     vector<SoftwareInfo*> tmp;
     initPage(tmp, NULL);
@@ -185,7 +181,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
     }
     clearWidgetsAndLayouts(mainLayout);
     mainLayout = new QVBoxLayout;
-    //disconnect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::onStartInstallationButtonCliked);
+
     disconnect(this,0,0,0);
 
 
@@ -196,7 +192,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
 
     for(SoftwareInfo *si: softwareList){
-        if(si->markedForDownlaod && downloadConfirmed){
+        if(si->markedForDownlaod && downloadConfirmed ){
 
             QString s = "Downloading " + si->softwareName;
             QGroupBox *groupBox = new QGroupBox(s);
@@ -281,7 +277,12 @@ void SoftwareDownloadPage::stopDownloads()
 
 
         //could do stop only checked(selected) downloads
-        for(SoftwareInfo *si: softwareList) {disconnect(si->pl,0,0,0); delete si->pl; }
+        for(SoftwareInfo *si: softwareList) {
+            si->downloadInProg = false;
+            si->downloadInterrupted = true;
+            disconnect(si->pl,0,0,0);
+            delete si->pl;
+        }
 
 
         vector<SoftwareInfo*> a;
@@ -289,13 +290,14 @@ void SoftwareDownloadPage::stopDownloads()
 
     }
 
-    //delete warning;
-
 }
 
-bool SoftwareDownloadPage::isDownloadInProgress()
-{
+bool SoftwareDownloadPage::isDownloadInProgress(){
 
+    for(SoftwareInfo *si: softwareList){
+        if(!si->pl) continue;
+        if(si->pl->_lastKnownReceived < si->pl->_lastKnownTotal) return true;
+    }
     return false;
 }
 

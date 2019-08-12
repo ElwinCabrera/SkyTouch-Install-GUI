@@ -25,7 +25,8 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
     }
 
     QLabel *totalSizeLabel = new QLabel;
-    totalSizeLabel->setText("Total Size: " + QString::number(totalFileSize(softwareL)) + "MiB");
+    int fileSize = totalFileSize(softwareL);
+    totalSizeLabel->setText("Total Size: " + QString::number(fileSize) + "MiB");
 
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
