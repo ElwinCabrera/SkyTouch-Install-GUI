@@ -325,18 +325,20 @@ void SoftwareDownloadPage::stopDownloads()
     warning.exec();
     if(warning.getOkButtonCliked()) {
 
-        network->closeAllConnections();
+
         clearWidgetsAndLayouts(mainLayout);
 
 
 
         //could do stop only checked(selected) downloads
         for(SoftwareInfo *si: softwareList) {
+            disconnect(si->reply,0,0,0);
             si->downloadInProg = false;
             si->downloadInterrupted = true;
             disconnect(si->pl,0,0,0);
             delete si->pl;
         }
+        network->closeAllConnections();
 
 
         vector<SoftwareInfo*> a;
