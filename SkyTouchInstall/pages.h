@@ -41,6 +41,7 @@ private:
 
     QPushButton *viewDownloadProgButton;
     QPushButton *readyToInstallButton;
+    QPushButton *stopDownloadBtn;
 
 
     vector<SoftwareInfo*> softwareList;

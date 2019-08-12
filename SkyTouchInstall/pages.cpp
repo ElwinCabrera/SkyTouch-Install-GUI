@@ -74,8 +74,8 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
 
     viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
 
-    //bool downloadInProgress = isDownloadInProgress();
-    //if(!downloadInProgress) viewDownloadProgButton->setDisabled(true);
+
+    if(!isDownloadInProgress()) viewDownloadProgButton->setDisabled(true);
 
     readyToInstallButton = new QPushButton(tr("Show Ready to Install"));
     readyToInstallButton->setDisabled(true);
@@ -161,7 +161,7 @@ void SoftwareDownloadPage::backToSoftwareList(){
 
     downloadConfirmed = false;
     for(SoftwareInfo *si: softwareList)
-        if(!si->downloadInProg) disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
+        if(si->downloadInProg || si->reply->isFinished()) disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
 
     vector<SoftwareInfo*> tmp;
     initPage(tmp, NULL);
@@ -179,7 +179,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
         qDebug() << "in function showDownloadProgres: mainLayout is NULL";
         return;
     }
-    clearWidgetsAndLayouts(mainLayout);
+    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
     mainLayout = new QVBoxLayout;
 
     disconnect(this,0,0,0);
@@ -192,7 +192,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
 
     for(SoftwareInfo *si: softwareList){
-        if(si->markedForDownlaod && downloadConfirmed ){
+        if(si->markedForDownlaod  || si->downloadInProg){
 
             QString s = "Downloading " + si->softwareName;
             QGroupBox *groupBox = new QGroupBox(s);
@@ -201,20 +201,18 @@ void SoftwareDownloadPage::showDownloadProgress(){
             if(!si->downloadInProg){
                 si->pl = new ProgressListenner;
             } else {
-                connect(si->reply, &QNetworkReply::downloadProgress, si->pl,&ProgressListenner::onDownloadProgress);
+                if(si->reply && si->pl) connect(si->reply, &QNetworkReply::downloadProgress, si->pl,&ProgressListenner::onDownloadProgress);
             }
 
-            si->pl->pBar = new QProgressBar;
-            si->pl->pBar->setFixedWidth(300);
+            if(si->pl){
+                si->pl->pBar = new QProgressBar;
+                si->pl->pBar->setFixedWidth(300);
 
-
-
-            QHBoxLayout *layout = new QHBoxLayout;
-            layout->addWidget(si->pl->pBar);
-            layout->addStretch(1);
-            groupBox->setLayout(layout);
-
-
+                QHBoxLayout *layout = new QHBoxLayout;
+                layout->addWidget(si->pl->pBar);
+                layout->addStretch(1);
+                groupBox->setLayout(layout);
+            }
 
             scrollAreaLayout->addWidget(groupBox);
 
@@ -226,18 +224,18 @@ void SoftwareDownloadPage::showDownloadProgress(){
     QPushButton *backButton = new QPushButton(tr("Back"));
 
 
-    QPushButton *stopDownload = new QPushButton(tr("Stop Download"));
-    if(!downloadConfirmed) stopDownload->setDisabled(true);
+    stopDownloadBtn = new QPushButton(tr("Stop Download"));
+    if(!isDownloadInProgress()) stopDownloadBtn->setDisabled(true);
 
-    QPalette pal = stopDownload->palette();
+    QPalette pal = stopDownloadBtn->palette();
     pal.setColor(QPalette::Button, QColor(Qt::red));
-    stopDownload->setAutoFillBackground(true);
-    stopDownload->setPalette(pal);
-    stopDownload->update();
+    stopDownloadBtn->setAutoFillBackground(true);
+    stopDownloadBtn->setPalette(pal);
+    stopDownloadBtn->update();
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(backButton);
-    buttonLayout->addWidget(stopDownload);
+    buttonLayout->addWidget(stopDownloadBtn);
 
 
     mainLayout->addWidget(scrollArea);
@@ -245,7 +243,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
-    connect(stopDownload, &QPushButton::clicked, this, &SoftwareDownloadPage::stopDownloads);
+    connect(stopDownloadBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::stopDownloads);
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToSoftwareList);
 
 }
@@ -259,6 +257,8 @@ void SoftwareDownloadPage::startDownloads()
         QNetworkReply *r = network->getLastReply();
         si->reply = r;
         si->downloadInProg = true;
+        si->markedForDownlaod = false;
+        stopDownloadBtn->setDisabled(false);
 
         connect(r, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
     }
