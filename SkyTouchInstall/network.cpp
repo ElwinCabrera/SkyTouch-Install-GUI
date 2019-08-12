@@ -24,15 +24,7 @@ void Network::get(QString url)
     qDebug() << "getting form server";
     //QNetworkRequest *request(QUrl(url));
 
-    QString targetFolder = "/home/elwin/Downloads";
-    QString fileName = "TEST_CRE.exe";
-    mFile = new QFile( targetFolder + QDir::separator() + fileName);
-    // Trying to open the file
-    if (!mFile->open(QIODevice::WriteOnly)){
-        qDebug() << "Could not open file";
-        delete mFile;
-        mFile = nullptr;
-    }
+
     QNetworkReply *reply = manager->get(QNetworkRequest(QUrl(url)));
 
     //reply->setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
@@ -105,12 +97,7 @@ void Network::readyRead()
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender()); // alternative way to get reply without a paremeter
     if(reply){
         //we have a reply
-        qDebug() << reply->readAll();
-        if(mFile->isOpen()) {
-            mFile->write(reply->readAll());
-            mFile->flush();
-            mFile->close();
-        }
+
     }
 
 
@@ -142,15 +129,7 @@ void Network::finished()
     if(reply){
         //we have a reply
         //qDebug() << reply->readAll();
-        if(mFile) {
-            qDebug() << "file is open attempting to write";
-            mFile->write(reply->readAll());
-            mFile->flush();
-            mFile->close();
-            qDebug() << "Finished writing to file, file closed";
 
-            //set a flag to start a process to execute the exe file
-        }
     }
 
 
@@ -230,10 +209,7 @@ void Network::closeAllConnections()
         reply->deleteLater();
     }
     replys.clear();
-    if(mFile){
-        mFile->flush();
-        mFile->close();
-    }
+
 
 }
 

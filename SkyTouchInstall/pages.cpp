@@ -171,7 +171,12 @@ void SoftwareDownloadPage::finishedDownloading(){
     qDebug() << "finished Downloading in SoftwareDownloadsPage";
 
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    if(reply == NULL) return;
 
+
+
+    QString targetFolder = "/home/elwin/Downloads";
+    QFile *mFile;
 
     for(SoftwareInfo *si: softwareList){
         if(si->reply == reply){
@@ -179,6 +184,28 @@ void SoftwareDownloadPage::finishedDownloading(){
             si->downloadSuccess = true;
             si->markedForDownlaod = false;
             si->markedForInstall = true;
+
+
+            QString fileName = si->softwareName;
+            if(si->version64Bit) fileName += "_x64";
+            fileName += ".exe";
+
+            mFile = new QFile( targetFolder + QDir::separator() + fileName);
+            // Trying to open the file
+            if (!mFile->open(QIODevice::WriteOnly)){
+                qDebug() << "Could not open file";
+                delete mFile;
+                mFile = nullptr;
+            }
+
+            if(mFile) {
+                qDebug() << "file is open attempting to write";
+                mFile->write(reply->readAll());
+                mFile->flush();
+                mFile->close();
+                qDebug() << "Finished writing to file. file closed.";
+
+            }
 
         }
     }

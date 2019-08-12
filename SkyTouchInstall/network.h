@@ -53,7 +53,7 @@ private:
     QNetworkAccessManager *manager;
     int lastFileLength;
     QNetworkReply *lastReply;
-    QFile *mFile;
+
 
     //vector<QProgressBar*> pBars;
     vector<QNetworkReply*> replys;
