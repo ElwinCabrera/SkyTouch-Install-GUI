@@ -35,6 +35,7 @@ public slots:
 private:
     bool readyToInstall;
     bool downloadConfirmed;
+    bool firstLoad;
 
     QVBoxLayout *mainLayout;
     Network *network;

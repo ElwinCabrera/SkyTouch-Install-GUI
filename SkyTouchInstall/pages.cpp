@@ -8,6 +8,7 @@
 SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
     downloadConfirmed = false;
     readyToInstall = false;
+    firstLoad = true;
 
 
 }
@@ -75,7 +76,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
 
 
-    if(!isDownloadInProgress()) viewDownloadProgButton->setDisabled(true);
+    if(!isDownloadInProgress() || firstLoad) viewDownloadProgButton->setDisabled(true);
 
     readyToInstallButton = new QPushButton(tr("Show Ready to Install"));
     readyToInstallButton->setDisabled(true);
@@ -110,7 +111,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
    // mainLayout->addSpacing(200);
     setLayout(mainLayout);
 
-
+    firstLoad = false;
 
 }
 
