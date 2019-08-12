@@ -168,11 +168,16 @@ void SoftwareDownloadPage::backToSoftwareList(){
             delete si->reply;
             si->downloadInProg = false;
             si->downloadSuccess = true;
+            si->markedForDownlaod = false;
 
         }
     }
     vector<SoftwareInfo*> tmp;
     initPage(tmp, NULL);
+}
+
+void SoftwareDownloadPage::finishedDownloading(){
+    qDebug() << "finishedDownloading in SoftwareDownloadsPage";
 }
 
 
@@ -200,6 +205,14 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
 
     for(SoftwareInfo *si: softwareList){
+        if(si->reply && si->reply->isFinished()){
+            delete si->reply;
+            si->downloadInProg = false;
+            si->downloadSuccess = true;
+            si->markedForDownlaod = false;
+            viewDownloadProgButton->setDisabled(true);
+            continue;
+        }
         if(si->markedForDownlaod  || si->downloadInProg){
 
             QString s = "Downloading " + si->softwareName;
@@ -269,6 +282,7 @@ void SoftwareDownloadPage::startDownloads()
         stopDownloadBtn->setDisabled(false);
 
         connect(r, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
+        connect(r, &QNetworkReply::finished, this, &SoftwareDownloadPage::finishedDownloading);
     }
 
 }

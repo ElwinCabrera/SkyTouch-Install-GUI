@@ -31,6 +31,7 @@ public slots:
     void viewDownloadProg();
     void showReadyToInstall();
     void backToSoftwareList();
+    void finishedDownloading();
 
 private:
     bool readyToInstall;
