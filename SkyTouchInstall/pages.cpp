@@ -8,7 +8,6 @@
 SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
     downloadConfirmed = false;
     readyToInstall = false;
-    firstLoad = true;
 
 
 }
@@ -76,7 +75,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
 
 
-    if(!isDownloadInProgress() || firstLoad) viewDownloadProgButton->setDisabled(true);
+
 
     readyToInstallButton = new QPushButton(tr("Show Ready to Install"));
     readyToInstallButton->setDisabled(true);
@@ -111,7 +110,6 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
    // mainLayout->addSpacing(200);
     setLayout(mainLayout);
 
-    firstLoad = false;
 
 }
 
@@ -164,20 +162,30 @@ void SoftwareDownloadPage::backToSoftwareList(){
 
     for(SoftwareInfo *si: softwareList) {
         if(si->reply && si->downloadInProg ) disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
-        if(si->reply && si->reply->isFinished()){
-            delete si->reply;
-            si->downloadInProg = false;
-            si->downloadSuccess = true;
-            si->markedForDownlaod = false;
-
-        }
     }
     vector<SoftwareInfo*> tmp;
     initPage(tmp, NULL);
 }
 
 void SoftwareDownloadPage::finishedDownloading(){
-    qDebug() << "finishedDownloading in SoftwareDownloadsPage";
+    qDebug() << "finished Downloading in SoftwareDownloadsPage";
+
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+
+
+    for(SoftwareInfo *si: softwareList){
+        if(si->reply == reply){
+            si->downloadInProg = false;
+            si->downloadSuccess = true;
+            si->markedForDownlaod = false;
+            si->markedForInstall = true;
+
+        }
+    }
+
+    readyToInstallButton->setDisabled(false);
+
+    reply->deleteLater();
 }
 
 
