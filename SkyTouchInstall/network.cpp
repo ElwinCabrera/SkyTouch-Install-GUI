@@ -154,7 +154,7 @@ void Network::finished()
     }
 
 
-    reply->deleteLater();
+    //reply->deleteLater();
 
 }
 
@@ -224,7 +224,7 @@ vector<QNetworkReply *> Network::getReplys()
 void Network::closeAllConnections()
 {
     for(QNetworkReply *reply: replys){
-        reply->
+
         disconnect(reply, SIGNAL(finished()), this, SLOT(finished()));
         reply->abort();
         reply->deleteLater();

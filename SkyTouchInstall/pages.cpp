@@ -160,9 +160,16 @@ void SoftwareDownloadPage::backToSoftwareList(){
     if(mainLayout) clearWidgetsAndLayouts(mainLayout);
 
     downloadConfirmed = false;
-    for(SoftwareInfo *si: softwareList)
-        if(si->downloadInProg || si->reply->isFinished()) disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
 
+    for(SoftwareInfo *si: softwareList) {
+        if(si->reply && si->downloadInProg ) disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
+        if(si->reply && si->reply->isFinished()){
+            delete si->reply;
+            si->downloadInProg = false;
+            si->downloadSuccess = true;
+
+        }
+    }
     vector<SoftwareInfo*> tmp;
     initPage(tmp, NULL);
 }
