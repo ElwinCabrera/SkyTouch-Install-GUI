@@ -183,7 +183,7 @@ void SoftwareDownloadPage::finishedDownloading(){
         }
     }
 
-    readyToInstallButton->setDisabled(false);
+
 
     reply->deleteLater();
 }
@@ -213,14 +213,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
 
     for(SoftwareInfo *si: softwareList){
-        if(si->reply && si->reply->isFinished()){
-            delete si->reply;
-            si->downloadInProg = false;
-            si->downloadSuccess = true;
-            si->markedForDownlaod = false;
-            viewDownloadProgButton->setDisabled(true);
-            continue;
-        }
+
         if(si->markedForDownlaod  || si->downloadInProg){
 
             QString s = "Downloading " + si->softwareName;
