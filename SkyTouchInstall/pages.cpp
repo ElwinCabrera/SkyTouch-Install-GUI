@@ -329,6 +329,7 @@ void SoftwareDownloadPage::stopDownloads()
         clearWidgetsAndLayouts(mainLayout);
 
 
+
         //could do stop only checked(selected) downloads
         for(SoftwareInfo *si: softwareList) {
             si->downloadInProg = false;
