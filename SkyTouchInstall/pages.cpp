@@ -78,7 +78,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
 
 
     readyToInstallButton = new QPushButton(tr("Show Ready to Install"));
-    readyToInstallButton->setDisabled(true);
+    if(!isReadyForInstall()) readyToInstallButton->setDisabled(true);
 
 
     QPushButton *downloadButton = new QPushButton(tr("Start Download(s)"));
@@ -182,6 +182,9 @@ void SoftwareDownloadPage::finishedDownloading(){
 
         }
     }
+
+    //readyToInstall = true;
+    if(readyToInstallButton) readyToInstallButton->setDisabled(false);
 
 
 
@@ -321,6 +324,11 @@ bool SoftwareDownloadPage::isDownloadInProgress(){
         if(!si->pl) continue;
         if(si->pl->_lastKnownReceived < si->pl->_lastKnownTotal) return true;
     }
+    return false;
+}
+
+bool SoftwareDownloadPage::isReadyForInstall(){
+    for(SoftwareInfo *si: softwareList) if(si->markedForInstall) return true;
     return false;
 }
 

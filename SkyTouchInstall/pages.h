@@ -33,6 +33,7 @@ public slots:
     void backToSoftwareList();
     void finishedDownloading();
 
+
 private:
     bool readyToInstall;
     bool downloadConfirmed;
@@ -53,6 +54,7 @@ private:
     void startDownloads();
     void stopDownloads();
     bool isDownloadInProgress();
+    bool isReadyForInstall();
 
 
 
