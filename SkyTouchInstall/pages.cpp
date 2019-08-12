@@ -264,9 +264,10 @@ void SoftwareDownloadPage::showDownloadProgress(){
                 layout->addWidget(si->pl->pBar);
                 layout->addStretch(1);
                 groupBox->setLayout(layout);
+                scrollAreaLayout->addWidget(groupBox);
             }
 
-            scrollAreaLayout->addWidget(groupBox);
+
 
         }
     }
@@ -303,17 +304,19 @@ void SoftwareDownloadPage::showDownloadProgress(){
 void SoftwareDownloadPage::startDownloads()
 {
     for(SoftwareInfo *si : softwareList){
-        if(si->version32Bit) network->get(si->url32BitVersion);
-        if(si->version64Bit) network->get(si->url64BitVersion);
+        if(si->markedForDownlaod) {
+            if(si->version32Bit) network->get(si->url32BitVersion);
+            if(si->version64Bit) network->get(si->url64BitVersion);
 
-        QNetworkReply *r = network->getLastReply();
-        si->reply = r;
-        si->downloadInProg = true;
-        si->markedForDownlaod = false;
-        stopDownloadBtn->setDisabled(false);
+            QNetworkReply *r = network->getLastReply();
+            si->reply = r;
+            si->downloadInProg = true;
+            si->markedForDownlaod = false;
+            stopDownloadBtn->setDisabled(false);
 
-        connect(r, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
-        connect(r, &QNetworkReply::finished, this, &SoftwareDownloadPage::finishedDownloading);
+            if(si->pl) connect(r, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
+            connect(r, &QNetworkReply::finished, this, &SoftwareDownloadPage::finishedDownloading);
+        }
     }
 
 }
@@ -332,11 +335,15 @@ void SoftwareDownloadPage::stopDownloads()
 
         //could do stop only checked(selected) downloads
         for(SoftwareInfo *si: softwareList) {
-            disconnect(si->reply,0,0,0);
-            si->downloadInProg = false;
-            si->downloadInterrupted = true;
-            disconnect(si->pl,0,0,0);
-            delete si->pl;
+            if(si->downloadInProg){
+                disconnect(si->reply,0,0,0);
+                disconnect(si->pl,0,0,0);
+                delete si->pl;
+
+                si->downloadInProg = false;
+                si->downloadInterrupted = true;
+                si->markedForDownlaod = true;
+            }
         }
         network->closeAllConnections();
 

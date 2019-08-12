@@ -10,14 +10,14 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
     SoftwareInfo *si= new SoftwareInfo("CRE", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe",true, false );
     softwareList.push_back(si);
 
-    /*SoftwareInfo *si1= new SoftwareInfo("CRE1", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe",false, false );
+    SoftwareInfo *si1= new SoftwareInfo("CRE1", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe",false, false );
     softwareList.push_back(si1);
 
     SoftwareInfo *si2= new SoftwareInfo("CRE2", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe",false, false );
     softwareList.push_back(si2);
 
     SoftwareInfo *si3= new SoftwareInfo("CRE3", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe",false, false );
-    softwareList.push_back(si3);*/
+    softwareList.push_back(si3);
 
     contentsWidget = new QListWidget;
     contentsWidget->setViewMode(QListView::IconMode);

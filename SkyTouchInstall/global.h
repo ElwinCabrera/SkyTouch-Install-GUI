@@ -13,7 +13,7 @@ public:
 
    qint64 _lastKnownReceived;
    qint64 _lastKnownTotal;
-   QProgressBar *pBar;
+   QProgressBar *pBar= nullptr;
 
 public slots:
      void onDownloadProgress( qint64 bytesReceived, qint64 bytesTotal )
@@ -61,8 +61,8 @@ public:
   bool version64Bit ;
   bool version32Bit ;
 
-  ProgressListenner *pl;
-  QNetworkReply *reply;
+  ProgressListenner *pl = nullptr;
+  QNetworkReply *reply = nullptr;
 
 public slots:
   void onDownloadCheckBoxClicked() {markedForDownlaod = !markedForDownlaod; debugInfo();}

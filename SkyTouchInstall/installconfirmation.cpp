@@ -63,9 +63,12 @@ int InstallConfirmation::totalFileSize(vector<SoftwareInfo*> softwareL)
 
     int totalSize = 0;
     for(SoftwareInfo *si: softwareL){
-        if(si->version32Bit) network.head(si->url32BitVersion);
-        if(si->version64Bit) network.head(si->url64BitVersion);
-        totalSize += network.getFileLength();
+        if(si->markedForDownlaod ){
+            if(si->version32Bit) network.head(si->url32BitVersion);
+            if(si->version64Bit) network.head(si->url64BitVersion);
+
+            totalSize += network.getFileLength();
+        }
     }
     return totalSize / (1024 * 1024); // converting to megabytes
 
