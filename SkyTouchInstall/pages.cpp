@@ -1,13 +1,14 @@
 
 
 #include "pages.h"
-#include "canceldownloadswarning.h"
+#include "warningbox.h"
 
 
 
 SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
     downloadConfirmed = false;
     readyToInstall = false;
+    addLocalFilesToInstallQ = false;
 
 
 }
@@ -292,9 +293,15 @@ void SoftwareDownloadPage::finishedDownloading(){
 
 void SoftwareDownloadPage::addFileToInstallList(){
     //show warning label
+    WarningBox warning("Are you sure you want to add the selected files to the install queue?");
+    warning.setModal(true);
+    warning.exec();
+    if(warning.actionConfirmed()) {
+        addLocalFilesToInstallQ = true;
+        for(LocalFile *lf: localFilesList){
+            if(lf->getToBeInstalled()) qDebug() << lf->getFileName()<<" is to be installed";
+        }
 
-    for(LocalFile *lf: localFilesList){
-        if(lf->getToBeInstalled()) qDebug() << lf->getFileName()<<" is to be installed";
     }
 }
 
@@ -403,10 +410,10 @@ void SoftwareDownloadPage::startDownloads()
 
 void SoftwareDownloadPage::stopDownloads()
 {
-    CancelDownloadsWarning warning;
-    warning.setModal(true);
-    warning.exec();
-    if(warning.getOkButtonCliked()) {
+    WarningBox warningbox("Are you sure you want to cancel ALL downloads?");
+    warningbox.setModal(true);
+    warningbox.exec();
+    if(warningbox.actionConfirmed()) {
 
 
         clearWidgetsAndLayouts(mainLayout);
