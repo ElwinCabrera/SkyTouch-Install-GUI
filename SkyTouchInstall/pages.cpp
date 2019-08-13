@@ -47,7 +47,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
         download64RadioBtn->setChecked(true);
 
         QHBoxLayout *downloadLayout = new QHBoxLayout;
-        downloadLayout->addStretch(1);
+        //downloadLayout->addStretch(1);
         downloadLayout->addWidget(downloadRadioBtn);
         downloadLayout->addWidget(download64RadioBtn);
         downloadGroup->setLayout(downloadLayout);
@@ -144,17 +144,71 @@ void SoftwareDownloadPage::downloadButtonCliked(){
 
 void SoftwareDownloadPage::searchForLocalFiles(){
 
+    if(!mainLayout) {
+        qDebug() << "in function searchForLocalFiles: mainLayout is NULL";
+        return;
+    }
+    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
+    mainLayout = new QVBoxLayout;
+
+    disconnect(this,0,0,0);
+
+
+    QScrollArea *scrollArea = new QScrollArea;
+    scrollArea->setFixedSize(QSize(350, 325));
+    QWidget *scrollAreaWidget = new QWidget;
+    QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
+
+
     QDirIterator dirIt("/home/elwin/Downloads",QDirIterator::Subdirectories);
     while (dirIt.hasNext()) {
         dirIt.next();
         if (QFileInfo(dirIt.filePath()).isFile()) {
             if(QFileInfo(dirIt.filePath()).suffix() == "exe") {
-                localFiles.push_back({dirIt.filePath(),dirIt.fileName()});
                 qDebug()<< dirIt.filePath();
+
+                LocalFile *lf = new LocalFile(dirIt.fileName(), dirIt.filePath(),false);
+                localFilesList.push_back(lf);
+
+                QGroupBox *gBox= new QGroupBox;
+                gBox->setFixedWidth(312.5);
+                gBox->setCheckable(true);
+                gBox->setChecked(false);
+                QLabel *label = new QLabel(dirIt.fileName());
+                QHBoxLayout *layout = new QHBoxLayout;
+
+                layout->addWidget(label);
+                //layout->addStretch(1);
+                gBox->setLayout(layout);
+                scrollAreaLayout->addWidget(gBox);
+
+                connect(gBox, &QGroupBox::clicked, lf, &LocalFile::changeInstallState);
+
             }
+
 
         }
     }
+    scrollAreaWidget->setLayout(scrollAreaLayout);
+    scrollArea->setWidget(scrollAreaWidget);
+
+    QPushButton *backButton = new QPushButton(tr("Back"));
+
+
+    QPushButton *addToInstallListBtn= new QPushButton(tr("Add To Install List"));
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(backButton);
+    buttonLayout->addWidget(addToInstallListBtn);
+
+
+    mainLayout->addWidget(scrollArea);
+    mainLayout->addLayout(buttonLayout);
+    mainLayout->addStretch(1);
+    setLayout(mainLayout);
+
+    connect(addToInstallListBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::addFileToInstallList);
+    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToSoftwareList);
 
 
 }
@@ -229,6 +283,14 @@ void SoftwareDownloadPage::finishedDownloading(){
 
 
     reply->deleteLater();
+}
+
+void SoftwareDownloadPage::addFileToInstallList(){
+    //show warning label
+
+    for(LocalFile *lf: localFilesList){
+        if(lf->getToBeInstalled()) qDebug() << lf->getFileName()<<" is to be installed";
+    }
 }
 
 

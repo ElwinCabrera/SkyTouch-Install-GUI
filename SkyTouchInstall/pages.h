@@ -23,6 +23,7 @@ public slots:
     void showReadyToInstall();
     void backToSoftwareList();
     void finishedDownloading();
+    void addFileToInstallList();
 
 
 private:
@@ -39,7 +40,7 @@ private:
 
 
     vector<SoftwareInfo*> softwareList;
-    vector<pair<QString,QString>> localFiles;
+    vector<LocalFile*> localFilesList;
 
     void showDownloadProgress();
     void startDownloads();

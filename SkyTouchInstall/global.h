@@ -94,7 +94,8 @@ public slots:
 
 };
 
-class LocalFile{
+class LocalFile: public QObject{
+
 public:
     LocalFile(QString fileName, QString filePath, bool markedForInstall){
         this->fileName = fileName;
@@ -107,6 +108,10 @@ public:
     bool getToBeInstalled() {return markedForInstall;}
 
     void setToBeInstalled(bool install){this->markedForInstall = install;}
+
+public slots:
+    void changeInstallState(){markedForInstall = !markedForInstall;}
+
 private:
     QString fileName = "";
     QString filePath = "";
