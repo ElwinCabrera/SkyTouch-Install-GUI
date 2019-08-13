@@ -160,26 +160,40 @@ void SoftwareDownloadPage::searchForLocalFiles(){
     QWidget *scrollAreaWidget = new QWidget;
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
-    QSet<QString> fileNameSet;
+
+    QSet<QString> visitedFilesSet;
 
     QDirIterator dirIt("/home/elwin/Downloads",QDirIterator::Subdirectories);
     while (dirIt.hasNext()) {
         dirIt.next();
         if (QFileInfo(dirIt.filePath()).isFile()) {
             if(QFileInfo(dirIt.filePath()).suffix() == "exe") {
+
                 qDebug()<< dirIt.filePath();
 
+                QMap<QString,LocalFile*>::iterator it = localFilesMap.find(dirIt.fileName());
 
-                if(fileNameSet.find(dirIt.fileName()) == fileNameSet.end()) fileNameSet.insert(dirIt.fileName());
+                LocalFile *lf = nullptr;
+                if(it == localFilesMap.end()) {
+
+                    lf = new LocalFile(dirIt.fileName(), dirIt.filePath(),false);
+
+                    localFilesMap.insert(dirIt.fileName(),lf);
+
+                } else lf = it.value();
+
+                if(visitedFilesSet.find(dirIt.fileName()) == visitedFilesSet.end()) visitedFilesSet.insert(dirIt.fileName());
                 else continue;
 
-                LocalFile *lf = new LocalFile(dirIt.fileName(), dirIt.filePath(),false);
-                localFilesList.push_back(lf);
+
 
                 QGroupBox *gBox= new QGroupBox;
                 gBox->setFixedWidth(312.5);
                 gBox->setCheckable(true);
-                gBox->setChecked(false);
+
+                if(lf) gBox->setChecked(lf->getToBeInstalled());
+                else gBox->setChecked(false);
+
                 QLabel *label = new QLabel(dirIt.fileName());
                 QHBoxLayout *layout = new QHBoxLayout;
 
@@ -188,7 +202,7 @@ void SoftwareDownloadPage::searchForLocalFiles(){
                 gBox->setLayout(layout);
                 scrollAreaLayout->addWidget(gBox);
 
-                connect(gBox, &QGroupBox::clicked, lf, &LocalFile::changeInstallState);
+                if(lf) connect(gBox, &QGroupBox::clicked, lf, &LocalFile::changeInstallState);
 
             }
 
@@ -299,7 +313,7 @@ void SoftwareDownloadPage::addFileToInstallList(){
     warning.exec();
     if(warning.actionConfirmed()) {
         addLocalFilesToInstallQ = true;
-        for(LocalFile *lf: localFilesList){
+        for(LocalFile *lf: localFilesMap){
             if(lf->getToBeInstalled()) qDebug() << lf->getFileName()<<" is to be installed";
         }
 

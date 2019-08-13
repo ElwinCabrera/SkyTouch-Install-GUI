@@ -40,7 +40,7 @@ private:
 
 
     vector<SoftwareInfo*> softwareList;
-    vector<LocalFile*> localFilesList;
+    QMap<QString,LocalFile*> localFilesMap;
 
     void showDownloadProgress();
     void startDownloads();
