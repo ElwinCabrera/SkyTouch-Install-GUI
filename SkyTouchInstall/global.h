@@ -3,23 +3,29 @@
 
 #include <QWidget>
 #include <QtWidgets>
-#include <vector>
 #include <QDebug>
 #include <QDialog>
-#include <QtNetwork/QNetworkReply>
-
-
 #include <QObject>
 
-#include <QtWidgets>
+#include <QSet>
+
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QAuthenticator>
 #include <QtNetwork/QNetworkProxy>
 
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+
 using std::vector;
 using std::pair;
+using std::unordered_set;
+using std::set;
+using std::unordered_map;
+
 
 class ProgressListenner : public QObject
 {

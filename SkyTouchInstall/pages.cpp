@@ -159,6 +159,7 @@ void SoftwareDownloadPage::searchForLocalFiles(){
     QWidget *scrollAreaWidget = new QWidget;
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
+    QSet<QString> fileNameSet;
 
     QDirIterator dirIt("/home/elwin/Downloads",QDirIterator::Subdirectories);
     while (dirIt.hasNext()) {
@@ -166,6 +167,10 @@ void SoftwareDownloadPage::searchForLocalFiles(){
         if (QFileInfo(dirIt.filePath()).isFile()) {
             if(QFileInfo(dirIt.filePath()).suffix() == "exe") {
                 qDebug()<< dirIt.filePath();
+
+
+                if(fileNameSet.find(dirIt.fileName()) == fileNameSet.end()) fileNameSet.insert(dirIt.fileName());
+                else continue;
 
                 LocalFile *lf = new LocalFile(dirIt.fileName(), dirIt.filePath(),false);
                 localFilesList.push_back(lf);
