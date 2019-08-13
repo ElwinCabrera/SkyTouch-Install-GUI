@@ -293,6 +293,7 @@ void SoftwareDownloadPage::finishedDownloading(){
 
 void SoftwareDownloadPage::addFileToInstallList(){
     //show warning label
+
     WarningBox warning("Are you sure you want to add the selected files to the install queue?");
     warning.setModal(true);
     warning.exec();
