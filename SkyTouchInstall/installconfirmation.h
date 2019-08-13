@@ -1,8 +1,7 @@
 #ifndef INSTALLCONFIRMATION_H
 #define INSTALLCONFIRMATION_H
 
-#include <QDialog>
-#include <vector>
+
 #include "network.h"
 #include "global.h"
 
@@ -22,7 +21,7 @@ class InstallConfirmation : public QDialog
 
 public:
     InstallConfirmation(QWidget *parent , vector<SoftwareInfo*> softwareL);
-    int totalFileSize(vector<SoftwareInfo*> softwareL);
+    uint64_t totalFileSize(vector<SoftwareInfo*> softwareL);
     bool getConfirmation() {return confirm; }
 
 

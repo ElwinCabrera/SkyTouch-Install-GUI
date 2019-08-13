@@ -1,10 +1,8 @@
 #ifndef CANCELDOWNLOADSWARNING_H
 #define CANCELDOWNLOADSWARNING_H
 
-#include <QObject>
-#include <QDialog>
-#include <QtWidgets>
-#include <QWidget>
+
+#include "global.h"
 
 class CancelDownloadsWarning : public QDialog
 {

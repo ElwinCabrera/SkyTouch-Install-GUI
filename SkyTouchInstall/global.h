@@ -1,9 +1,25 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include<QWidget>
+#include <QWidget>
 #include <QtWidgets>
+#include <vector>
+#include <QDebug>
+#include <QDialog>
 #include <QtNetwork/QNetworkReply>
+
+
+#include <QObject>
+
+#include <QtWidgets>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QAuthenticator>
+#include <QtNetwork/QNetworkProxy>
+
+using std::vector;
+using std::pair;
 
 class ProgressListenner : public QObject
 {
@@ -75,6 +91,27 @@ public slots:
       qDebug() << "32Bit  = " << version32Bit ;
       qDebug() << "64Bit  = " << version64Bit ;
   }
+
+};
+
+class LocalFile{
+public:
+    LocalFile(QString fileName, QString filePath, bool markedForInstall){
+        this->fileName = fileName;
+        this->filePath = filePath;
+        this->markedForInstall = markedForInstall;
+    }
+
+    QString getFileName() {return fileName;}
+    QString getFilePath() {return filePath;}
+    bool getToBeInstalled() {return markedForInstall;}
+
+    void setToBeInstalled(bool install){this->markedForInstall = install;}
+private:
+    QString fileName = "";
+    QString filePath = "";
+    bool markedForInstall = false;
+
 
 };
 

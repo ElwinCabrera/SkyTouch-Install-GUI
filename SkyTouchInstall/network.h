@@ -1,16 +1,9 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include <QObject>
-#include <QtWidgets>
-#include <vector>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QAuthenticator>
-#include <QtNetwork/QNetworkProxy>
 
-using std::vector;
+#include "global.h"
+
 
 class Network : public QObject
 {

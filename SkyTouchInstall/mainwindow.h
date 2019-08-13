@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 
-#include <QDialog>
+
 #include "pages.h"
 #include "global.h"
 #include "network.h"

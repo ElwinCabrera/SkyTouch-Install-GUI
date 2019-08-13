@@ -31,8 +31,7 @@ SOURCES += \
     pages.cpp \
     network.cpp \
     installconfirmation.cpp \
-    canceldownloadswarning.cpp \
-    helper.cpp
+    canceldownloadswarning.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,8 +39,7 @@ HEADERS += \
     network.h \
     installconfirmation.h \
     canceldownloadswarning.h \
-    global.h \
-    helper.h
+    global.h
 
 FORMS += \
         mainwindow.ui

@@ -16,6 +16,7 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
         if(si->markedForDownlaod) {
             //Creating a new list widget item whose parent is the softwareListWidget itself
             QListWidgetItem *item = new QListWidgetItem(softwareListWidget);
+
             if(si->version32Bit) item->setText(si->softwareName + ": " + si->url32BitVersion);
             if(si->version64Bit) item->setText(si->softwareName + ": " + si->url64BitVersion);
 
@@ -25,7 +26,7 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
     }
 
     QLabel *totalSizeLabel = new QLabel;
-    int fileSize = totalFileSize(softwareL);
+    uint64_t fileSize = totalFileSize(softwareL);
     totalSizeLabel->setText("Total Size: " + QString::number(fileSize) + "MiB");
 
 
@@ -58,10 +59,10 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
 
 }
 
-int InstallConfirmation::totalFileSize(vector<SoftwareInfo*> softwareL)
+uint64_t InstallConfirmation::totalFileSize(vector<SoftwareInfo*> softwareL)
 {
 
-    int totalSize = 0;
+    uint64_t totalSize = 0;
     for(SoftwareInfo *si: softwareL){
         if(si->markedForDownlaod ){
             if(si->version32Bit) network.head(si->url32BitVersion);

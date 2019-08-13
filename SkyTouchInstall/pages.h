@@ -1,20 +1,11 @@
 #ifndef PAGES_H
 #define PAGES_H
 
-#include <QWidget>
-#include <QtWidgets>
-#include <QDebug>
-#include <vector>
-#include <QtNetwork/QNetworkAccessManager>
 
 
 #include "network.h"
 #include "installconfirmation.h"
 #include "global.h"
-//#include<pair>
-
-using std::vector;
-using std::pair;
 
 
 class SoftwareDownloadPage : public QWidget {
@@ -48,7 +39,7 @@ private:
 
 
     vector<SoftwareInfo*> softwareList;
-    vector<QNetworkReply*> replys;
+    vector<pair<QString,QString>> localFiles;
 
     void showDownloadProgress();
     void startDownloads();

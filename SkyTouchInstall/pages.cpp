@@ -144,6 +144,18 @@ void SoftwareDownloadPage::downloadButtonCliked(){
 
 void SoftwareDownloadPage::searchForLocalFiles(){
 
+    QDirIterator dirIt("/home/elwin/Downloads",QDirIterator::Subdirectories);
+    while (dirIt.hasNext()) {
+        dirIt.next();
+        if (QFileInfo(dirIt.filePath()).isFile()) {
+            if(QFileInfo(dirIt.filePath()).suffix() == "exe") {
+                localFiles.push_back({dirIt.filePath(),dirIt.fileName()});
+                qDebug()<< dirIt.filePath();
+            }
+
+        }
+    }
+
 
 }
 
