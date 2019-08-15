@@ -9,19 +9,22 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
     QGroupBox *confirmInstallGroup = new QGroupBox(tr("Programs to be Installed..."));
     softwareListWidget = new QListWidget;
     softwareListWidget->setViewMode(QListView::ListMode);
-
     softwareListWidget->setMaximumWidth(650);
 
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
     for(SoftwareInfo *si: softwareL){
-        if(si->markedForDownlaod) {
+        if(si->getDownloadMarked()) {
             //Creating a new list widget item whose parent is the softwareListWidget itself
             QListWidgetItem *item = new QListWidgetItem(softwareListWidget);
 
-            if(si->version32Bit) item->setText(si->softwareName + ": " + si->url32BitVersion);
-            if(si->version64Bit) item->setText(si->softwareName + ": " + si->url64BitVersion);
+            if(si->getVersionSelect32()) item->setText(si->getSoftwareName() + ": " + si->get32BitURL());
+            if(si->getVersionSelect64()) item->setText(si->getSoftwareName() + ": " + si->get64BitURL());
 
             //Adding the item to the softwareListWidget
             softwareListWidget->addItem(item);
+
+            connect(buttonBox, &QDialogButtonBox::accepted, si, &SoftwareInfo::downloadStart);
         }
     }
 
@@ -30,10 +33,9 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
     totalSizeLabel->setText("Total Size: " + QString::number(fileSize) + "MiB");
 
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &InstallConfirmation::okButtonCliked);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &InstallConfirmation::cancelButtonClicked);
+
+
 
     QHBoxLayout *confirmInstallLayout = new QHBoxLayout;
     confirmInstallLayout->addWidget(softwareListWidget);
@@ -56,6 +58,9 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
 
     setLayout(mainLayout);
 
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &InstallConfirmation::okButtonCliked);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &InstallConfirmation::cancelButtonClicked);
+
 
 }
 
@@ -64,9 +69,9 @@ uint64_t InstallConfirmation::totalFileSize(vector<SoftwareInfo*> softwareL)
 
     uint64_t totalSize = 0;
     for(SoftwareInfo *si: softwareL){
-        if(si->markedForDownlaod ){
-            if(si->version32Bit) network.head(si->url32BitVersion);
-            if(si->version64Bit) network.head(si->url64BitVersion);
+        if(si->getDownloadMarked() ){
+            if(si->getVersionSelect32()) network.head(si->get32BitURL());
+            if(si->getVersionSelect64()) network.head(si->get64BitURL());
 
             totalSize += network.getFileLength();
         }

@@ -29,7 +29,7 @@ public slots:
 private:
     bool readyToInstall;
     bool downloadConfirmed;
-    bool addLocalFilesToInstallQ;
+    bool localFilesInInstallQ;
 
     QVBoxLayout *mainLayout;
     Network *network;

@@ -8,7 +8,7 @@
 SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
     downloadConfirmed = false;
     readyToInstall = false;
-    addLocalFilesToInstallQ = false;
+    localFilesInInstallQ = false;
 
 
 }
@@ -29,13 +29,13 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
     for(SoftwareInfo *si :  softwareList){
-        QGroupBox *downloadGroup = new QGroupBox("Download "+si->softwareName);
+        QGroupBox *downloadGroup = new QGroupBox("Download "+si->getSoftwareName());
         downloadGroup->setFixedWidth(312.5);
         downloadGroup->setCheckable(true);
         downloadGroup->blockSignals(true);
-        downloadGroup->setChecked(si->markedForDownlaod);
+        downloadGroup->setChecked(si->getDownloadMarked());
 
-        if(si->downloadInProg || si->downloadSuccess){
+        if(si->downloadInProgress() || si->getDownloadSuccess()){
             downloadGroup->setChecked(false);
             downloadGroup->setDisabled(true);
         }
@@ -53,10 +53,10 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
         downloadLayout->addWidget(download64RadioBtn);
         downloadGroup->setLayout(downloadLayout);
 
-        if( si->url32BitVersion == "") downloadRadioBtn->setCheckable(false);
-        if( si->url64BitVersion == "") download64RadioBtn->setCheckable(false);
-        downloadRadioBtn->setChecked(si->version32Bit);
-        download64RadioBtn->setChecked(si->version64Bit);
+        if( si->get32BitURL() == "") downloadRadioBtn->setCheckable(false);
+        if( si->get64BitURL() == "") download64RadioBtn->setCheckable(false);
+        downloadRadioBtn->setChecked(si->getVersionSelect32());
+        download64RadioBtn->setChecked(si->getVersionSelect64());
 
         connect(downloadGroup, &QGroupBox::toggled, si, &SoftwareInfo::onDownloadCheckBoxClicked);
         connect(download64RadioBtn, &QRadioButton::toggled,si, &SoftwareInfo::onVersionSelect);
@@ -78,20 +78,17 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
 
 
 
-    readyToInstallButton = new QPushButton(tr("Show Ready to Install"));
+    readyToInstallButton = new QPushButton(tr("Ready to Install"));
+
     if(!isReadyForInstall()) readyToInstallButton->setDisabled(true);
+    else readyToInstallButton->setStyleSheet("QPushButton{background-color:green;");
+
 
 
     QPushButton *downloadButton = new QPushButton(tr("Start Download(s)"));
     downloadButton->setDefault(true);
 
 
-
-
-    connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::downloadButtonCliked);
-    connect(searchForLocalButton, &QPushButton::clicked, this , &SoftwareDownloadPage::searchForLocalFiles);
-    connect(viewDownloadProgButton, &QPushButton::clicked, this, &SoftwareDownloadPage::viewDownloadProg);
-    connect(readyToInstallButton, &QPushButton::clicked, this, &SoftwareDownloadPage::showReadyToInstall);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addWidget(searchForLocalButton);
@@ -102,7 +99,6 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
 
     //
     mainLayout->addWidget(scrollArea);
-    //mainLayout->addWidget(downloadButton);
     mainLayout->addLayout(buttonsLayout);
     mainLayout->addWidget(readyToInstallButton);
     mainLayout->addWidget(downloadButton);
@@ -110,6 +106,11 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     mainLayout->addStretch(1);
    // mainLayout->addSpacing(200);
     setLayout(mainLayout);
+
+    connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::downloadButtonCliked);
+    connect(searchForLocalButton, &QPushButton::clicked, this , &SoftwareDownloadPage::searchForLocalFiles);
+    connect(viewDownloadProgButton, &QPushButton::clicked, this, &SoftwareDownloadPage::viewDownloadProg);
+    connect(readyToInstallButton, &QPushButton::clicked, this, &SoftwareDownloadPage::showReadyToInstall);
 
 
 }
@@ -122,7 +123,7 @@ void SoftwareDownloadPage::downloadButtonCliked(){
     bool minimumOneChecked = false;
 
     for(SoftwareInfo *si: softwareList){
-        if(si->markedForDownlaod) {minimumOneChecked = true; break;}
+        if(si->getDownloadMarked()) {minimumOneChecked = true; break;}
     }
 
     if(minimumOneChecked){
@@ -135,10 +136,10 @@ void SoftwareDownloadPage::downloadButtonCliked(){
             qDebug() << "download confirmed";
             showDownloadProgress();
             startDownloads();
+            stopDownloadBtn->setDisabled(false);
 
             //if all downloads are done then return to installation screen
-        }
-        if(!confirmWindow.getConfirmation()) qDebug() << "download  NOT confirmed";
+        } else qDebug() << "download  NOT confirmed";
 
     }
 }
@@ -189,9 +190,12 @@ void SoftwareDownloadPage::searchForLocalFiles(){
 
                 QGroupBox *gBox= new QGroupBox;
                 gBox->setFixedWidth(312.5);
-                gBox->setCheckable(true);
 
-                if(lf) gBox->setChecked(lf->getToBeInstalled());
+                gBox->setCheckable(true);
+                if(lf->getInstallState()){
+                    gBox->setTitle("Marked For Install");
+                }
+                if(lf) gBox->setChecked(lf->getReadyState() || lf->getInstallState());
                 else gBox->setChecked(false);
 
                 QLabel *label = new QLabel(dirIt.fileName());
@@ -202,7 +206,7 @@ void SoftwareDownloadPage::searchForLocalFiles(){
                 gBox->setLayout(layout);
                 scrollAreaLayout->addWidget(gBox);
 
-                if(lf) connect(gBox, &QGroupBox::clicked, lf, &LocalFile::changeInstallState);
+                if(lf) connect(gBox, &QGroupBox::clicked, lf, &LocalFile::changeReadyState);
 
             }
 
@@ -215,7 +219,8 @@ void SoftwareDownloadPage::searchForLocalFiles(){
     QPushButton *backButton = new QPushButton(tr("Back"));
 
 
-    QPushButton *addToInstallListBtn= new QPushButton(tr("Add To Install List"));
+    QPushButton *addToInstallListBtn= new QPushButton(tr("Apply Changes"));
+    addToInstallListBtn->setDefault(true);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(backButton);
@@ -238,6 +243,21 @@ void SoftwareDownloadPage::viewDownloadProg(){
 }
 
 void SoftwareDownloadPage::showReadyToInstall(){
+    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
+    else { qDebug() << "mainLayout NOT null: in showReadyToInstall"; return; }
+
+    QScrollArea *scrollArea = new QScrollArea;
+    scrollArea->setFixedSize(QSize(350, 325));
+    QWidget *scrollAreaWidget = new QWidget;
+    QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
+
+    for(SoftwareInfo *si: softwareList){
+        if(si->getInstallReadyState()){
+
+        }
+    }
+
+
 
 }
 
@@ -248,7 +268,8 @@ void SoftwareDownloadPage::backToSoftwareList(){
     downloadConfirmed = false;
 
     for(SoftwareInfo *si: softwareList) {
-        if(si->reply && si->downloadInProg ) disconnect(si->reply, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
+        if(si->getNetworkReply() && si->downloadInProgress() )
+            disconnect(si->getNetworkReply(), &QNetworkReply::downloadProgress, si->getProgressListener(), &ProgressListenner::onDownloadProgress);
     }
     vector<SoftwareInfo*> tmp;
     initPage(tmp, NULL);
@@ -257,52 +278,56 @@ void SoftwareDownloadPage::backToSoftwareList(){
 void SoftwareDownloadPage::finishedDownloading(){
     qDebug() << "finished Downloading in SoftwareDownloadsPage";
 
-    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-    if(reply == NULL) return;
+//    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+//    if(reply == NULL) return;
 
 
 
-    QString targetFolder = "/home/elwin/Downloads";
-    QFile *mFile;
+//    QString targetFolder = "/home/elwin/Downloads";
+//    QFile *mFile;
 
-    for(SoftwareInfo *si: softwareList){
-        if(si->reply == reply){
-            si->downloadInProg = false;
-            si->downloadSuccess = true;
-            si->markedForDownlaod = false;
-            si->markedForInstall = true;
+//    for(SoftwareInfo *si: softwareList){
+//        if(si->getNetworkReply() == reply){
+//            si->downloadInProg = false;
+//            si->downloadSuccess = true;
+//            si->markedForDownlaod = false;
+//            si->markedForInstall = true;
 
 
-            QString fileName = si->softwareName;
-            if(si->version64Bit) fileName += "_x64";
-            fileName += ".exe";
+//            QString fileName = si->getSoftwareName();
+//            if(si->version64Bit) fileName += "_x64";
+//            fileName += ".exe";
 
-            mFile = new QFile( targetFolder + QDir::separator() + fileName);
-            // Trying to open the file
-            if (!mFile->open(QIODevice::WriteOnly)){
-                qDebug() << "Could not open file";
-                delete mFile;
-                mFile = nullptr;
-            }
+//            mFile = new QFile( targetFolder + QDir::separator() + fileName);
+//            // Trying to open the file
+//            if (!mFile->open(QIODevice::WriteOnly)){
+//                qDebug() << "Could not open file";
+//                delete mFile;
+//                mFile = nullptr;
+//            }
 
-            if(mFile) {
-                qDebug() << "file is open attempting to write";
-                mFile->write(reply->readAll());
-                mFile->flush();
-                mFile->close();
-                qDebug() << "Finished writing to file. file closed.";
+//            if(mFile) {
+//                qDebug() << "file is open attempting to write";
+//                mFile->write(reply->readAll());
+//                mFile->flush();
+//                mFile->close();
+//                qDebug() << "Finished writing to file. file closed.";
 
-            }
+//            }
 
-        }
-    }
+//        }
+//    }
 
     //readyToInstall = true;
-    if(readyToInstallButton) readyToInstallButton->setDisabled(false);
+    if(readyToInstallButton) {
+        readyToInstallButton->setDisabled(false);
+        readyToInstallButton->setStyleSheet("QPushButton{background-color:green;}");
+
+    }
 
 
 
-    reply->deleteLater();
+    //reply->deleteLater();
 }
 
 void SoftwareDownloadPage::addFileToInstallList(){
@@ -312,9 +337,10 @@ void SoftwareDownloadPage::addFileToInstallList(){
     warning.setModal(true);
     warning.exec();
     if(warning.actionConfirmed()) {
-        addLocalFilesToInstallQ = true;
+        localFilesInInstallQ = true;
         for(LocalFile *lf: localFilesMap){
-            if(lf->getToBeInstalled()) qDebug() << lf->getFileName()<<" is to be installed";
+            if(lf->getReadyState()) qDebug() << lf->getFileName()<<" is ready to be installed";
+
         }
 
     }
@@ -346,24 +372,29 @@ void SoftwareDownloadPage::showDownloadProgress(){
 
     for(SoftwareInfo *si: softwareList){
 
-        if(si->markedForDownlaod  || si->downloadInProg){
+        if(si->getDownloadMarked()  || si->downloadInProgress()){
+            ProgressListenner *progListPtr = si->getProgressListener();
+            QNetworkReply *replyPtr = si ->getNetworkReply();
 
-            QString s = "Downloading " + si->softwareName;
+            QString s = "Downloading " + si->getSoftwareName();
             QGroupBox *groupBox = new QGroupBox(s);
             //groupBox->setFixedWidth(312.5);
 
-            if(!si->downloadInProg){
-                si->pl = new ProgressListenner;
+            if(!si->downloadInProgress()){
+                si->setProgressListener(new ProgressListenner);
+                progListPtr = si->getProgressListener();
+                connect(stopDownloadBtn, &QPushButton::clicked, si, &SoftwareInfo::stopDownload);
             } else {
-                if(si->reply && si->pl) connect(si->reply, &QNetworkReply::downloadProgress, si->pl,&ProgressListenner::onDownloadProgress);
+                if(replyPtr && progListPtr)
+                    connect(replyPtr, &QNetworkReply::downloadProgress, progListPtr ,&ProgressListenner::onDownloadProgress);
             }
 
-            if(si->pl){
-                si->pl->pBar = new QProgressBar;
-                si->pl->pBar->setFixedWidth(300);
+            if(progListPtr){
+                progListPtr->pBar = new QProgressBar;
+                progListPtr->pBar->setFixedWidth(300);
 
                 QHBoxLayout *layout = new QHBoxLayout;
-                layout->addWidget(si->pl->pBar);
+                layout->addWidget(si->getProgressListener()->pBar);
                 layout->addStretch(1);
                 groupBox->setLayout(layout);
                 scrollAreaLayout->addWidget(groupBox);
@@ -406,18 +437,19 @@ void SoftwareDownloadPage::showDownloadProgress(){
 void SoftwareDownloadPage::startDownloads()
 {
     for(SoftwareInfo *si : softwareList){
-        if(si->markedForDownlaod) {
-            if(si->version32Bit) network->get(si->url32BitVersion);
-            if(si->version64Bit) network->get(si->url64BitVersion);
+        if(si->getDownloadMarked()) {
+            if(si->getVersionSelect32()) network->get(si->get32BitURL());
+            if(si->getVersionSelect64()) network->get(si->get64BitURL());
 
-            QNetworkReply *r = network->getLastReply();
-            si->reply = r;
-            si->downloadInProg = true;
-            si->markedForDownlaod = false;
-            stopDownloadBtn->setDisabled(false);
+            QNetworkReply *reply = network->getLastReply();
+            si->setNetworkReply(reply);
+//            si->downloadInProg = true;
+//            si->markedForDownlaod = false;
 
-            if(si->pl) connect(r, &QNetworkReply::downloadProgress, si->pl, &ProgressListenner::onDownloadProgress);
-            connect(r, &QNetworkReply::finished, this, &SoftwareDownloadPage::finishedDownloading);
+
+            if(si->getProgressListener()) connect(reply, &QNetworkReply::downloadProgress, si->getProgressListener(), &ProgressListenner::onDownloadProgress);
+            connect(reply, &QNetworkReply::finished, this, &SoftwareDownloadPage::finishedDownloading);
+            connect(reply, &QNetworkReply::finished, si, &SoftwareInfo::finishedDownload);
         }
     }
 
@@ -426,6 +458,7 @@ void SoftwareDownloadPage::startDownloads()
 void SoftwareDownloadPage::stopDownloads()
 {
     WarningBox warningbox("Are you sure you want to cancel ALL downloads?");
+    //warningbox.setStopDownloadsWarning(true);
     warningbox.setModal(true);
     warningbox.exec();
     if(warningbox.actionConfirmed()) {
@@ -435,19 +468,19 @@ void SoftwareDownloadPage::stopDownloads()
 
 
 
-        //could do stop only checked(selected) downloads
-        for(SoftwareInfo *si: softwareList) {
-            if(si->downloadInProg){
-                disconnect(si->reply,0,0,0);
-                disconnect(si->pl,0,0,0);
-                delete si->pl;
+//        //could do stop only checked(selected) downloads
+//        for(SoftwareInfo *si: softwareList) {
+//            if(si->downloadInProgress()){
+//                disconnect(si->getNetworkReply(),0,0,0);
+//                disconnect(si->getProgressListener(),0,0,0);
+//                delete si->getProgressListener();
 
-                si->downloadInProg = false;
-                si->downloadInterrupted = true;
-                si->markedForDownlaod = true;
-            }
-        }
-        network->closeAllConnections();
+//                si->downloadInProg = false;
+//                si->downloadInterrupt = true;
+//                si->markedForDownlaod = true;
+//            }
+//        }
+//        network->closeAllConnections();
 
 
         vector<SoftwareInfo*> a;
@@ -460,14 +493,15 @@ void SoftwareDownloadPage::stopDownloads()
 bool SoftwareDownloadPage::isDownloadInProgress(){
 
     for(SoftwareInfo *si: softwareList){
-        if(!si->pl) continue;
-        if(si->pl->_lastKnownReceived < si->pl->_lastKnownTotal) return true;
+        if(!si->getProgressListener()) continue;
+        if(si->getProgressListener()->_lastKnownReceived < si->getProgressListener()->_lastKnownTotal) return true;
     }
     return false;
 }
 
 bool SoftwareDownloadPage::isReadyForInstall(){
-    for(SoftwareInfo *si: softwareList) if(si->markedForInstall) return true;
+    if(localFilesInInstallQ) return true;
+    for(SoftwareInfo *si: softwareList) if(si->getInstallReadyState()) return true;
     return false;
 }
 
