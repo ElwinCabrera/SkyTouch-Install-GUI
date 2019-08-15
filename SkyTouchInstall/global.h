@@ -200,6 +200,7 @@ public:
 
 public slots:
     void changeReadyState(){readyForInstall = !readyForInstall;}
+    void changeInstallState() {markedForInstall = !markedForInstall;}
 
 private:
     QString fileName = "";

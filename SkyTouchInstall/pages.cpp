@@ -276,8 +276,42 @@ void SoftwareDownloadPage::readyToInstallPage(){
             gBox->setLayout(layout);
             scrollAreaLayout->addWidget(gBox);
 
-            connect(gBox, &QGroupBox::clicked, si, &SoftwareInfo::onInstallCheckBoxClicked);
+            connect(gBox, &QGroupBox::toggled, si, &SoftwareInfo::onInstallCheckBoxClicked);
         }
+    }
+
+    if(localFilesInInstallQ){
+        QGroupBox *gb = new QGroupBox;
+        gb->setFixedWidth(312.5);
+        gb->setDisabled(true);
+
+        QLabel *l = new QLabel("Local Files");
+        QHBoxLayout *lay = new QHBoxLayout;
+
+        lay->addWidget(l);
+        gb->setLayout(lay);
+        scrollAreaLayout->addWidget(gb);
+
+        for(LocalFile *lf: localFilesMap){
+            if(lf->getReadyState()){
+                QGroupBox *gBox = new QGroupBox;
+                gBox->setFixedWidth(312.5);
+                gBox->setCheckable(true);
+                gBox->setChecked(false);
+
+                QLabel *l = new QLabel(lf->getFileName());
+                QHBoxLayout *layout = new QHBoxLayout;
+
+                layout->addWidget(l);
+                gBox->setLayout(layout);
+                scrollAreaLayout->addWidget(gBox);
+
+
+                connect(gBox, &QGroupBox::toggled, lf, &LocalFile::changeInstallState);
+            }
+        }
+
+
     }
 
     scrollAreaWidget->setLayout(scrollAreaLayout);
