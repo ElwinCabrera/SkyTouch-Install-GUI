@@ -369,11 +369,13 @@ void SoftwareDownloadPage::showDownloadProgress(){
     QWidget *scrollAreaWidget = new QWidget;
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
+    stopDownloadBtn = new QPushButton(tr("Stop Download"));
+    if(!isDownloadInProgress()) stopDownloadBtn->setDisabled(true);
 
     for(SoftwareInfo *si: softwareList){
 
         if(si->getDownloadMarked()  || si->downloadInProgress()){
-            ProgressListenner *progListPtr = si->getProgressListener();
+
             QNetworkReply *replyPtr = si ->getNetworkReply();
 
             QString s = "Downloading " + si->getSoftwareName();
@@ -381,17 +383,17 @@ void SoftwareDownloadPage::showDownloadProgress(){
             //groupBox->setFixedWidth(312.5);
 
             if(!si->downloadInProgress()){
+                //ProgressListenner *pl = new ProgressListenner;
                 si->setProgressListener(new ProgressListenner);
-                progListPtr = si->getProgressListener();
                 connect(stopDownloadBtn, &QPushButton::clicked, si, &SoftwareInfo::stopDownload);
             } else {
-                if(replyPtr && progListPtr)
-                    connect(replyPtr, &QNetworkReply::downloadProgress, progListPtr ,&ProgressListenner::onDownloadProgress);
+                if(replyPtr && si->getProgressListener())
+                    connect(replyPtr, &QNetworkReply::downloadProgress, si->getProgressListener() ,&ProgressListenner::onDownloadProgress);
             }
 
-            if(progListPtr){
-                progListPtr->pBar = new QProgressBar;
-                progListPtr->pBar->setFixedWidth(300);
+            if(si->getProgressListener()){
+                si->getProgressListener()->pBar = new QProgressBar;
+                si->getProgressListener()->pBar->setFixedWidth(300);
 
                 QHBoxLayout *layout = new QHBoxLayout;
                 layout->addWidget(si->getProgressListener()->pBar);
@@ -410,8 +412,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
     QPushButton *backButton = new QPushButton(tr("Back"));
 
 
-    stopDownloadBtn = new QPushButton(tr("Stop Download"));
-    if(!isDownloadInProgress()) stopDownloadBtn->setDisabled(true);
+
 
     QPalette pal = stopDownloadBtn->palette();
     pal.setColor(QPalette::Button, QColor(Qt::red));
@@ -458,13 +459,14 @@ void SoftwareDownloadPage::startDownloads()
 void SoftwareDownloadPage::stopDownloads()
 {
     WarningBox warningbox("Are you sure you want to cancel ALL downloads?");
-    //warningbox.setStopDownloadsWarning(true);
+    warningbox.setWarningType(false, true);
     warningbox.setModal(true);
     warningbox.exec();
     if(warningbox.actionConfirmed()) {
 
 
         clearWidgetsAndLayouts(mainLayout);
+        for(SoftwareInfo *si: softwareList) si->stopDownload();
 
 
 

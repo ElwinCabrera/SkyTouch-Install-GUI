@@ -114,7 +114,8 @@ public slots:
   void downloadStart() { markedForDownlaod = false; downloadInProg = true; readyForInstall = false; downloadInterrupt = false; downloadSuccess = false;}
   void stopDownload() {
       downloadSuccess = false; downloadInterrupt = true; downloadInProg = false; markedForDownlaod = true; readyForInstall = false;
-
+    delete pl;
+      delete reply;
   }
 
   void finishedDownload(){
