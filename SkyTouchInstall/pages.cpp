@@ -245,6 +245,7 @@ void SoftwareDownloadPage::viewDownloadProg(){
 void SoftwareDownloadPage::showReadyToInstall(){
     if(mainLayout) clearWidgetsAndLayouts(mainLayout);
     else { qDebug() << "mainLayout NOT null: in showReadyToInstall"; return; }
+    mainLayout = new QVBoxLayout;
 
     QScrollArea *scrollArea = new QScrollArea;
     scrollArea->setFixedSize(QSize(350, 325));
@@ -254,8 +255,49 @@ void SoftwareDownloadPage::showReadyToInstall(){
     for(SoftwareInfo *si: softwareList){
         if(si->getInstallReadyState()){
 
+            QGroupBox *gBox= new QGroupBox;
+            gBox->setFixedWidth(312.5);
+
+            gBox->setCheckable(true);
+
+            gBox->setChecked(false);
+
+
+            QLabel *label = new QLabel(si->getSoftwareName());
+            QHBoxLayout *layout = new QHBoxLayout;
+
+            layout->addWidget(label);
+            //layout->addStretch(1);
+            gBox->setLayout(layout);
+            scrollAreaLayout->addWidget(gBox);
+
+            connect(gBox, &QGroupBox::clicked, si, &SoftwareInfo::onInstallCheckBoxClicked);
         }
     }
+
+    scrollAreaWidget->setLayout(scrollAreaLayout);
+    scrollArea->setWidget(scrollAreaWidget);
+
+    QPushButton *backButton = new QPushButton(tr("Back"));
+
+
+    QPushButton *startInstallsBtn= new QPushButton(tr("Install"));
+    startInstallsBtn->setDefault(true);
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(backButton);
+    buttonLayout->addWidget(startInstallsBtn);
+
+
+    mainLayout->addWidget(scrollArea);
+    mainLayout->addLayout(buttonLayout);
+    mainLayout->addStretch(1);
+    setLayout(mainLayout);
+
+    //connect(startInstallsBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::startInstalls);
+    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToSoftwareList);
+
+
 
 
 
@@ -278,56 +320,13 @@ void SoftwareDownloadPage::backToSoftwareList(){
 void SoftwareDownloadPage::finishedDownloading(){
     qDebug() << "finished Downloading in SoftwareDownloadsPage";
 
-//    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-//    if(reply == NULL) return;
 
-
-
-//    QString targetFolder = "/home/elwin/Downloads";
-//    QFile *mFile;
-
-//    for(SoftwareInfo *si: softwareList){
-//        if(si->getNetworkReply() == reply){
-//            si->downloadInProg = false;
-//            si->downloadSuccess = true;
-//            si->markedForDownlaod = false;
-//            si->markedForInstall = true;
-
-
-//            QString fileName = si->getSoftwareName();
-//            if(si->version64Bit) fileName += "_x64";
-//            fileName += ".exe";
-
-//            mFile = new QFile( targetFolder + QDir::separator() + fileName);
-//            // Trying to open the file
-//            if (!mFile->open(QIODevice::WriteOnly)){
-//                qDebug() << "Could not open file";
-//                delete mFile;
-//                mFile = nullptr;
-//            }
-
-//            if(mFile) {
-//                qDebug() << "file is open attempting to write";
-//                mFile->write(reply->readAll());
-//                mFile->flush();
-//                mFile->close();
-//                qDebug() << "Finished writing to file. file closed.";
-
-//            }
-
-//        }
-//    }
-
-    //readyToInstall = true;
     if(readyToInstallButton) {
         readyToInstallButton->setDisabled(false);
         readyToInstallButton->setStyleSheet("QPushButton{background-color:green;}");
 
     }
 
-
-
-    //reply->deleteLater();
 }
 
 void SoftwareDownloadPage::addFileToInstallList(){
@@ -338,10 +337,7 @@ void SoftwareDownloadPage::addFileToInstallList(){
     warning.exec();
     if(warning.actionConfirmed()) {
         localFilesInInstallQ = true;
-        for(LocalFile *lf: localFilesMap){
-            if(lf->getReadyState()) qDebug() << lf->getFileName()<<" is ready to be installed";
-
-        }
+        for(LocalFile *lf: localFilesMap) if(lf->getReadyState()) qDebug() << lf->getFileName()<<" is ready to be installed";
 
     }
 }
@@ -383,9 +379,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
             //groupBox->setFixedWidth(312.5);
 
             if(!si->downloadInProgress()){
-                //ProgressListenner *pl = new ProgressListenner;
                 si->setProgressListener(new ProgressListenner);
-                connect(stopDownloadBtn, &QPushButton::clicked, si, &SoftwareInfo::stopDownload);
             } else {
                 if(replyPtr && si->getProgressListener())
                     connect(replyPtr, &QNetworkReply::downloadProgress, si->getProgressListener() ,&ProgressListenner::onDownloadProgress);
@@ -444,8 +438,7 @@ void SoftwareDownloadPage::startDownloads()
 
             QNetworkReply *reply = network->getLastReply();
             si->setNetworkReply(reply);
-//            si->downloadInProg = true;
-//            si->markedForDownlaod = false;
+            si->downloadStart();
 
 
             if(si->getProgressListener()) connect(reply, &QNetworkReply::downloadProgress, si->getProgressListener(), &ProgressListenner::onDownloadProgress);
@@ -459,32 +452,13 @@ void SoftwareDownloadPage::startDownloads()
 void SoftwareDownloadPage::stopDownloads()
 {
     WarningBox warningbox("Are you sure you want to cancel ALL downloads?");
-    warningbox.setWarningType(false, true);
     warningbox.setModal(true);
     warningbox.exec();
     if(warningbox.actionConfirmed()) {
 
-
-        clearWidgetsAndLayouts(mainLayout);
         for(SoftwareInfo *si: softwareList) si->stopDownload();
 
-
-
-//        //could do stop only checked(selected) downloads
-//        for(SoftwareInfo *si: softwareList) {
-//            if(si->downloadInProgress()){
-//                disconnect(si->getNetworkReply(),0,0,0);
-//                disconnect(si->getProgressListener(),0,0,0);
-//                delete si->getProgressListener();
-
-//                si->downloadInProg = false;
-//                si->downloadInterrupt = true;
-//                si->markedForDownlaod = true;
-//            }
-//        }
-//        network->closeAllConnections();
-
-
+        clearWidgetsAndLayouts(mainLayout);
         vector<SoftwareInfo*> a;
         initPage(a, NULL);
 

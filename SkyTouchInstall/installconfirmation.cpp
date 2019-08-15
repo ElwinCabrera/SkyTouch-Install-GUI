@@ -11,7 +11,7 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
     softwareListWidget->setViewMode(QListView::ListMode);
     softwareListWidget->setMaximumWidth(650);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
 
     for(SoftwareInfo *si: softwareL){
         if(si->getDownloadMarked()) {
@@ -24,7 +24,7 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
             //Adding the item to the softwareListWidget
             softwareListWidget->addItem(item);
 
-            connect(buttonBox, &QDialogButtonBox::accepted, si, &SoftwareInfo::downloadStart);
+
         }
     }
 
@@ -34,7 +34,7 @@ InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> 
 
 
 
-
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
 
     QHBoxLayout *confirmInstallLayout = new QHBoxLayout;

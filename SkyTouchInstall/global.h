@@ -113,7 +113,7 @@ public slots:
   void onVersionSelect() {version32BitSelect = !version32BitSelect; version64BitSelect = !version64BitSelect; }
   void downloadStart() { markedForDownlaod = false; downloadInProg = true; readyForInstall = false; downloadInterrupt = false; downloadSuccess = false;}
   void stopDownload() {
-      downloadSuccess = false; downloadInterrupt = true; downloadInProg = false; markedForDownlaod = true; readyForInstall = false;
+      downloadSuccess = false; downloadInterrupt = true; downloadInProg = false; readyForInstall = false;
     delete pl;
       delete reply;
   }
