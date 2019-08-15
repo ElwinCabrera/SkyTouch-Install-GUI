@@ -24,6 +24,7 @@ public slots:
     void backToInitPage();
     void finishedDownloading();
     void addFileToInstallList();
+    void startInstalls();
 
 
 private:

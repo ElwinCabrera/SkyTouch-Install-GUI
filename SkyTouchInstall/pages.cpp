@@ -86,7 +86,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     readyToInstallButton = new QPushButton(tr("Ready to Install"));
 
     if(!isReadyForInstall()) readyToInstallButton->setDisabled(true);
-    else readyToInstallButton->setStyleSheet("QPushButton{background-color:green;");
+    else readyToInstallButton->setStyleSheet("QPushButton{background-color:green}");
 
 
 
@@ -333,7 +333,7 @@ void SoftwareDownloadPage::readyToInstallPage(){
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
-    //connect(startInstallsBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::startInstalls);
+    connect(startInstallsBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::startInstalls);
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
 
@@ -361,7 +361,7 @@ void SoftwareDownloadPage::finishedDownloading(){
 
     if(readyToInstallButton) {
         readyToInstallButton->setDisabled(false);
-        readyToInstallButton->setStyleSheet("QPushButton{background-color:green;}");
+        readyToInstallButton->setStyleSheet("QPushButton{background-color:green}");
 
     }
 
@@ -378,6 +378,11 @@ void SoftwareDownloadPage::addFileToInstallList(){
         for(LocalFile *lf: localFilesMap) if(lf->getReadyState()) qDebug() << lf->getFileName()<<" is ready to be installed";
 
     }
+}
+
+void SoftwareDownloadPage::startInstalls()
+{
+
 }
 
 
