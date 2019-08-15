@@ -18,10 +18,10 @@ public:
 
 public slots:
     void downloadButtonCliked();
-    void searchForLocalFiles();
+    void localFilesPage();
     void viewDownloadProg();
-    void showReadyToInstall();
-    void backToSoftwareList();
+    void readyToInstallPage();
+    void backToInitPage();
     void finishedDownloading();
     void addFileToInstallList();
 
@@ -31,22 +31,23 @@ private:
     bool downloadConfirmed;
     bool localFilesInInstallQ;
 
-    QVBoxLayout *mainLayout;
-    Network *network;
+    QVBoxLayout *mainLayout = nullptr;
+    Network *network = nullptr;
 
-    QPushButton *viewDownloadProgButton;
-    QPushButton *readyToInstallButton;
-    QPushButton *stopDownloadBtn;
+    QPushButton *viewDownloadProgButton = nullptr;
+    QPushButton *readyToInstallButton = nullptr;
+    QPushButton *stopDownloadBtn = nullptr;
 
 
     vector<SoftwareInfo*> softwareList;
     QMap<QString,LocalFile*> localFilesMap;
 
-    void showDownloadProgress();
+    void activeDownloadsPage();
     void startDownloads();
     void stopDownloads();
     bool isDownloadInProgress();
     bool isReadyForInstall();
+    void clearGlobalWidgets();
 
 
 
@@ -60,7 +61,7 @@ public:
     //~ConfigurationPage();
 };
 
-void clearWidgetsAndLayouts(QLayout * layout);
+void clearPage(QLayout * layout);
 
 
 

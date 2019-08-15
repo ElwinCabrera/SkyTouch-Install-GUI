@@ -18,6 +18,11 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     if(network) this->network = network;
     if(!softwareL.empty()) this->softwareList = softwareL;
 
+    if(mainLayout) {
+        clearPage(mainLayout);
+        clearGlobalWidgets();
+    }
+    mainLayout = new QVBoxLayout;
 
 
     QScrollArea *scrollArea = new QScrollArea;
@@ -108,9 +113,9 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     setLayout(mainLayout);
 
     connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::downloadButtonCliked);
-    connect(searchForLocalButton, &QPushButton::clicked, this , &SoftwareDownloadPage::searchForLocalFiles);
+    connect(searchForLocalButton, &QPushButton::clicked, this , &SoftwareDownloadPage::localFilesPage);
     connect(viewDownloadProgButton, &QPushButton::clicked, this, &SoftwareDownloadPage::viewDownloadProg);
-    connect(readyToInstallButton, &QPushButton::clicked, this, &SoftwareDownloadPage::showReadyToInstall);
+    connect(readyToInstallButton, &QPushButton::clicked, this, &SoftwareDownloadPage::readyToInstallPage);
 
 
 }
@@ -134,7 +139,7 @@ void SoftwareDownloadPage::downloadButtonCliked(){
         if(confirmWindow.getConfirmation()) {
             downloadConfirmed = true;
             qDebug() << "download confirmed";
-            showDownloadProgress();
+            activeDownloadsPage();
             startDownloads();
             stopDownloadBtn->setDisabled(false);
 
@@ -144,16 +149,13 @@ void SoftwareDownloadPage::downloadButtonCliked(){
     }
 }
 
-void SoftwareDownloadPage::searchForLocalFiles(){
+void SoftwareDownloadPage::localFilesPage(){
 
-    if(!mainLayout) {
-        qDebug() << "in function searchForLocalFiles: mainLayout is NULL";
-        return;
+    if(mainLayout) {
+        clearPage(mainLayout);
+        clearGlobalWidgets();
     }
-    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
     mainLayout = new QVBoxLayout;
-
-    disconnect(this,0,0,0);
 
 
     QScrollArea *scrollArea = new QScrollArea;
@@ -233,18 +235,21 @@ void SoftwareDownloadPage::searchForLocalFiles(){
     setLayout(mainLayout);
 
     connect(addToInstallListBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::addFileToInstallList);
-    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToSoftwareList);
+    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
 
 }
 
 void SoftwareDownloadPage::viewDownloadProg(){
-    showDownloadProgress();
+    activeDownloadsPage();
 }
 
-void SoftwareDownloadPage::showReadyToInstall(){
-    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
-    else { qDebug() << "mainLayout NOT null: in showReadyToInstall"; return; }
+void SoftwareDownloadPage::readyToInstallPage(){
+
+    if(mainLayout) {
+        clearPage(mainLayout);
+        clearGlobalWidgets();
+    }
     mainLayout = new QVBoxLayout;
 
     QScrollArea *scrollArea = new QScrollArea;
@@ -295,7 +300,7 @@ void SoftwareDownloadPage::showReadyToInstall(){
     setLayout(mainLayout);
 
     //connect(startInstallsBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::startInstalls);
-    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToSoftwareList);
+    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
 
 
@@ -303,9 +308,8 @@ void SoftwareDownloadPage::showReadyToInstall(){
 
 }
 
-void SoftwareDownloadPage::backToSoftwareList(){
+void SoftwareDownloadPage::backToInitPage(){
 
-    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
 
     downloadConfirmed = false;
 
@@ -348,17 +352,13 @@ void SoftwareDownloadPage::addFileToInstallList(){
 
 
 
-void SoftwareDownloadPage::showDownloadProgress(){
+void SoftwareDownloadPage::activeDownloadsPage(){
 
-    if(!mainLayout) {
-        qDebug() << "in function showDownloadProgres: mainLayout is NULL";
-        return;
+    if(mainLayout) {
+        clearPage(mainLayout);
+        clearGlobalWidgets();
     }
-    if(mainLayout) clearWidgetsAndLayouts(mainLayout);
     mainLayout = new QVBoxLayout;
-
-    disconnect(this,0,0,0);
-
 
     QScrollArea *scrollArea = new QScrollArea;
     scrollArea->setFixedSize(QSize(350, 325));
@@ -425,7 +425,7 @@ void SoftwareDownloadPage::showDownloadProgress(){
     setLayout(mainLayout);
 
     connect(stopDownloadBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::stopDownloads);
-    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToSoftwareList);
+    connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
 }
 
@@ -458,7 +458,7 @@ void SoftwareDownloadPage::stopDownloads()
 
         for(SoftwareInfo *si: softwareList) si->stopDownload();
 
-        clearWidgetsAndLayouts(mainLayout);
+        //clearPage(mainLayout);
         vector<SoftwareInfo*> a;
         initPage(a, NULL);
 
@@ -481,6 +481,11 @@ bool SoftwareDownloadPage::isReadyForInstall(){
     return false;
 }
 
+void SoftwareDownloadPage::clearGlobalWidgets(){
+    viewDownloadProgButton = nullptr;
+    readyToInstallButton = nullptr;
+    stopDownloadBtn = nullptr;
+}
 
 
 
@@ -509,12 +514,16 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
     setLayout(mainLayout);
 }
 
-void clearWidgetsAndLayouts(QLayout * layout) {
+void clearPage(QLayout * layout) {
    if (! layout) return;
 
-   while (auto item = layout->takeAt(0)) {
-      delete item->widget();
-      clearWidgetsAndLayouts(item->layout());
+    while (auto item = layout->takeAt(0)) {
+        auto widget = item->widget();
+        delete item->widget();
+        widget = nullptr;
+        clearPage(item->layout());
    }
    delete layout;
 }
+
+

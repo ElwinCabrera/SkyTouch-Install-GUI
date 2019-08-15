@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SoftwareDownloadPage_t {
     QByteArrayData data[9];
-    char stringdata0[159];
+    char stringdata0[150];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,17 +34,17 @@ static const qt_meta_stringdata_SoftwareDownloadPage_t qt_meta_stringdata_Softwa
 QT_MOC_LITERAL(0, 0, 20), // "SoftwareDownloadPage"
 QT_MOC_LITERAL(1, 21, 20), // "downloadButtonCliked"
 QT_MOC_LITERAL(2, 42, 0), // ""
-QT_MOC_LITERAL(3, 43, 19), // "searchForLocalFiles"
-QT_MOC_LITERAL(4, 63, 16), // "viewDownloadProg"
-QT_MOC_LITERAL(5, 80, 18), // "showReadyToInstall"
-QT_MOC_LITERAL(6, 99, 18), // "backToSoftwareList"
-QT_MOC_LITERAL(7, 118, 19), // "finishedDownloading"
-QT_MOC_LITERAL(8, 138, 20) // "addFileToInstallList"
+QT_MOC_LITERAL(3, 43, 14), // "localFilesPage"
+QT_MOC_LITERAL(4, 58, 16), // "viewDownloadProg"
+QT_MOC_LITERAL(5, 75, 18), // "readyToInstallPage"
+QT_MOC_LITERAL(6, 94, 14), // "backToInitPage"
+QT_MOC_LITERAL(7, 109, 19), // "finishedDownloading"
+QT_MOC_LITERAL(8, 129, 20) // "addFileToInstallList"
 
     },
     "SoftwareDownloadPage\0downloadButtonCliked\0"
-    "\0searchForLocalFiles\0viewDownloadProg\0"
-    "showReadyToInstall\0backToSoftwareList\0"
+    "\0localFilesPage\0viewDownloadProg\0"
+    "readyToInstallPage\0backToInitPage\0"
     "finishedDownloading\0addFileToInstallList"
 };
 #undef QT_MOC_LITERAL
@@ -90,10 +90,10 @@ void SoftwareDownloadPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c,
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->downloadButtonCliked(); break;
-        case 1: _t->searchForLocalFiles(); break;
+        case 1: _t->localFilesPage(); break;
         case 2: _t->viewDownloadProg(); break;
-        case 3: _t->showReadyToInstall(); break;
-        case 4: _t->backToSoftwareList(); break;
+        case 3: _t->readyToInstallPage(); break;
+        case 4: _t->backToInitPage(); break;
         case 5: _t->finishedDownloading(); break;
         case 6: _t->addFileToInstallList(); break;
         default: ;
