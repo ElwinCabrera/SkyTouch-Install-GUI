@@ -113,9 +113,8 @@ public slots:
   void onVersionSelect() {version32BitSelect = !version32BitSelect; version64BitSelect = !version64BitSelect; }
   void downloadStart() { markedForDownlaod = false; downloadInProg = true; readyForInstall = false; downloadInterrupt = false; downloadSuccess = false;}
   void stopDownload() {
+      if(!downloadInProg) return ;
       downloadSuccess = false; downloadInterrupt = true; downloadInProg = false; readyForInstall = false;
-    delete pl;
-      delete reply;
   }
 
   void finishedDownload(){
@@ -155,6 +154,7 @@ public slots:
     downloadInterrupt  = false;
     readyForInstall = true;
 
+    delete pl;
     reply->deleteLater();
   }
 
