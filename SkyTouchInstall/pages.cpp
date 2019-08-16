@@ -573,7 +573,7 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
 
 
 ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
-    QGroupBox *configGroup = new QGroupBox(tr("Server configuration"));
+    /*QGroupBox *configGroup = new QGroupBox(tr("Server configuration"));
 
     QLabel *serverLabel = new QLabel(tr("Server:"));
     QComboBox *serverCombo = new QComboBox;
@@ -594,7 +594,7 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(configGroup);
     mainLayout->addStretch(1);
-    setLayout(mainLayout);
+    setLayout(mainLayout);*/
 }
 
 void clearPage(QLayout * layout) {

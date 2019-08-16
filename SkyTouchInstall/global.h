@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QDialog>
 #include <QObject>
+#include<QAction>
 
 #include <QSet>
 
