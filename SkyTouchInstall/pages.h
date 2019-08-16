@@ -50,6 +50,8 @@ private:
     bool isReadyForInstall();
     void clearGlobalWidgets();
 
+    void populateLocalFilesMap();
+
 
 
 };

@@ -395,7 +395,7 @@ compiler_moc_header_clean:
 moc_mainwindow.cpp: ../SkyTouchInstall/pages.h \
 		../SkyTouchInstall/network.h \
 		../SkyTouchInstall/global.h \
-		../SkyTouchInstall/warningbox.h \
+		../SkyTouchInstall/installconfirmation.h \
 		../SkyTouchInstall/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -403,7 +403,7 @@ moc_mainwindow.cpp: ../SkyTouchInstall/pages.h \
 
 moc_pages.cpp: ../SkyTouchInstall/network.h \
 		../SkyTouchInstall/global.h \
-		../SkyTouchInstall/warningbox.h \
+		../SkyTouchInstall/installconfirmation.h \
 		../SkyTouchInstall/pages.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -451,20 +451,21 @@ main.o: ../SkyTouchInstall/main.cpp ../SkyTouchInstall/mainwindow.h \
 		../SkyTouchInstall/pages.h \
 		../SkyTouchInstall/network.h \
 		../SkyTouchInstall/global.h \
-		../SkyTouchInstall/warningbox.h
+		../SkyTouchInstall/installconfirmation.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SkyTouchInstall/main.cpp
 
 mainwindow.o: ../SkyTouchInstall/mainwindow.cpp ../SkyTouchInstall/mainwindow.h \
 		../SkyTouchInstall/pages.h \
 		../SkyTouchInstall/network.h \
 		../SkyTouchInstall/global.h \
-		../SkyTouchInstall/warningbox.h \
+		../SkyTouchInstall/installconfirmation.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../SkyTouchInstall/mainwindow.cpp
 
 pages.o: ../SkyTouchInstall/pages.cpp ../SkyTouchInstall/pages.h \
 		../SkyTouchInstall/network.h \
 		../SkyTouchInstall/global.h \
+		../SkyTouchInstall/installconfirmation.h \
 		../SkyTouchInstall/warningbox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pages.o ../SkyTouchInstall/pages.cpp
 

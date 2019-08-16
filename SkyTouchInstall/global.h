@@ -57,12 +57,19 @@ public:
         this->softwareName = softwareName;
         this->url32BitVer = url32BitVer;
         this->url64BitVer = url64BitVer;
+
+        fileName64 = softwareName + "_x64.exe";
+        fileName32 = softwareName + ".exe";
     }
 
   /***************Getters*************/
   QString getSoftwareName(){return softwareName;}
   QString get32BitURL(){return url32BitVer;}
   QString get64BitURL(){return url64BitVer;}
+
+  QString getFileName64() {return fileName64;}
+  QString getFileName32() {return fileName32;}
+  QString getFilePath() {return filePath;}
 
   bool getDownloadMarked() {return markedForDownlaod;}
   bool downloadInProgress() {return downloadInProg;}
@@ -84,6 +91,8 @@ public:
   void setSoftwareName(QString name) {softwareName = name;}
   void set32BitURL(QString url) {url32BitVer = url;}
   void set64BitURL(QString url) {url64BitVer = url;}
+
+  void setFilePath(QString path) {filePath = path;}
 
   //void setDownloadMarked(bool state){markedForDownlaod = marked;}
   //void setDownloadInProgress(bool inProg) {downloadInProg = inProg; }
@@ -118,9 +127,21 @@ public slots:
   }
 
   void finishedDownload(){
-    qDebug() << "finished Downloading in SoftwareDownloadsPage";
+    qDebug() << "finished Downloading in software info";
+
+    markedForDownlaod = false;
+    downloadInProg = false;
+    downloadSuccess = true;
+    downloadInterrupt  = false;
+    readyForInstall = true;
+
+    if(pl) {
+        delete pl;
+        pl = nullptr;
+    }
 
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+
     if(reply == NULL) return;
 
 
@@ -148,14 +169,8 @@ public slots:
 
     }
 
-    markedForDownlaod = false;
-    downloadInProg = false;
-    downloadSuccess = true;
-    downloadInterrupt  = false;
-    readyForInstall = true;
 
-    delete pl;
-    reply->deleteLater();
+    if(reply) reply->deleteLater();
   }
 
 
@@ -163,6 +178,10 @@ private:
   QString softwareName = "";
   QString url32BitVer = "";
   QString url64BitVer = "";
+
+  QString fileName32 = "";
+  QString fileName64 = "";
+  QString filePath = "";
 
   //bool readyForDownload;
   bool markedForDownlaod = false;
@@ -199,8 +218,8 @@ public:
     void setReadyState(bool ready) {readyForInstall = ready;}
 
 public slots:
-    void changeReadyState(){readyForInstall = !readyForInstall;}
-    void changeInstallState() {markedForInstall = !markedForInstall;}
+    void changeReadyState(){ readyForInstall = !readyForInstall; markedForInstall = false;}
+    void changeInstallState(){ markedForInstall = true; readyForInstall = false; }
 
 private:
     QString fileName = "";

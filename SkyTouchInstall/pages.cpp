@@ -10,6 +10,7 @@ SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
     readyToInstall = false;
     localFilesInInstallQ = false;
 
+    populateLocalFilesMap();
 
 }
 
@@ -34,13 +35,20 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
     for(SoftwareInfo *si :  softwareList){
+
+        auto it32 = localFilesMap.find(si->getFileName32());
+        auto it64 = localFilesMap.find(si->getFileName64());
+        auto itEnd = localFilesMap.end();
+
         QGroupBox *downloadGroup = new QGroupBox("Download "+si->getSoftwareName());
         downloadGroup->setFixedWidth(312.5);
         downloadGroup->setCheckable(true);
         downloadGroup->blockSignals(true);
         downloadGroup->setChecked(si->getDownloadMarked());
 
-        if(si->downloadInProgress() || si->getDownloadSuccess()){
+        if(si->downloadInProgress() || si->getDownloadSuccess()
+          || (it32 != itEnd && it32.value()->getReadyState() && it64 != itEnd && it64.value()->getReadyState()) ){
+
             downloadGroup->setChecked(false);
             downloadGroup->setDisabled(true);
         }
@@ -58,16 +66,24 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
         downloadLayout->addWidget(download64RadioBtn);
         downloadGroup->setLayout(downloadLayout);
 
-        if( si->get32BitURL() == "") downloadRadioBtn->setCheckable(false);
-        if( si->get64BitURL() == "") download64RadioBtn->setCheckable(false);
-        downloadRadioBtn->setChecked(si->getVersionSelect32());
-        download64RadioBtn->setChecked(si->getVersionSelect64());
+        if( si->get32BitURL() == "" || (it32 != itEnd && it32.value()->getReadyState())) {
+            downloadRadioBtn->setCheckable(false);
+            downloadRadioBtn->setDisabled(true);
+            downloadRadioBtn->setText("32 Bit Ready");
+
+        } else downloadRadioBtn->setChecked(si->getVersionSelect32());
+
+        if( si->get64BitURL() == "" || (it64 != itEnd && it64.value()->getReadyState()) ) {
+            download64RadioBtn->setCheckable(false);
+            download64RadioBtn->setDisabled(true);
+
+        } else download64RadioBtn->setChecked(si->getVersionSelect64());
+
+
+        scrollAreaLayout->addWidget(downloadGroup);
 
         connect(downloadGroup, &QGroupBox::toggled, si, &SoftwareInfo::onDownloadCheckBoxClicked);
         connect(download64RadioBtn, &QRadioButton::toggled,si, &SoftwareInfo::onVersionSelect);
-
-        //mainLayout->addWidget(downloadGroup);
-        scrollAreaLayout->addWidget(downloadGroup);
 
     }
     scrollAreaWidget->setLayout(scrollAreaLayout);
@@ -105,8 +121,8 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     //
     mainLayout->addWidget(scrollArea);
     mainLayout->addLayout(buttonsLayout);
-    mainLayout->addWidget(readyToInstallButton);
     mainLayout->addWidget(downloadButton);
+    mainLayout->addWidget(readyToInstallButton);
 
     mainLayout->addStretch(1);
    // mainLayout->addSpacing(200);
@@ -164,56 +180,29 @@ void SoftwareDownloadPage::localFilesPage(){
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
 
-    QSet<QString> visitedFilesSet;
+    for(LocalFile *lf: localFilesMap) {
 
-    QDirIterator dirIt("/home/elwin/Downloads",QDirIterator::Subdirectories);
-    while (dirIt.hasNext()) {
-        dirIt.next();
-        if (QFileInfo(dirIt.filePath()).isFile()) {
-            if(QFileInfo(dirIt.filePath()).suffix() == "exe") {
+        QGroupBox *gBox= new QGroupBox;
+        gBox->setFixedWidth(312.5);
 
-                qDebug()<< dirIt.filePath();
-
-                QMap<QString,LocalFile*>::iterator it = localFilesMap.find(dirIt.fileName());
-
-                LocalFile *lf = nullptr;
-                if(it == localFilesMap.end()) {
-
-                    lf = new LocalFile(dirIt.fileName(), dirIt.filePath(),false);
-
-                    localFilesMap.insert(dirIt.fileName(),lf);
-
-                } else lf = it.value();
-
-                if(visitedFilesSet.find(dirIt.fileName()) == visitedFilesSet.end()) visitedFilesSet.insert(dirIt.fileName());
-                else continue;
-
-
-
-                QGroupBox *gBox= new QGroupBox;
-                gBox->setFixedWidth(312.5);
-
-                gBox->setCheckable(true);
-                if(lf->getInstallState()){
-                    gBox->setTitle("Marked For Install");
-                }
-                if(lf) gBox->setChecked(lf->getReadyState() || lf->getInstallState());
-                else gBox->setChecked(false);
-
-                QLabel *label = new QLabel(dirIt.fileName());
-                QHBoxLayout *layout = new QHBoxLayout;
-
-                layout->addWidget(label);
-                //layout->addStretch(1);
-                gBox->setLayout(layout);
-                scrollAreaLayout->addWidget(gBox);
-
-                if(lf) connect(gBox, &QGroupBox::clicked, lf, &LocalFile::changeReadyState);
-
-            }
-
-
+        gBox->setCheckable(true);
+        if(lf->getInstallState()) {
+            gBox->setTitle("Marked For Install");
+            gBox->setDisabled(true);
         }
+
+        gBox->setChecked(lf->getReadyState() || lf->getInstallState());
+
+        QLabel *label = new QLabel(lf->getFileName());
+        QHBoxLayout *layout = new QHBoxLayout;
+
+        layout->addWidget(label);
+        //layout->addStretch(1);
+        gBox->setLayout(layout);
+        scrollAreaLayout->addWidget(gBox);
+
+        connect(gBox, &QGroupBox::clicked, lf, &LocalFile::changeReadyState);
+
     }
     scrollAreaWidget->setLayout(scrollAreaLayout);
     scrollArea->setWidget(scrollAreaWidget);
@@ -238,6 +227,30 @@ void SoftwareDownloadPage::localFilesPage(){
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
 
+}
+
+void SoftwareDownloadPage::populateLocalFilesMap(){
+
+
+    QDirIterator dirIt("/home/elwin/Downloads",QDirIterator::Subdirectories);
+    while (dirIt.hasNext()) {
+        dirIt.next();
+        if (QFileInfo(dirIt.filePath()).isFile()) {
+            if(QFileInfo(dirIt.filePath()).suffix() == "exe") {
+
+                qDebug()<< dirIt.filePath();
+
+                QMap<QString,LocalFile*>::iterator it = localFilesMap.find(dirIt.fileName());
+
+
+                if(it == localFilesMap.end()) {
+                    LocalFile *lf = new LocalFile(dirIt.fileName(), dirIt.filePath(),false);
+                    localFilesMap.insert(dirIt.fileName(),lf);
+                }
+
+            }
+        }
+    }
 }
 
 void SoftwareDownloadPage::viewDownloadProg(){
@@ -281,16 +294,19 @@ void SoftwareDownloadPage::readyToInstallPage(){
     }
 
     if(localFilesInInstallQ){
-        QGroupBox *gb = new QGroupBox;
-        gb->setFixedWidth(312.5);
-        gb->setDisabled(true);
+        //QGroupBox *gb = new QGroupBox;
+        //gb->setFixedWidth(312.5);
+        //gb->setDisabled(true);
 
-        QLabel *l = new QLabel("Local Files");
+        QLabel *l = new QLabel("From Local Files");
+        l->setAlignment(Qt::AlignCenter);
+        l->setFixedWidth(312.5);
         QHBoxLayout *lay = new QHBoxLayout;
 
-        lay->addWidget(l);
-        gb->setLayout(lay);
-        scrollAreaLayout->addWidget(gb);
+        //lay->addWidget(l);
+        l->setLayout(lay);
+        //gb->setLayout(lay);
+        scrollAreaLayout->addWidget(l);
 
         for(LocalFile *lf: localFilesMap){
             if(lf->getReadyState()){
@@ -359,7 +375,7 @@ void SoftwareDownloadPage::finishedDownloading(){
     qDebug() << "finished Downloading in SoftwareDownloadsPage";
 
 
-    if(readyToInstallButton) {
+    if(readyToInstallButton != nullptr ) {
         readyToInstallButton->setDisabled(false);
         readyToInstallButton->setStyleSheet("QPushButton{background-color:green}");
 
@@ -374,8 +390,16 @@ void SoftwareDownloadPage::addFileToInstallList(){
     warning.setModal(true);
     warning.exec();
     if(warning.actionConfirmed()) {
-        localFilesInInstallQ = true;
-        for(LocalFile *lf: localFilesMap) if(lf->getReadyState()) qDebug() << lf->getFileName()<<" is ready to be installed";
+        localFilesInInstallQ = false;
+
+        for(LocalFile *lf: localFilesMap){
+
+            if(lf->getReadyState()) {
+                qDebug() << lf->getFileName()<<" is ready to be installed";
+                localFilesInInstallQ = true;
+                //break;
+            }
+        }
 
     }
 }
@@ -471,7 +495,14 @@ void SoftwareDownloadPage::activeDownloadsPage(){
 void SoftwareDownloadPage::startDownloads()
 {
     for(SoftwareInfo *si : softwareList){
-        if(si->getDownloadMarked()) {
+
+        QString fileName = si->getSoftwareName();
+        if(si->getVersionSelect64()) fileName += "_x64";
+        fileName += ".exe";
+        auto it = localFilesMap.find(fileName);
+
+        if(si->getDownloadMarked() && it == localFilesMap.end()) {
+
             if(si->getVersionSelect32()) network->get(si->get32BitURL());
             if(si->getVersionSelect64()) network->get(si->get64BitURL());
 
@@ -483,6 +514,19 @@ void SoftwareDownloadPage::startDownloads()
             if(si->getProgressListener()) connect(reply, &QNetworkReply::downloadProgress, si->getProgressListener(), &ProgressListenner::onDownloadProgress);
             connect(reply, &QNetworkReply::finished, this, &SoftwareDownloadPage::finishedDownloading);
             connect(reply, &QNetworkReply::finished, si, &SoftwareInfo::finishedDownload);
+
+        } else if (si->getDownloadMarked() && it != localFilesMap.end()){
+
+            ProgressListenner *plPtr = si->getProgressListener();
+            if(plPtr && plPtr->pBar) {
+                plPtr->pBar->setMinimum(0);
+                plPtr->pBar->setMaximum(1);
+                plPtr->pBar->setValue(1);
+            }
+            si->downloadStart();
+            si->finishedDownload();
+            si->setFilePath(it.value()->getFilePath());
+            localFilesMap.erase(it);
         }
     }
 
