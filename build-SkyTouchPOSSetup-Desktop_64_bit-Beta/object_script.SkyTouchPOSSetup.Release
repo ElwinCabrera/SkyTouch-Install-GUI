@@ -1,0 +1,12 @@
+release/main.o
+release/mainwindow.o
+release/pages.o
+release/network.o
+release/installconfirmation.o
+release/warningbox.o
+release/qrc_recources.o
+release/moc_mainwindow.o
+release/moc_pages.o
+release/moc_network.o
+release/moc_installconfirmation.o
+release/moc_warningbox.o

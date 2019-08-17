@@ -231,8 +231,9 @@ void SoftwareDownloadPage::localFilesPage(){
 
 void SoftwareDownloadPage::populateLocalFilesMap(){
 
-
-    QDirIterator dirIt("/home/elwin/Downloads",QDirIterator::Subdirectories);
+    QString path = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() + "Downloads");
+    //QString path = QDir::toNativeSeparators(QDir::currentPath());
+    QDirIterator dirIt(path,QDirIterator::Subdirectories);
     while (dirIt.hasNext()) {
         dirIt.next();
         if (QFileInfo(dirIt.filePath()).isFile()) {
