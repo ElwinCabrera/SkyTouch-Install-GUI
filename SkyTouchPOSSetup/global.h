@@ -147,13 +147,17 @@ public slots:
 
 
 
-    QString targetFolder = "/home/elwin/Downloads";
+    QString targetFolder = QDir::homePath() + QDir::separator()+ "Downloads";
+    //QString targetFolder = QDir::currentPath();
 
     QString fileName = softwareName;
     if(version64BitSelect) fileName += "_x64";
     fileName += ".exe";
 
-    QFile *mFile = new QFile( targetFolder + QDir::separator() + fileName);
+    QString filePath = targetFolder + QDir::separator() + fileName;
+    filePath = QDir::toNativeSeparators(filePath);
+
+    QFile *mFile = new QFile(filePath);
     // Trying to open the file
     if (!mFile->open(QIODevice::WriteOnly)){
         qDebug() << "Could not open file";
@@ -164,6 +168,7 @@ public slots:
     if(mFile) {
         qDebug() << "file is open attempting to write";
         mFile->write(reply->readAll());
+        //mFile->write(reply->read(reply->size()));
         mFile->flush();
         mFile->close();
         qDebug() << "Finished writing to file. file closed.";
