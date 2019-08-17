@@ -1,6 +1,5 @@
 *.o
-*.pro.user
 build-SkyTouchPOSSetup-Desktop_64_bit-Debug/
-
 build-SkyTouchPOSSetup-Desktop_64_bit-Release/*.Debug
 build-SkyTouchPOSSetup-Desktop_64_bit-Beta/*.Debug
+*.user
