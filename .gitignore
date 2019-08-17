@@ -1,3 +1,3 @@
 *.o
 *.pro.user
-*Debug/
+build-SkyTouchPOSSetup-Desktop_64_bit-Debug/
