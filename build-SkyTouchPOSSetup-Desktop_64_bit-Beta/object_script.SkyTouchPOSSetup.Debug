@@ -1,0 +1,12 @@
+debug/main.o
+debug/mainwindow.o
+debug/pages.o
+debug/network.o
+debug/installconfirmation.o
+debug/warningbox.o
+debug/qrc_recources.o
+debug/moc_mainwindow.o
+debug/moc_pages.o
+debug/moc_network.o
+debug/moc_installconfirmation.o
+debug/moc_warningbox.o
