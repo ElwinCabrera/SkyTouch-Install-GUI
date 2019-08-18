@@ -310,11 +310,11 @@ void SoftwareDownloadPage::readyToInstallPage(){
         scrollAreaLayout->addWidget(l);
 
         for(LocalFile *lf: localFilesMap){
-            if(lf->getReadyState()){
+            if(lf->getReadyState() || lf->getInstallState()){
                 QGroupBox *gBox = new QGroupBox;
                 gBox->setFixedWidth(312.5);
                 gBox->setCheckable(true);
-                gBox->setChecked(false);
+                gBox->setChecked(lf->getInstallState());
 
                 QLabel *l = new QLabel(lf->getFileName());
                 QHBoxLayout *layout = new QHBoxLayout;
