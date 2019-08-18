@@ -408,7 +408,7 @@ void SoftwareDownloadPage::addFileToInstallList(){
 void SoftwareDownloadPage::startInstalls(){
 
     for(SoftwareInfo *si: softwareList){
-        if(si->getInstallReadyState()) startProcess(this,si->getFilePath(), si->getSoftwareName());
+        if(si->getInstallMarked()) startProcess(this,si->getFilePath(), si->getSoftwareName());
 
     }
 
