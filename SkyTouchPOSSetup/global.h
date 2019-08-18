@@ -61,6 +61,10 @@ public:
 
         fileName64 = softwareName + "_x64.exe";
         fileName32 = softwareName + ".exe";
+
+        filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() + fileName64);
+        //filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName64);
+
     }
 
   /***************Getters*************/
@@ -120,7 +124,17 @@ public:
 public slots:
   void onDownloadCheckBoxClicked() {markedForDownlaod = !markedForDownlaod; }
   void onInstallCheckBoxClicked() {markedForInstall = !markedForInstall; }
-  void onVersionSelect() {version32BitSelect = !version32BitSelect; version64BitSelect = !version64BitSelect; }
+
+  void onVersionSelect() {
+      version32BitSelect = !version32BitSelect;
+      version64BitSelect = !version64BitSelect;
+
+      if(version32BitSelect) filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() +fileName32);
+      if(version64BitSelect) filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() +fileName64);
+
+      //if(version32BitSelect) filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName32);
+      //if(version64BitSelect) filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName64);
+  }
   void downloadStart() { markedForDownlaod = false; downloadInProg = true; readyForInstall = false; downloadInterrupt = false; downloadSuccess = false;}
   void stopDownload() {
       if(!downloadInProg) return ;
@@ -147,15 +161,15 @@ public slots:
 
 
 
-    QString targetFolder = QDir::homePath() + QDir::separator()+ "Downloads";
+    //QString targetFolder = QDir::homePath() + QDir::separator()+ "Downloads";
     //QString targetFolder = QDir::currentPath();
 
-    QString fileName = softwareName;
-    if(version64BitSelect) fileName += "_x64";
-    fileName += ".exe";
+    //QString fileName = softwareName;
+    //if(version64BitSelect) fileName += "_x64";
+    //fileName += ".exe";
 
-    QString filePath = targetFolder + QDir::separator() + fileName;
-    filePath = QDir::toNativeSeparators(filePath);
+    //QString filePath = targetFolder + QDir::separator() + fileName;
+    //filePath = QDir::toNativeSeparators(filePath);
 
     QFile *mFile = new QFile(filePath);
     // Trying to open the file

@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
     contentsWidget->setSpacing(12);
 
     pagesWidget = new QStackedWidget;
-    softwareDownloadPage = new SoftwareDownloadPage;
+    softwareDownloadPage = new SoftwareDownloadPage(this);
     softwareDownloadPage->initPage(softwareList, network);
 
     pagesWidget->addWidget(softwareDownloadPage);

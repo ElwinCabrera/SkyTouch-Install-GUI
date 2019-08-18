@@ -65,7 +65,6 @@ public:
 };
 
 void clearPage(QLayout * layout);
-
-
+void startProcess(QObject *parent, QString programPath, QString fileName );
 
 #endif // PAGES_H

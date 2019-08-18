@@ -407,12 +407,16 @@ void SoftwareDownloadPage::addFileToInstallList(){
 
 void SoftwareDownloadPage::startInstalls(){
 
+    for(SoftwareInfo *si: softwareList){
+        if(si->getInstallReadyState()) startProcess(this,si->getFilePath(), si->getSoftwareName());
+
+    }
+
+    for(LocalFile *lf: localFilesMap){
+        if(lf->getInstallState()) startProcess(this, lf->getFilePath(), lf->getFileName());
+    }
 
 }
-
-
-
-
 
 
 
@@ -608,6 +612,18 @@ void clearPage(QLayout * layout) {
         clearPage(item->layout());
    }
    delete layout;
+}
+
+void startProcess(QObject *parent, QString programPath, QString fileName ) {
+
+    QProcess *process = new QProcess(parent);
+    process->start(programPath);
+
+    if(!process->waitForStarted()) {
+        WarningBox warning("Could not start " + fileName);
+        warning.setModal(true);
+        warning.exec();
+    }
 }
 
 
