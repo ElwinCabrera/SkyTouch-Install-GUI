@@ -405,8 +405,8 @@ void SoftwareDownloadPage::addFileToInstallList(){
     }
 }
 
-void SoftwareDownloadPage::startInstalls()
-{
+void SoftwareDownloadPage::startInstalls(){
+
 
 }
 
