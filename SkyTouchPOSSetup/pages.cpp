@@ -627,4 +627,3 @@ void startProcess(QObject *parent, QString programPath, QString fileName ) {
     }
 }
 
-
