@@ -323,7 +323,6 @@ void SoftwareDownloadPage::readyToInstallPage(){
                 gBox->setLayout(layout);
                 scrollAreaLayout->addWidget(gBox);
 
-
                 connect(gBox, &QGroupBox::toggled, lf, &LocalFile::changeInstallState);
             }
         }
