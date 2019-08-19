@@ -62,6 +62,7 @@ class ConfigurationPage : public QWidget{
 public:
     ConfigurationPage(QWidget *parent = 0);
     //~ConfigurationPage();
+    QVBoxLayout *mainLayout = nullptr;
 };
 
 void clearPage(QLayout * layout);

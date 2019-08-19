@@ -578,6 +578,76 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
 
 
 ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
+    mainLayout = new QVBoxLayout;
+    QStandardItemModel *model = new QStandardItemModel;
+    model->setHorizontalHeaderLabels({"test1", "test2"});
+    //QStandardItem *rootItem = model->invisibleRootItem();
+
+
+    QStandardItem *settingsItem = new QStandardItem(QString("Windows settings1"));
+
+    QStandardItem *setting1A = new QStandardItem("Setting 1A");
+    QStandardItem *setting1B = new QStandardItem("Setting 1B");
+    QStandardItem *setting1C = new QStandardItem("Setting 1C");
+    setting1A->setCheckable(true);
+    setting1B->setCheckable(true);
+    setting1C->setCheckable(true);
+
+    setting1A->setAccessibleText("This is a description of what this does and it does something I just dont know what it does at the moment the quick brown fox jumped over the brown fence");
+    setting1A->setEditable(false);
+
+    settingsItem->appendRow(setting1A);
+    settingsItem->appendRow(setting1B);
+    settingsItem->appendRow(setting1C);
+
+    QStandardItem *settingsItem2 = new QStandardItem(QString("Windows settings2"));
+
+    QStandardItem *setting2A = new QStandardItem("Setting 2A");
+    QStandardItem *setting2B = new QStandardItem("Setting 2B");
+    QStandardItem *setting2C = new QStandardItem("Setting 2C");
+    setting2A->setCheckable(true);
+    setting2B->setCheckable(true);
+    setting2C->setCheckable(true);
+
+    settingsItem2->appendRow(setting2A);
+    settingsItem2->appendRow(setting2B);
+    settingsItem2->appendRow(setting2C);
+
+    QStandardItem *settingsItem3 = new QStandardItem(QString("Windows settings3"));
+
+    QStandardItem *setting3A = new QStandardItem("Setting 3A");
+    QStandardItem *setting3B = new QStandardItem("Setting 3B");
+    QStandardItem *setting3C = new QStandardItem("Setting 3C");
+    setting3A->setCheckable(true);
+    setting3B->setCheckable(true);
+    setting3C->setCheckable(true);
+    settingsItem3->appendRow(setting3A);
+    settingsItem3->appendRow(setting3B);
+    settingsItem3->appendRow(setting3C);
+
+    QStandardItem *settingsItem4 = new QStandardItem(QString("Windows settings4"));
+
+    QStandardItem *setting4A = new QStandardItem("Setting 4A");
+    QStandardItem *setting4B = new QStandardItem("Setting 4B");
+    QStandardItem *setting4C = new QStandardItem("Setting 4C");
+    setting4A->setCheckable(true);
+    setting4B->setCheckable(true);
+    setting1C->setCheckable(true);
+    settingsItem4->appendRow(setting4A);
+    settingsItem4->appendRow(setting4B);
+    settingsItem4->appendRow(setting4C);
+
+    model->appendRow(settingsItem);
+    model->appendRow(settingsItem2);
+    model->appendRow(settingsItem3);
+    model->appendRow(settingsItem4);
+
+    QTreeView *treeView = new QTreeView(this);
+    treeView->setModel(model);
+
+    mainLayout->addWidget(treeView);
+    setLayout(mainLayout);
+
 
 }
 
