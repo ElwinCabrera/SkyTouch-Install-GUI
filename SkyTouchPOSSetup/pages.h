@@ -62,7 +62,14 @@ class ConfigurationPage : public QWidget{
 public:
     ConfigurationPage(QWidget *parent = 0);
     //~ConfigurationPage();
+    QTreeView* buildPolicyTree();
     QVBoxLayout *mainLayout = nullptr;
+    QStandardItemModel *model = nullptr;
+    QTreeView *policyTree = nullptr;
+
+
+    QMap<int, QStandardItem*> policyToItemsMap;
+    QMap<QStandardItem*, QVariant> itemToValueMap;
 };
 
 void clearPage(QLayout * layout);
