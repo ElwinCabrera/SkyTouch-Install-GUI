@@ -582,10 +582,22 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
 
 
     policyTree = buildPolicyTree();
+    policyTree->resizeColumnToContents(0);
     policyTree->setModel(model);
 
+    QPushButton *restoreDefaultBtn = new QPushButton("Restore Default");
+    QPushButton *applyBtn = new QPushButton("Apply");
+
+    QHBoxLayout *btnLayout = new QHBoxLayout;
+    btnLayout->addWidget(restoreDefaultBtn);
+    btnLayout->addWidget(applyBtn);
+
+
     mainLayout->addWidget(policyTree);
+    mainLayout->addItem(btnLayout);
     setLayout(mainLayout);
+
+    connect(policyTree, &QTreeView::doubleClicked, this, &ConfigurationPage::itemDoubleClicked);
 
 
 }
@@ -600,6 +612,9 @@ QTreeView* ConfigurationPage::buildPolicyTree(){
 
 
     QStandardItem *recommendedPolicies = new QStandardItem("Recommended Policies");
+
+    recommendedPolicies->setColumnCount(2);
+    addRecommendedPolicies(recommendedPolicies);
     recommendedPolicies->setEditable(false);
 
     QStandardItem *controlPanelPolicies = new QStandardItem("Control Panel");
@@ -650,6 +665,172 @@ QTreeView* ConfigurationPage::buildPolicyTree(){
     return tv;
 
 }
+
+void ConfigurationPage::addRecommendedPolicies(QStandardItem *recommendedPolicies){
+    if(recommendedPolicies == nullptr) {
+        qDebug() << "variable 'recommendedPolicies' is NULL in 'addRecommendedPolicies'";
+        return;
+    }
+    QList<QStandardItem*> row;
+
+
+    QStandardItem *autoStartProgram = new QStandardItem("Select a Program For Autostart");
+    QStandardItem *autoStartProgramRegVal = new QStandardItem("NULL");
+    autoStartProgram->setCheckable(true);
+    autoStartProgram->setCheckState(Qt::Checked);
+    autoStartProgram->setEditable(false);
+    autoStartProgramRegVal->setEditable(false);
+
+    row.append(autoStartProgram);
+    row.append(autoStartProgramRegVal);
+    recommendedPolicies->appendRow(row);
+    policyToItemsMap.insert(AUTOSTART_PGM, autoStartProgramRegVal);
+    itemToValueTypeMap.insert(autoStartProgramRegVal,"Path");
+
+
+    QStandardItem *disableShutdown = new QStandardItem("Disable Shutdown Option For All Users");
+    QStandardItem *diableShutdownRegVal = new QStandardItem("NULL");
+    disableShutdown->setCheckable(true);
+    disableShutdown->setCheckState(Qt::Checked);
+    disableShutdown->setEditable(false);
+    diableShutdownRegVal->setEditable(false);
+
+
+    row.clear();
+    row.append(disableShutdown);
+    row.append(diableShutdownRegVal);
+    recommendedPolicies->appendRow(row);
+
+    QStandardItem *disableInstallPrograms = new QStandardItem("Disable Installing of Programs");
+    QStandardItem *disableInstallProgramsRegVal = new QStandardItem("NULL");
+    disableInstallPrograms->setCheckable(true);
+    disableInstallPrograms->setCheckState(Qt::Checked);
+    disableInstallPrograms->setEditable(false);
+    disableInstallProgramsRegVal->setEditable(false);
+
+    row.clear();
+    row.append( disableInstallPrograms);
+    row.append(disableInstallProgramsRegVal);
+    recommendedPolicies->appendRow(row);
+
+
+    QStandardItem *execOfSelectPrograms = new QStandardItem("Allow Execution Only of Selected Programs");
+    QStandardItem *execOfSelectProgramsRegVal = new QStandardItem("NULL");
+    execOfSelectPrograms->setCheckable(true);
+    execOfSelectPrograms->setCheckState(Qt::Checked);
+    execOfSelectPrograms->setEditable(false);
+    execOfSelectProgramsRegVal->setEditable(false);
+
+
+    row.clear();
+    row.append(execOfSelectPrograms);
+    row.append(execOfSelectProgramsRegVal);
+    recommendedPolicies->appendRow(row);
+
+
+    QStandardItem *disableInternetBrowser = new QStandardItem("Disable Internet Browser");
+    QStandardItem *disableInternetBrowserRegVal = new QStandardItem("NULL");
+    disableInternetBrowser->setCheckable(true);
+    disableInternetBrowser->setCheckState(Qt::Checked);
+    disableInternetBrowser->setEditable(false);
+    disableInternetBrowserRegVal->setEditable(false);
+
+    row.clear();
+    row.append(disableInternetBrowser);
+    row.append(disableInternetBrowserRegVal);
+    recommendedPolicies->appendRow(row);
+
+
+    QStandardItem *customSupportMsg = new QStandardItem("Add Custom Support Message for Access Denied");
+    QStandardItem *customSupportMsgRegVal = new QStandardItem("NULL");
+    customSupportMsg->setCheckable(true);
+    customSupportMsg->setCheckState(Qt::Checked);
+    customSupportMsg->setEditable(false);
+    customSupportMsg->setEditable(false);
+    customSupportMsgRegVal->setEditable(false);
+
+    row.clear();
+    row.append(customSupportMsg);
+    row.append(customSupportMsgRegVal);
+    recommendedPolicies->appendRow(row);
+    policyToItemsMap.insert(CUSTOM_SUPPORT_MSG,customSupportMsgRegVal);
+    itemToValueTypeMap.insert(customSupportMsgRegVal,"Text");
+
+
+    QStandardItem *customLogo = new QStandardItem("Add Logo");
+    QStandardItem *customLogoRegVal = new QStandardItem("NULL");
+    customLogo->setCheckable(true);
+    customLogo->setCheckState(Qt::Checked);
+    customLogo->setEditable(false);
+    customLogoRegVal->setEditable(false);
+
+    row.clear();
+    row.append(customLogo);
+    row.append(customLogoRegVal);
+    recommendedPolicies->appendRow(row);
+    policyToItemsMap.insert(CUSTOM_LOGO,customLogoRegVal);
+    itemToValueTypeMap.insert(customLogoRegVal,"Path");
+
+
+    //connect(policyTree->model(), &);
+    //policyTree->mouseDoubleClickEvent();
+    //policyTree->selectionChanged();
+    //policyTree->selectionModel();
+
+}
+
+void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
+    qDebug() << "Double Clicked" << index.data().toString() << "row" << index.row() << "col" << index.column();
+    qDebug() << "Parent" << index.parent().data().toString() << "row"<< index.parent().row() << "col" << index.parent().column();
+
+    if(index.column() == 0) return;
+
+
+
+
+    QStandardItemModel *model = (QStandardItemModel*) policyTree->model();
+    QStandardItem *parentItem = model->item(index.parent().row(), 0);
+    QStandardItem *childItem = parentItem->child(index.row(),index.column());
+
+    auto it = itemToValueTypeMap.find(childItem);
+    if(it != itemToValueTypeMap.end() && parentItem->child(index.row(),0)->checkState() == Qt::Checked){
+
+        QMessageBox msgBox;
+        int msgBoxReturn;
+        bool ok = false;
+        QString newInput = "";
+
+
+        if(it.value() == "Path"){
+            newInput = QFileDialog::getOpenFileName(this, "Select Executable",QDir::homePath(),"Windows Executable Files (*.EXE, *.exe, *.DLL, *.dll)");
+
+            if(newInput.isEmpty() || newInput.isNull()) return;
+            ok = true;
+
+        } else if(it.value() == "Text"){
+            newInput =  QInputDialog::getText(this,"Edit Message","Enter New Message", QLineEdit::Normal,"", &ok);
+        }
+
+        if(ok && !newInput.isEmpty()){
+            msgBox.setText("Modifiying Value");
+            msgBox.setInformativeText("Are you sure you want to modify this value to '"+newInput+"'");
+            msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.setModal(true);
+            msgBoxReturn = msgBox.exec();
+
+            if(msgBoxReturn == QMessageBox::Ok) childItem->setText(newInput);
+        }
+
+
+
+
+
+
+    }
+
+}
+
 
 void clearPage(QLayout * layout) {
    if (! layout) return;

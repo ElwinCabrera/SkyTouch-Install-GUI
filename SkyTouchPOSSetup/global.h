@@ -250,6 +250,15 @@ private:
 
 };
 
+enum Policies{
+    AUTOSTART_PGM = 0,
+    NO_SUTDOWN,
+    NO_OHTER_PGMS,
+    NO_INET_BROWSER,
+    CUSTOM_SUPPORT_MSG,
+    CUSTOM_LOGO
+};
+
 
 
 #endif // GLOBAL_H

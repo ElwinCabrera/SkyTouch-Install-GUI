@@ -59,17 +59,24 @@ private:
 
 
 class ConfigurationPage : public QWidget{
+    Q_OBJECT
 public:
     ConfigurationPage(QWidget *parent = 0);
     //~ConfigurationPage();
+public slots:
+    void itemDoubleClicked(const QModelIndex &index);
+
+public:
     QTreeView* buildPolicyTree();
+    void addRecommendedPolicies(QStandardItem *recommendedPolicies);
+
     QVBoxLayout *mainLayout = nullptr;
     QStandardItemModel *model = nullptr;
     QTreeView *policyTree = nullptr;
 
 
     QMap<int, QStandardItem*> policyToItemsMap;
-    QMap<QStandardItem*, QVariant> itemToValueMap;
+    QMap<QStandardItem*, QString> itemToValueTypeMap;
 };
 
 void clearPage(QLayout * layout);
