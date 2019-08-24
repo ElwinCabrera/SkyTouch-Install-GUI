@@ -7,7 +7,6 @@
 QT       += core gui
 
 QT      += network
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SkyTouchPOSSetup
@@ -31,7 +30,8 @@ SOURCES += \
     pages.cpp \
     network.cpp \
     installconfirmation.cpp \
-    warningbox.cpp
+    warningbox.cpp \
+    windowsregistry.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +39,8 @@ HEADERS += \
     network.h \
     installconfirmation.h \
     global.h \
-    warningbox.h
+    warningbox.h \
+    windowsregistry.h
 
 FORMS +=
 

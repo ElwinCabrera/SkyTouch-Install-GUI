@@ -7,6 +7,16 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
     //ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
 
+    QCoreApplication::setOrganizationName("SkyTouch");
+    QCoreApplication::setOrganizationDomain("SkyTouch.com");
+    QCoreApplication::setApplicationName("SkyTouch POS Setup");
+    QCoreApplication::setApplicationVersion("0.0.1");
+
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", QSettings::NativeFormat);
+    settings.setValue("NoControlPanel", 1);
+    qDebug() << settings.value("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", "NoControlPanel").toString();
+    settings.setValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", "test");
+
     network = new Network;
 
     menuBar = new QMenuBar;
