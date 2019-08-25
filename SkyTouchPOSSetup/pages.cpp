@@ -599,6 +599,8 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
     setLayout(mainLayout);
 
     connect(policyTree, &QTreeView::doubleClicked, this, &ConfigurationPage::itemDoubleClicked);
+    connect(restoreDefaultBtn, &QPushButton::clicked, this, &ConfigurationPage::restoreDefault);
+    connect(applyBtn, &QPushButton::clicked, this, &ConfigurationPage::applySettings);
 
 
 }
@@ -1169,6 +1171,16 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
         }
 
     }
+
+}
+
+void ConfigurationPage::restoreDefault()
+{
+
+}
+
+void ConfigurationPage::applySettings()
+{
 
 }
 

@@ -67,6 +67,8 @@ public:
     //~ConfigurationPage();
 public slots:
     void itemDoubleClicked(const QModelIndex &index);
+    void restoreDefault();
+    void applySettings();
 
 public:
 
