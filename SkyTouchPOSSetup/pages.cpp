@@ -1196,8 +1196,80 @@ void ConfigurationPage::restoreDefault(){
     }*/
 }
 
-void ConfigurationPage::applySettings()
-{
+void ConfigurationPage::applySettings(){
+    for(int row = 0; row < recommendedPolicies->rowCount(); ++row){
+        QString policyName = recommendedPolicies->child(row, 2)->text();
+        QString type = recommendedPolicies->child(row, 3)->text();
+        if(recommendedPolicies->child(row,0)->checkState() == Qt::Checked){
+
+            if(type == "Path" || type == "Text"){
+                QString pathOrText = recommendedPolicies->child(row, 1)->text();
+                regHan.setPolicyVal(policyName, pathOrText);
+            } else {
+                regHan.setPolicyVal(policyName, 1);
+            }
+
+        } else {
+            if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+        }
+        recommendedPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+    }
+
+
+    /*for(int row = 0; row < controlPanelPolicies->rowCount(); ++row){
+        QString policyName = controlPanelPolicies->child(row, 2)->text();
+        QString type = controlPanelPolicies->child(row, 3)->text();
+        if(controlPanelPolicies->child(row,0)->checkState() == Qt::Checked){
+
+            if(type == "Path" || type == "Text"){
+                QString pathOrText = controlPanelPolicies->child(row, 1)->text();
+                regHan.setPolicyVal(policyName, pathOrText);
+            } else {
+                regHan.setPolicyVal(policyName, 1);
+            }
+
+        } else {
+            if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+        }
+        controlPanelPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+    }
+
+
+    for(int row = 0; row < systemPolicies->rowCount(); ++row){
+        QString policyName = systemPolicies->child(row, 2)->text();
+        QString type = systemPolicies->child(row, 3)->text();
+        if(systemPolicies->child(row,0)->checkState() == Qt::Checked){
+
+            if(type == "Path" || type == "Text"){
+                QString pathOrText = systemPolicies->child(row, 1)->text();
+                regHan.setPolicyVal(policyName, pathOrText);
+            } else {
+                regHan.setPolicyVal(policyName, 1);
+            }
+
+        } else {
+            if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+        }
+        systemPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+    }
+
+    for(int row = 0; row < personalizationPolicies->rowCount(); ++row){
+        QString policyName = personalizationPolicies->child(row, 2)->text();
+        QString type = personalizationPolicies->child(row, 3)->text();
+        if(personalizationPolicies->child(row,0)->checkState() == Qt::Checked){
+
+            if(type == "Path" || type == "Text"){
+                QString pathOrText = personalizationPolicies->child(row, 1)->text();
+                regHan.setPolicyVal(policyName, pathOrText);
+            } else {
+                regHan.setPolicyVal(policyName, 1);
+            }
+
+        } else {
+            if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+        }
+        personalizationPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+    }*/
 
 }
 

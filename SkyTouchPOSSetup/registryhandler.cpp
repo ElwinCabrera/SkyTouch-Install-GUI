@@ -55,6 +55,17 @@ QString RegistryHandler::getCurrRegDataVal(QString policyName){
     return "";
 }
 
+
+void RegistryHandler::setPolicyVal(QString policyName, QVariant value)
+{
+    auto it = policyNameToKey.find(policyName);
+
+    if(it != policyNameToKey.end()){
+        QSettings setting(it.value(), QSettings::NativeFormat);
+        setting.setValue(policyName, value);
+    }
+}
+
 void RegistryHandler::setDefaultValues(){
 
     /************  HKCU\Software\Microsoft\Windows\CurrentVersion\Run ***********/

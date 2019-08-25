@@ -10,7 +10,10 @@ class RegistryHandler
 public:
     RegistryHandler();
     QString getCurrRegDataVal(QString val);
+    QString getPolicyVal(QString policyName);
+    void setPolicyVal(QString policyName, QVariant value);
     void setDefaultValues();
+
 
 private:
 
