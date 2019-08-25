@@ -611,20 +611,20 @@ QTreeView* ConfigurationPage::buildPolicyTree(){
     model->setHorizontalHeaderItem(1, valueHeaderItem);
 
 
-    QStandardItem *recommendedPolicies = new QStandardItem("Recommended Policies");
-
+    recommendedPolicies = new QStandardItem("Recommended Policies");
     recommendedPolicies->setColumnCount(2);
-    addRecommendedPolicies(recommendedPolicies);
     recommendedPolicies->setEditable(false);
 
-    QStandardItem *controlPanelPolicies = new QStandardItem("Control Panel");
+    controlPanelPolicies = new QStandardItem("Control Panel");
     controlPanelPolicies->setEditable(false);
 
-    QStandardItem *systemPolicies = new QStandardItem("System");
+    systemPolicies = new QStandardItem("System");
     systemPolicies->setEditable(false);
 
-    QStandardItem *personalizationPolicies = new QStandardItem("Personalization");
+    personalizationPolicies = new QStandardItem("Personalization");
     personalizationPolicies->setEditable(false);
+
+    populatePolicies();
 
 
 
@@ -640,30 +640,483 @@ QTreeView* ConfigurationPage::buildPolicyTree(){
 
 }
 
-void ConfigurationPage::addRecommendedPolicies(QStandardItem *recommendedPolicies){
-    if(recommendedPolicies == nullptr) {
-        qDebug() << "variable 'recommendedPolicies' is NULL in 'addRecommendedPolicies'";
-        return;
-    }
+void ConfigurationPage::populatePolicies(){
+
     QList<QStandardItem*> row;
 
 
     QStandardItem *autoStartProgram = new QStandardItem("Autostart a Program");
     QStandardItem *autoStartProgramRegVal = new QStandardItem(regHan.getCurrRegDataVal("CashRegisterExpressRun"));
-    QStandardItem *regKeyName = new QStandardItem("CashRegisterExpressRun");
-    QStandardItem *dataType = new QStandardItem("Path");
+    QStandardItem *autoStartProgramRegKeyName = new QStandardItem("CashRegisterExpressRun");
+    QStandardItem *autoStartProgramDataType = new QStandardItem("Path");
 
     autoStartProgram->setCheckable(true);
     autoStartProgram->setCheckState(Qt::Checked);
     autoStartProgram->setEditable(false);
     autoStartProgramRegVal->setEditable(false);
 
+    row.clear();
     row.append(autoStartProgram);
     row.append(autoStartProgramRegVal);
-    row.append(regKeyName);
-    row.append(dataType);
+    row.append(autoStartProgramRegKeyName);
+    row.append(autoStartProgramDataType);
     recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
 
+
+    QStandardItem *noControlPanel = new QStandardItem("Prohibit access to Control Panel and PC Settings");
+    QStandardItem *noControlPanelRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoControlPanel"));
+    QStandardItem *noControlPanelRegKeyName = new QStandardItem("NoControlPanel");
+    QStandardItem *noControlPanelDataType = new QStandardItem("");
+
+    noControlPanel->setCheckable(true);
+    noControlPanel->setCheckState(Qt::Checked);
+    noControlPanel->setEditable(false);
+    noControlPanelRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noControlPanel);
+    row.append(noControlPanelRegVal);
+    row.append(noControlPanelRegKeyName);
+    row.append(noControlPanelDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+    controlPanelPolicies->appendRow(row);
+
+
+
+    QStandardItem *hidePowerOptions = new QStandardItem("Remove and prevent access to the Shut Down, Restart, Sleep, and Hibernate commandss");
+    QStandardItem *hidePowerOptionsRegVal = new QStandardItem(regHan.getCurrRegDataVal("HidePowerOptions"));
+    QStandardItem *hidePowerOptionsRegKeyName = new QStandardItem("HidePowerOptions");
+    QStandardItem *hidePowerOptionsDataType = new QStandardItem("");
+
+    hidePowerOptions->setCheckable(true);
+    hidePowerOptions->setCheckState(Qt::Checked);
+    hidePowerOptions->setEditable(false);
+    hidePowerOptionsRegVal->setEditable(false);
+
+    row.clear();
+    row.append(hidePowerOptions);
+    row.append(hidePowerOptionsRegVal);
+    row.append(hidePowerOptionsRegKeyName);
+    row.append(hidePowerOptionsDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+    QStandardItem *noLogoff = new QStandardItem("Remove logoff");
+    QStandardItem *noLogoffRegVal = new QStandardItem(regHan.getCurrRegDataVal("Nologoff"));
+    QStandardItem *noLogoffRegKeyName = new QStandardItem("Nologoff");
+    QStandardItem *noLogoffDataType = new QStandardItem("");
+
+    noLogoff->setCheckable(true);
+    noLogoff->setCheckState(Qt::Checked);
+    noLogoff->setEditable(false);
+    noLogoffRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noLogoff);
+    row.append(noLogoffRegVal);
+    row.append(noLogoffRegKeyName);
+    row.append(noLogoffDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+    QStandardItem *disableCMD = new QStandardItem("Prevent access to the command prompt");
+    QStandardItem *disableCMDRegVal = new QStandardItem(regHan.getCurrRegDataVal("DisableCMD"));
+    QStandardItem *disableCMDRegKeyName = new QStandardItem("DisableCMD");
+    QStandardItem *disableCMDDataType = new QStandardItem("");
+
+    disableCMD->setCheckable(true);
+    disableCMD->setCheckState(Qt::Checked);
+    disableCMD->setEditable(false);
+    disableCMDRegVal->setEditable(false);
+
+    row.clear();
+    row.append(disableCMD);
+    row.append(disableCMDRegVal);
+    row.append(disableCMDRegKeyName);
+    row.append(disableCMDDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+    QStandardItem *disabletaskMgr = new QStandardItem("Remove Task Manager");
+    QStandardItem *disabletaskMgrRegVal = new QStandardItem(regHan.getCurrRegDataVal("DisabletaskMgr"));
+    QStandardItem *disabletaskMgrRegKeyName = new QStandardItem("DisabletaskMgr");
+    QStandardItem *disabletaskMgrDataType = new QStandardItem("");
+
+    disabletaskMgr->setCheckable(true);
+    disabletaskMgr->setCheckState(Qt::Checked);
+    disabletaskMgr->setEditable(false);
+    disabletaskMgrRegVal->setEditable(false);
+
+    row.clear();
+    row.append(disabletaskMgr);
+    row.append(disabletaskMgrRegVal);
+    row.append(disabletaskMgrRegKeyName);
+    row.append(disabletaskMgrDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+
+    QStandardItem *disablelockWorkstation = new QStandardItem("Remove Lock Computer");
+    QStandardItem *disablelockWorkstationRegVal = new QStandardItem(regHan.getCurrRegDataVal("DisablelockWorkstation"));
+    QStandardItem *disablelockWorkstationRegKeyName = new QStandardItem("DisablelockWorkstation");
+    QStandardItem *disablelockWorkstationDataType = new QStandardItem("");
+
+    disablelockWorkstation->setCheckable(true);
+    disablelockWorkstation->setCheckState(Qt::Checked);
+    disablelockWorkstation->setEditable(false);
+    disablelockWorkstationRegVal->setEditable(false);
+
+    row.clear();
+    row.append(disablelockWorkstation);
+    row.append(disablelockWorkstationRegVal);
+    row.append(disablelockWorkstationRegKeyName);
+    row.append(disablelockWorkstationDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+    QStandardItem *removeChangePsswd = new QStandardItem("Remove Change Passoword");
+    QStandardItem *removeChangePsswdRegVal = new QStandardItem(regHan.getCurrRegDataVal("Disablechangepassword"));
+    QStandardItem *removeChangePsswdRegKeyName = new QStandardItem("Disablechangepassword");
+    QStandardItem *removeChangePsswdDataType = new QStandardItem("");
+
+    removeChangePsswd->setCheckable(true);
+    removeChangePsswd->setCheckState(Qt::Checked);
+    removeChangePsswd->setEditable(false);
+    removeChangePsswdRegVal->setEditable(false);
+
+    row.clear();
+    row.append(removeChangePsswd);
+    row.append(removeChangePsswdRegVal);
+    row.append(removeChangePsswdRegKeyName);
+    row.append(removeChangePsswdDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+    controlPanelPolicies->appendRow(row);
+
+
+
+    QStandardItem *noAutoUpdate = new QStandardItem("Remove Windows automatic updates");
+    QStandardItem *noAutoUpdateRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoAutoUpdate"));
+    QStandardItem *noAutoUpdateRegKeyName = new QStandardItem("NoAutoUpdate");
+    QStandardItem *noAutoUpdateDataType = new QStandardItem("");
+
+    noAutoUpdate->setCheckable(true);
+    noAutoUpdate->setCheckState(Qt::Checked);
+    noAutoUpdate->setEditable(false);
+    noAutoUpdateRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noAutoUpdate);
+    row.append(noAutoUpdateRegVal);
+    row.append(noAutoUpdateRegKeyName);
+    row.append(noAutoUpdateDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+    controlPanelPolicies->appendRow(row);
+
+
+
+    QStandardItem *taskbarNoNotification = new QStandardItem("Turn off all balloon notifications");
+    QStandardItem *taskbarNoNotificationRegVal = new QStandardItem(regHan.getCurrRegDataVal("TaskbarNoNotification"));
+    QStandardItem *taskbarNoNotificationRegKeyName = new QStandardItem("TaskbarNoNotification");
+    QStandardItem *taskbarNoNotificationDataType = new QStandardItem("");
+
+    taskbarNoNotification->setCheckable(true);
+    taskbarNoNotification->setCheckState(Qt::Checked);
+    taskbarNoNotification->setEditable(false);
+    taskbarNoNotificationRegVal->setEditable(false);
+
+    row.clear();
+    row.append(taskbarNoNotification);
+    row.append(taskbarNoNotificationRegVal);
+    row.append(taskbarNoNotificationRegKeyName);
+    row.append(taskbarNoNotificationDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+
+
+    QStandardItem *noballoonFeatureAds = new QStandardItem("Turn off all Balloon Featured Advertisements");
+    QStandardItem *noballoonFeatureAdsRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoballoonFeatureAdvertisements"));
+    QStandardItem *noballoonFeatureAdsRegKeyName = new QStandardItem("NoballoonFeatureAdvertisements");
+    QStandardItem *noballoonFeatureAdsDataType = new QStandardItem("");
+
+    noballoonFeatureAds->setCheckable(true);
+    noballoonFeatureAds->setCheckState(Qt::Checked);
+    noballoonFeatureAds->setEditable(false);
+    noballoonFeatureAdsRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noballoonFeatureAds);
+    row.append(noballoonFeatureAdsRegVal);
+    row.append(noballoonFeatureAdsRegKeyName);
+    row.append(noballoonFeatureAdsDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+
+    QStandardItem *noTileApplicationNoti = new QStandardItem("Turn off tile notifications");
+    QStandardItem *noTileApplicationNotiRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoTileApplicationNotification"));
+    QStandardItem *noTileApplicationNotiRegKeyName = new QStandardItem("NoTileApplicationNotification");
+    QStandardItem *noTileApplicationNotiDataType = new QStandardItem("");
+
+    noTileApplicationNoti->setCheckable(true);
+    noTileApplicationNoti->setCheckState(Qt::Checked);
+    noTileApplicationNoti->setEditable(false);
+    noTileApplicationNotiRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noTileApplicationNoti);
+    row.append(noTileApplicationNotiRegVal);
+    row.append(noTileApplicationNotiRegKeyName);
+    row.append(noTileApplicationNotiDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+    QStandardItem *NoCloudAppNoti = new QStandardItem("Turn off notifications network usage");
+    QStandardItem *NoCloudAppNotiRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoCloudApplicationNotification"));
+    QStandardItem *NoCloudAppNotiRegKeyName = new QStandardItem("NoCloudApplicationNotification");
+    QStandardItem *NoCloudAppNotiDataType = new QStandardItem("");
+
+    NoCloudAppNoti->setCheckable(true);
+    NoCloudAppNoti->setCheckState(Qt::Checked);
+    NoCloudAppNoti->setEditable(false);
+    NoCloudAppNotiRegVal->setEditable(false);
+
+    row.clear();
+    row.append(NoCloudAppNoti);
+    row.append(NoCloudAppNotiRegVal);
+    row.append(NoCloudAppNotiRegKeyName);
+    row.append(NoCloudAppNotiDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+    QStandardItem *lockTaskbar = new QStandardItem("Lock the taskBar");
+    QStandardItem *lockTaskbarRegVal = new QStandardItem(regHan.getCurrRegDataVal("LockTaskbar"));
+    QStandardItem *lockTaskbarRegKeyName = new QStandardItem("LockTaskbar");
+    QStandardItem *lockTaskbarDataType = new QStandardItem("");
+
+    lockTaskbar->setCheckable(true);
+    lockTaskbar->setCheckState(Qt::Checked);
+    lockTaskbar->setEditable(false);
+    lockTaskbarRegVal->setEditable(false);
+
+    row.clear();
+    row.append(lockTaskbar);
+    row.append(lockTaskbarRegVal);
+    row.append(lockTaskbarRegKeyName);
+    row.append(lockTaskbarDataType);
+    recommendedPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+    controlPanelPolicies->appendRow(row);
+
+
+
+    QStandardItem *noMinimizingShortcuts = new QStandardItem("Turn off Aero Shake window minimizing mouse gesture");
+    QStandardItem *noMinimizingShortcutsRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoWindowMinimizingShortcuts"));
+    QStandardItem *noMinimizingShortcutsRegKeyName = new QStandardItem("NoWindowMinimizingShortcuts");
+    QStandardItem *noMinimizingShortcutsDataType = new QStandardItem("");
+
+    noMinimizingShortcuts->setCheckable(true);
+    noMinimizingShortcuts->setCheckState(Qt::Checked);
+    noMinimizingShortcuts->setEditable(false);
+    noMinimizingShortcutsRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noMinimizingShortcuts);
+    row.append(noMinimizingShortcutsRegVal);
+    row.append(noMinimizingShortcutsRegKeyName);
+    row.append(noMinimizingShortcutsDataType);
+    recommendedPolicies->appendRow(row);
+    personalizationPolicies->appendRow(row);
+
+
+
+
+    QStandardItem *noChangestartMenu = new QStandardItem("Prevent users from customizing their start screen");
+    QStandardItem *noChangestartMenuRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoChangestartMenu"));
+    QStandardItem *noChangestartMenuRegKeyName = new QStandardItem("NoChangestartMenu");
+    QStandardItem *noChangestartMenuDataType = new QStandardItem("");
+
+    noChangestartMenu->setCheckable(true);
+    noChangestartMenu->setEditable(false);
+    noChangestartMenuRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noChangestartMenu);
+    row.append(noChangestartMenuRegVal);
+    row.append(noChangestartMenuRegKeyName);
+    row.append(noChangestartMenuDataType);
+    personalizationPolicies->appendRow(row);
+
+
+
+
+    QStandardItem *noAddRemoveToolbar = new QStandardItem("Prevent users from adding or removing toolbars");
+    QStandardItem *noAddRemoveToolbarRegVal = new QStandardItem(regHan.getCurrRegDataVal("TaskbarNoAddRemoveToolbar"));
+    QStandardItem *noAddRemoveToolbarRegKeyName = new QStandardItem("TaskbarNoAddRemoveToolbar");
+    QStandardItem *noAddRemoveToolbarDataType = new QStandardItem("");
+
+    noAddRemoveToolbar->setCheckable(true);
+    noAddRemoveToolbar->setEditable(false);
+    noAddRemoveToolbarRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noAddRemoveToolbar);
+    row.append(noAddRemoveToolbarRegVal);
+    row.append(noAddRemoveToolbarRegKeyName);
+    row.append(noAddRemoveToolbarDataType);
+    personalizationPolicies->appendRow(row);
+
+
+
+
+    QStandardItem *noSetTaskbar = new QStandardItem("Prevent changes to Taskbar and start menu Settings");
+    QStandardItem *noSetTaskbarRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoSetTaskbar"));
+    QStandardItem *noSetTaskbarRegKeyName = new QStandardItem("NoSetTaskbar");
+    QStandardItem *noSetTaskbarDataType = new QStandardItem("");
+
+    noSetTaskbar->setCheckable(true);
+    noSetTaskbar->setEditable(false);
+    noSetTaskbarRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noSetTaskbar);
+    row.append(noSetTaskbarRegVal);
+    row.append(noSetTaskbarRegKeyName);
+    row.append(noSetTaskbarDataType);
+    personalizationPolicies->appendRow(row);
+
+
+
+    QStandardItem *taskbarLockAll = new QStandardItem("Lock all taskbar settings");
+    QStandardItem *taskbarLockAllRegVal = new QStandardItem(regHan.getCurrRegDataVal("taskbarLockAll"));
+    QStandardItem *taskbarLockAllRegKeyName = new QStandardItem("taskbarLockAll");
+    QStandardItem *taskbarLockAllDataType = new QStandardItem("");
+
+    taskbarLockAll->setCheckable(true);
+    taskbarLockAll->setEditable(false);
+    taskbarLockAllRegVal->setEditable(false);
+
+    row.clear();
+    row.append(taskbarLockAll);
+    row.append(taskbarLockAllRegVal);
+    row.append(taskbarLockAllRegKeyName);
+    row.append(taskbarLockAllDataType);
+    personalizationPolicies->appendRow(row);
+
+
+
+    QStandardItem *noMovingToolbars = new QStandardItem("Prohibit adjusting desktop toolbars");
+    QStandardItem *noMovingToolbarsRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoMovingBands"));
+    QStandardItem *noMovingToolbarsRegKeyName = new QStandardItem("NoMovingBands");
+    QStandardItem *noMovingToolbarsDataType = new QStandardItem("");
+
+    noMovingToolbars->setCheckable(true);
+    noMovingToolbars->setEditable(false);
+    noMovingToolbarsRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noMovingToolbars);
+    row.append(noMovingToolbarsRegVal);
+    row.append(noMovingToolbarsRegKeyName);
+    row.append(noMovingToolbarsDataType);
+    personalizationPolicies->appendRow(row);
+
+
+
+
+    QStandardItem *noChangingWallPaper = new QStandardItem("Prevent changing desktop background/wallpaper");
+    QStandardItem *noChangingWallPaperRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoChangingWallPaper"));
+    QStandardItem *noChangingWallPaperRegKeyName = new QStandardItem("NoChangingWallPaper");
+    QStandardItem *noChangingWallPaperDataType = new QStandardItem("");
+
+    noChangingWallPaper->setCheckable(true);
+    noChangingWallPaper->setEditable(false);
+    noChangingWallPaperRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noChangingWallPaper);
+    row.append(noChangingWallPaperRegVal);
+    row.append(noChangingWallPaperRegKeyName);
+    row.append(noChangingWallPaperDataType);
+    personalizationPolicies->appendRow(row);
+
+
+
+    QStandardItem *noChanginglockscreen = new QStandardItem("Prevent changing lock screen and logon image");
+    QStandardItem *noChanginglockscreenRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoChanginglockscreen"));
+    QStandardItem *noChanginglockscreenRegKeyName = new QStandardItem("NoChanginglockscreen");
+    QStandardItem *noChanginglockscreenDataType = new QStandardItem("");
+
+    noChanginglockscreen->setCheckable(true);
+    noChanginglockscreen->setEditable(false);
+    noChanginglockscreenRegVal->setEditable(false);
+
+    row.clear();
+    row.append(noChanginglockscreen);
+    row.append(noChanginglockscreenRegVal);
+    row.append(noChanginglockscreenRegKeyName);
+    row.append(noChanginglockscreenDataType);
+    personalizationPolicies->appendRow(row);
+
+
+
+
+    QStandardItem *nolockscreen = new QStandardItem("Do not display the lock screen");
+    QStandardItem *nolockscreenRegVal = new QStandardItem(regHan.getCurrRegDataVal("Nolockscreen"));
+    QStandardItem *nolockscreenRegKeyName = new QStandardItem("Nolockscreen");
+    QStandardItem *nolockscreenDataType = new QStandardItem("");
+
+    nolockscreen->setCheckable(true);
+    nolockscreen->setEditable(false);
+    nolockscreenRegVal->setEditable(false);
+
+    row.clear();
+    row.append(nolockscreen);
+    row.append(nolockscreenRegVal);
+    row.append(nolockscreenRegKeyName);
+    row.append(nolockscreenDataType);
+    personalizationPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
+
+
+
+    QStandardItem *useDefaultTile = new QStandardItem("Apply the default account picture to all users");
+    QStandardItem *useDefaultTileRegVal = new QStandardItem(regHan.getCurrRegDataVal("UseDefaultTile"));
+    QStandardItem *useDefaultTileRegKeyName = new QStandardItem("UseDefaultTile");
+    QStandardItem *useDefaultTileDataType = new QStandardItem("");
+
+    useDefaultTile->setCheckable(true);
+    useDefaultTile->setEditable(false);
+    useDefaultTileRegVal->setEditable(false);
+
+    row.clear();
+    row.append(useDefaultTile);
+    row.append(useDefaultTileRegVal);
+    row.append(useDefaultTileRegKeyName);
+    row.append(useDefaultTileDataType);
+    personalizationPolicies->appendRow(row);
+    systemPolicies->appendRow(row);
 
 
 }

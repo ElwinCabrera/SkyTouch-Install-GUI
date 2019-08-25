@@ -113,6 +113,7 @@ void RegistryHandler::setDefaultValues(){
 
     /************************ HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer ******************/
     QSettings policyExplorerSettingsHKLM(hklmPolicyKey, QSettings::NativeFormat);
+
     /*
      * Note: The default account picture is stored at %PROGRAMDATA%\Microsoft\User Account pictures\user.jpg.
      * The default guest picture is stored at %PROGRAMDATA%\Microsoft\User Account pictures\guest.jpg.

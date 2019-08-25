@@ -69,15 +69,24 @@ public slots:
     void itemDoubleClicked(const QModelIndex &index);
 
 public:
-    QTreeView* buildPolicyTree();
-    void addRecommendedPolicies(QStandardItem *recommendedPolicies);
 
-    RegistryHandler regHan;
+
+private:
+    QTreeView* buildPolicyTree();
+    void populatePolicies();
+
+
     QVBoxLayout *mainLayout = nullptr;
-    QStandardItemModel *model = nullptr;
     QTreeView *policyTree = nullptr;
 
+    QStandardItemModel *model = nullptr;
 
+    QStandardItem *recommendedPolicies = nullptr;
+    QStandardItem *controlPanelPolicies = nullptr;
+    QStandardItem *systemPolicies = nullptr;
+    QStandardItem *personalizationPolicies = nullptr;
+
+    RegistryHandler regHan;
 
     QMap<QString, QStandardItem*> policyNameToItemValue;
     //QMap<QString, >
