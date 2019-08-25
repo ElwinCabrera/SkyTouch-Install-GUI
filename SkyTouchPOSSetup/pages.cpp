@@ -647,9 +647,6 @@ void ConfigurationPage::populatePolicies(){
 
     QList<QStandardItem*> row;
 
-    QSettings test("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-    test.setValue("CashRegisterExpressRun", "modafucka");
-
     QStandardItem *autoStartProgram = new QStandardItem("Autostart a Program");
     QStandardItem *autoStartProgramRegVal = new QStandardItem(regHan.getCurrRegDataVal("CashRegisterExpressRun"));
     QStandardItem *autoStartProgramRegKeyName = new QStandardItem("CashRegisterExpressRun");
