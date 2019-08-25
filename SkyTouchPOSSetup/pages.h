@@ -75,8 +75,9 @@ public:
     QTreeView *policyTree = nullptr;
 
 
-    QMap<int, QStandardItem*> policyToItemsMap;
-    QMap<QStandardItem*, QString> itemToValueTypeMap;
+
+    QMap<QString, QStandardItem*> policyNameToItemValue;
+    //QMap<QString, >
 };
 
 void clearPage(QLayout * layout);
