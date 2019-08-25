@@ -5,6 +5,8 @@
 
 #include "network.h"
 #include "installconfirmation.h"
+#include "warningbox.h"
+#include "registryhandler.h"
 #include "global.h"
 
 
@@ -70,6 +72,7 @@ public:
     QTreeView* buildPolicyTree();
     void addRecommendedPolicies(QStandardItem *recommendedPolicies);
 
+    RegistryHandler regHan;
     QVBoxLayout *mainLayout = nullptr;
     QStandardItemModel *model = nullptr;
     QTreeView *policyTree = nullptr;

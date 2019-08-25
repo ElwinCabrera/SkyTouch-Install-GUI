@@ -1,7 +1,7 @@
 
 
 #include "pages.h"
-#include "warningbox.h"
+
 
 
 
@@ -626,45 +626,12 @@ QTreeView* ConfigurationPage::buildPolicyTree(){
     QStandardItem *personalizationPolicies = new QStandardItem("Personalization");
     personalizationPolicies->setEditable(false);
 
-    /*QStandardItem *desktopPolicies = new QStandardItem("Desktop");
-    desktopPolicies->setEditable(false);
-
-    QStandardItem *microsoftEdgePolicies = new QStandardItem("MicrosoftEdge");
-    microsoftEdgePolicies->setEditable(false);
-
-    QStandardItem *microsoftOfficePolicies = new QStandardItem("Microsoft Office");
-    microsoftOfficePolicies->setEditable(false);
-
-    QStandardItem *networkPolicies = new QStandardItem("Network");
-    networkPolicies->setEditable(false);
-
-    QStandardItem *printersPolicies = new QStandardItem("Printers");
-    printersPolicies->setEditable(false);
-
-    QStandardItem *sharedFoldersPolicies = new QStandardItem("Shared Folders");
-    sharedFoldersPolicies->setEditable(false);
-
-    QStandardItem *startMenuAndTaskBarPolicies = new QStandardItem("Start Menu and TaskBar");
-    startMenuAndTaskBarPolicies->setEditable(false);
-
-    QStandardItem *windowsComponentsPolicies = new QStandardItem("Windows Components");
-    windowsComponentsPolicies->setEditable(false);*/
 
 
     model->appendRow(recommendedPolicies);
     model->appendRow(controlPanelPolicies);
     model->appendRow(systemPolicies);
     model->appendRow(personalizationPolicies);
-
-    /*model->appendRow(desktopPolicies);
-    model->appendRow(microsoftEdgePolicies);
-    model->appendRow(microsoftOfficePolicies);
-    model->appendRow(networkPolicies);
-    model->appendRow(printersPolicies);
-    model->appendRow(sharedFoldersPolicies);
-    model->appendRow(startMenuAndTaskBarPolicies);
-
-    model->appendRow(windowsComponentsPolicies);*/
 
 
     QTreeView *tv = new QTreeView(this);
@@ -682,7 +649,7 @@ void ConfigurationPage::addRecommendedPolicies(QStandardItem *recommendedPolicie
 
 
     QStandardItem *autoStartProgram = new QStandardItem("Autostart a Program");
-    QStandardItem *autoStartProgramRegVal = new QStandardItem("NULL" /*getCurrRegVal(AUTOSTART_PGM)*/);
+    QStandardItem *autoStartProgramRegVal = new QStandardItem(regHan.getCurrRegDataVal("CashRegisterExpressRun"));
     QStandardItem *regKeyName = new QStandardItem("CashRegisterExpressRun");
     QStandardItem *dataType = new QStandardItem("Path");
 

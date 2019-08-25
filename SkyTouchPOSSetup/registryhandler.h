@@ -3,9 +3,7 @@
 
 #include "global.h"
 
-#define HKCU_POLICY_KEY "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies"
-#define HKCU_RUN_KEY "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
-#define HKCU_SYSTEM_KEY "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\System"
+
 
 class RegistryHandler
 {
@@ -15,11 +13,20 @@ public:
     void setDefaultValues();
 
 private:
-    QSettings policySettings;
-    QSettings runSetting; // for auto start
-    QSettings systemSettings;
 
-    QMap<QString, QString> policyNameToType;
+    QMap<QString, QString> policyNameToKey;
+
+    QString HKCU = "HKEY_CURRENT_USER";
+    QString HKLM = "HKEY_LOCAL_MACHINE";
+
+
+    QString hkcuPolicyWinKey = HKCU+"\\Software\\Policies\\Microsoft\\Windows";
+    QString hkcuPolicyKey = HKCU+"\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies";
+    QString hkcuRunKey = HKCU+"\\Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+    QString hkcuPolicyPushNotiKey = HKCU+"\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications";
+
+    QString hklmPolicyPersonalKey = HKLM+"\\Software\\Policies\\Microsoft\\Windows\\Personalization";
+    QString hklmPolicyKey = HKLM+"\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer";
 
 };
 
