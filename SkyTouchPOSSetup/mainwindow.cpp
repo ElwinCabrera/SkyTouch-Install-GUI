@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 //#include "ui_mainwindow.h"
 #include <QtWidgets>
+#include <qt_windows.h>
 
 
 MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::MainWindow)*/ {
@@ -11,6 +12,12 @@ MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::Main
     QCoreApplication::setOrganizationDomain("SkyTouch.com");
     QCoreApplication::setApplicationName("SkyTouch POS Setup");
     QCoreApplication::setApplicationVersion("0.0.1");
+
+
+
+    QSettings testSetting("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Test", QSettings::NativeFormat);
+    testSetting.setValue("test\\A", 1);
+
 
     network = new Network;
 

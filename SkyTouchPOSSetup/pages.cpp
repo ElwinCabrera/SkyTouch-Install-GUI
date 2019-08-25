@@ -579,6 +579,7 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
 
 ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
     mainLayout = new QVBoxLayout;
+    regHan.setDefaultValues();
 
 
     policyTree = buildPolicyTree();
