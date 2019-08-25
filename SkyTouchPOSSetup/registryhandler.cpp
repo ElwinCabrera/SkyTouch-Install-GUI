@@ -44,7 +44,12 @@ QString RegistryHandler::getCurrRegDataVal(QString policyName){
     if(it != policyNameToKey.end()){
         QString key = it.value();
         QSettings settings(key, QSettings::NativeFormat);
-        return settings.value(policyName).toString();
+
+        QString val = settings.value(policyName).toString();
+
+        if(val == "1") return "ON";
+        else if(val == "0") return "OFF";
+        else return val;
     }
 
     return "";
@@ -60,13 +65,13 @@ void RegistryHandler::setDefaultValues(){
     /************  HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\... ***********/
     // Explorer
     QSettings policyExplorerSettings(hkcuPolicyKey+"\\Explorer", QSettings::NativeFormat);
-    policyExplorerSettings.setValue("NoControlPanel", 1); //Prohibit access to Control Panel and PC Settings
-    policyExplorerSettings.setValue("HidePowerOptions", 1); // Remove and prevent access to the Shut Down, Restart, Sleep, and Hibernate commands
-    policyExplorerSettings.setValue("Nologoff", 1); // Remove logoff
-    policyExplorerSettings.setValue("NoAutoUpdate", 1); // Windows automatic updates
-    policyExplorerSettings.setValue("TaskbarNoNotification", 1); // Turn off all balloon notifications
+    policyExplorerSettings.setValue("NoControlPanel", 0); //Prohibit access to Control Panel and PC Settings
+    policyExplorerSettings.setValue("HidePowerOptions", 0); // Remove and prevent access to the Shut Down, Restart, Sleep, and Hibernate commands
+    policyExplorerSettings.setValue("Nologoff", 0); // Remove logoff
+    policyExplorerSettings.setValue("NoAutoUpdate", 0); // Windows automatic updates
+    policyExplorerSettings.setValue("TaskbarNoNotification", 0); // Turn off all balloon notifications
     policyExplorerSettings.setValue("NoChangestartMenu", 0); // Prevent users from customizing their start screen
-    policyExplorerSettings.setValue("LockTaskbar", 1); // Lock the taskBar
+    policyExplorerSettings.setValue("LockTaskbar", 0); // Lock the taskBar
     policyExplorerSettings.setValue("TaskbarNoAddRemoveToolbar", 0); // Prevent users from adding or removing toolbars
     policyExplorerSettings.setValue("NoSetTaskbar", 0); //Prevent changes to Taskbar and start menu Settings
     policyExplorerSettings.setValue("taskbarLockAll", 0); // Lock all taskbar settings
@@ -75,40 +80,40 @@ void RegistryHandler::setDefaultValues(){
 
     // System
     QSettings policySystemSettings(hkcuPolicyKey+"\\System", QSettings::NativeFormat);
-    policySystemSettings.setValue("DisabletaskMgr", 1); // Remove Task Manager
-    policySystemSettings.setValue("DisablelockWorkstation", 1); // Remove Lock Computer
-    policySystemSettings.setValue("Disablechangepassword", 1); // Remove Change Passoword
+    policySystemSettings.setValue("DisabletaskMgr", 0); // Remove Task Manager
+    policySystemSettings.setValue("DisablelockWorkstation", 0); // Remove Lock Computer
+    policySystemSettings.setValue("Disablechangepassword", 0); // Remove Change Passoword
 
 
     /**************** HKCU\Software\Policies\Microsoft\Windows\...  ********/
     // Explorer
     QSettings policyWinExplorerSettings(hkcuPolicyWinKey+"\\Explorer", QSettings::NativeFormat);
-    policyWinExplorerSettings.setValue("NoballoonFeatureAdvertisements", 1);
-    policyWinExplorerSettings.setValue("NoWindowMinimizingShortcuts", 1); // Turn off Aero Shake window minimizing mouse gesture
+    policyWinExplorerSettings.setValue("NoballoonFeatureAdvertisements", 0);
+    policyWinExplorerSettings.setValue("NoWindowMinimizingShortcuts", 0); // Turn off Aero Shake window minimizing mouse gesture
 
 
     // System
     QSettings policyWinSystemSettings(hkcuPolicyWinKey+"\\System", QSettings::NativeFormat);
-    policyWinSystemSettings.setValue("DisableCMD", 1); //Prevent access to the command prompt
+    policyWinSystemSettings.setValue("DisableCMD", 0); //Prevent access to the command prompt
 
 
     //ActiveDesktop
     QSettings policyWinActiveDesktopSettings(hkcuPolicyWinKey+"\\ActiveDesktop", QSettings::NativeFormat);
-    policyWinActiveDesktopSettings.setValue("NoChangingWallPaper", 1); // Prevent changing desktop background/wallpaper
+    policyWinActiveDesktopSettings.setValue("NoChangingWallPaper", 0); // Prevent changing desktop background/wallpaper
 
 
 
     /********************** HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications\... *******/
     QSettings policyPushNotiSettings(hkcuPolicyPushNotiKey, QSettings::NativeFormat);
-    policyPushNotiSettings.setValue("NoTileApplicationNotification", 1); // Turn off tile notifications
-    policyPushNotiSettings.setValue("NoCloudApplicationNotification", 1); // Turn off notifications network usage
+    policyPushNotiSettings.setValue("NoTileApplicationNotification", 0); // Turn off tile notifications
+    policyPushNotiSettings.setValue("NoCloudApplicationNotification", 0); // Turn off notifications network usage
 
 
 
     /********************* HKLM\Software\Policies\Microsoft\Windows\Personalization\ ... ************************/
     QSettings policyPersonalSettings(hklmPolicyPersonalKey, QSettings::NativeFormat);
     policyPersonalSettings.setValue("NoChanginglockscreen", 0); //Prevent changing lock screen and logon image
-    policyPersonalSettings.setValue("Nolockscreen", 1); // Do not display the lock screen
+    policyPersonalSettings.setValue("Nolockscreen", 0); // Do not display the lock screen
 
 
     /************************ HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer ******************/

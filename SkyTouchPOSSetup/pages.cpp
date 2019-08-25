@@ -647,6 +647,8 @@ void ConfigurationPage::populatePolicies(){
 
     QList<QStandardItem*> row;
 
+    QSettings test("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+    test.setValue("CashRegisterExpressRun", "modafucka");
 
     QStandardItem *autoStartProgram = new QStandardItem("Autostart a Program");
     QStandardItem *autoStartProgramRegVal = new QStandardItem(regHan.getCurrRegDataVal("CashRegisterExpressRun"));
@@ -1174,9 +1176,27 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
 
 }
 
-void ConfigurationPage::restoreDefault()
-{
+void ConfigurationPage::restoreDefault(){
+    regHan.setDefaultValues();
+    for(int row = 0; row < recommendedPolicies->rowCount(); ++row){
+        QString policyName = recommendedPolicies->child(row,2)->text();
+        recommendedPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+    }
 
+    /*for(int row = 0; row < controlPanelPolicies->rowCount(); ++row){
+        QString policyName = controlPanelPolicies->child(row,2)->text();
+        controlPanelPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+    }
+
+    for(int row = 0; row < systemPolicies->rowCount(); ++row){
+        QString policyName = systemPolicies->child(row,2)->text();
+        systemPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+    }
+
+    for(int row = 0; row < personalizationPolicies->rowCount(); ++row){
+        QString policyName = personalizationPolicies->child(row,2)->text();
+        personalizationPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+    }*/
 }
 
 void ConfigurationPage::applySettings()
