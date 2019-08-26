@@ -29,20 +29,13 @@ public:
     explicit  MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
-    void changePage(QListWidgetItem *current, QListWidgetItem *previous);
-
 private slots:
     void exitApp();
 
 private:
-    void createIcons();
-
     void createMenuActions();
     void createMenu();
 
-    QListWidget *contentsWidget = nullptr;
-    QStackedWidget *pagesWidget = nullptr;
     QMenuBar *menuBar = nullptr;
     QStatusBar *statusBar = nullptr;
 

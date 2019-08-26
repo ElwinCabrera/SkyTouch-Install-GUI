@@ -28,36 +28,20 @@ MainWindow::MainWindow(QWidget * /* parent unused */) /*: QMainWindow(parent), u
     SoftwareInfo *si3= new SoftwareInfo("CRE3", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe" );
     softwareList.push_back(si3);
 
-    contentsWidget = new QListWidget;
-    contentsWidget->setViewMode(QListView::IconMode);
-    contentsWidget->setIconSize(QSize(96, 84));
-    contentsWidget->setMovement(QListView::Static);
-    contentsWidget->setMaximumWidth(128);
-    contentsWidget->setMinimumWidth(128);
-    contentsWidget->setSpacing(12);
+    QTabWidget *tabs = new QTabWidget(this);
+    SoftwareDownloadPage *softwarePage= new SoftwareDownloadPage(this);
+    softwarePage->initPage(softwareList, network);
 
-    pagesWidget = new QStackedWidget;
-    softwareDownloadPage = new SoftwareDownloadPage(this);
-    softwareDownloadPage->initPage(softwareList, network);
-
-    pagesWidget->addWidget(softwareDownloadPage);
-    pagesWidget->addWidget(new ConfigurationPage);
-
-
-    createIcons();
-    contentsWidget->setCurrentRow(100);
-
-    QHBoxLayout *horizontalLayout = new QHBoxLayout;
-    horizontalLayout->addWidget(contentsWidget);
-    horizontalLayout->addWidget(pagesWidget, 1);
+    tabs->addTab(softwarePage, "Software");
+    tabs->addTab(new ConfigurationPage, "Configuration");
+    tabs->setTabPosition(QTabWidget::North);
 
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(menuBar);
-    mainLayout->addLayout(horizontalLayout);
+    mainLayout->addWidget(tabs);
     mainLayout->addStretch(100);
     mainLayout->addSpacing(12);
-    //mainLayout->addLayout(buttonsLayout);
     mainLayout->addWidget(statusBar);
     setLayout(mainLayout);
 
@@ -71,29 +55,6 @@ MainWindow::~MainWindow()
 {
     //delete ui;
 }
-
-void MainWindow::createIcons(){
-    QListWidgetItem *configButton = new QListWidgetItem(contentsWidget);
-    configButton->setIcon(QIcon(":/images/update.png"));
-    configButton->setText(tr("Software"));
-    configButton->setTextAlignment(Qt::AlignHCenter);
-    configButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-    QListWidgetItem *updateButton = new QListWidgetItem(contentsWidget);
-    updateButton->setIcon(QIcon(":/images/config.png"));
-    updateButton->setText(tr("Configuration"));
-    updateButton->setTextAlignment(Qt::AlignHCenter);
-    updateButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-    /*QListWidgetItem *queryButton = new QListWidgetItem(contentsWidget);
-    queryButton->setIcon(QIcon(":/images/query.png"));
-    queryButton->setText(tr("Query"));
-    queryButton->setTextAlignment(Qt::AlignHCenter);
-    queryButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);*/
-
-    connect(contentsWidget, &QListWidget::currentItemChanged, this, &MainWindow::changePage);
-}
-
 
 
 void MainWindow::createMenuActions(){
@@ -158,12 +119,6 @@ void MainWindow::createMenu(){
     helpMenu->addAction(aboutSkyTouchAct);
 }
 
-void MainWindow::changePage(QListWidgetItem *current, QListWidgetItem *previous){
-    if (!current)
-        current = previous;
-
-    pagesWidget->setCurrentIndex(contentsWidget->row(current));
-}
 
 void MainWindow::exitApp()
 {
