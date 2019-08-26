@@ -2,9 +2,6 @@
 
 #include "pages.h"
 
-
-
-
 SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
     downloadConfirmed = false;
     readyToInstall = false;
