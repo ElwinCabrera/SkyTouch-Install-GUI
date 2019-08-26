@@ -386,10 +386,8 @@ void SoftwareDownloadPage::finishedDownloading(){
 void SoftwareDownloadPage::addFileToInstallList(){
     //show warning label
 
-    WarningBox warning("Are you sure you want to add the selected files to the install queue?");
-    warning.setModal(true);
-    warning.exec();
-    if(warning.actionConfirmed()) {
+    int msgRet = messageBox("Are you sure you want to add the selected files to the install queue?", "");
+    if(msgRet == QMessageBox::Ok) {
         localFilesInInstallQ = false;
 
         for(LocalFile *lf: localFilesMap){
@@ -539,10 +537,8 @@ void SoftwareDownloadPage::startDownloads()
 
 void SoftwareDownloadPage::stopDownloads()
 {
-    WarningBox warningbox("Are you sure you want to cancel ALL downloads?");
-    warningbox.setModal(true);
-    warningbox.exec();
-    if(warningbox.actionConfirmed()) {
+    int msgRet = messageBox("Are you sure you want to cancel ALL downloads?", "");
+    if(msgRet == QMessageBox::Ok) {
 
         for(SoftwareInfo *si: softwareList) si->stopDownload();
 
@@ -1118,8 +1114,6 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
 
     if(parentItem->child(index.row(),0)->checkState() == Qt::Checked){
 
-        QMessageBox msgBox;
-        int msgBoxReturn;
         bool ok = false;
         QString newInput = "";
 
@@ -1139,12 +1133,8 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
         }
 
         if(ok && !newInput.isEmpty()){
-            msgBox.setText("Modifiying Value");
-            msgBox.setInformativeText("Are you sure you want to modify this value to '"+newInput+"'");
-            msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-            msgBox.setDefaultButton(QMessageBox::Ok);
-            msgBox.setModal(true);
-            msgBoxReturn = msgBox.exec();
+
+           int msgBoxReturn = messageBox("Modifiying Value", "Are you sure you want to modify this value to '"+newInput+"'");
 
             if(msgBoxReturn == QMessageBox::Ok) {
                 brush.setColor(Qt::darkYellow);
@@ -1159,14 +1149,8 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
 }
 
 void ConfigurationPage::restoreDefault(){
-    QMessageBox msgBox;
-    msgBox.setText("Restore to Default Settings");
-    msgBox.setInformativeText("Doing this will reset ALL policies to its default settings. Are you sure?");
-    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setModal(true);
-    int msgReturn = msgBox.exec();
 
+    int msgReturn =messageBox("Restore to Default Settings", "Doing this will reset ALL policies to its default settings. Are you sure?");
     if(msgReturn != QMessageBox::Ok) return;
 
     regHan.setDefaultValues();
@@ -1192,14 +1176,8 @@ void ConfigurationPage::restoreDefault(){
 }
 
 void ConfigurationPage::applySettings(){
-    QMessageBox msgBox;
-    msgBox.setText("Apply Settings");
-    msgBox.setInformativeText("Doing this will apply ALL selected policies to for this user. Are you sure you want to continue?");
-    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setModal(true);
-    int msgReturn = msgBox.exec();
 
+    int msgReturn = messageBox("Apply Settings", "Doing this will apply ALL selected policies to for this user. Are you sure you want to continue?");
     if(msgReturn != QMessageBox::Ok) return;
 
 
@@ -1289,9 +1267,7 @@ void clearPage(QLayout * layout) {
    if (! layout) return;
 
     while (auto item = layout->takeAt(0)) {
-        auto widget = item->widget();
         delete item->widget();
-        widget = nullptr;
         clearPage(item->layout());
    }
    delete layout;
@@ -1302,10 +1278,7 @@ void startProcess(QObject *parent, QString programPath, QString fileName ) {
     QProcess *process = new QProcess(parent);
     process->start(programPath);
 
-    if(!process->waitForStarted()) {
-        WarningBox warning("Could not start " + fileName);
-        warning.setModal(true);
-        warning.exec();
-    }
+    if(!process->waitForStarted()) messageBox("Could not start " + fileName, "");
+
 }
 

@@ -3,7 +3,7 @@
 #include <QtWidgets>
 
 
-InstallConfirmation::InstallConfirmation(QWidget *parent, vector<SoftwareInfo*> softwareL) {
+InstallConfirmation::InstallConfirmation(QWidget * /* parent unused */, vector<SoftwareInfo*> softwareL) {
     resize(QSize(600, 300));
 
     QGroupBox *confirmInstallGroup = new QGroupBox(tr("Programs to be Installed..."));

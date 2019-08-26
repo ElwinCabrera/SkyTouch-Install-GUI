@@ -5,7 +5,6 @@
 
 #include "network.h"
 #include "installconfirmation.h"
-#include "warningbox.h"
 #include "registryhandler.h"
 #include "global.h"
 

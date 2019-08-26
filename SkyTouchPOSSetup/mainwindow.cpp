@@ -3,7 +3,7 @@
 #include <QtWidgets>
 
 
-MainWindow::MainWindow(QWidget *parent) /*: QMainWindow(parent), ui(new Ui::MainWindow)*/ {
+MainWindow::MainWindow(QWidget * /* parent unused */) /*: QMainWindow(parent), ui(new Ui::MainWindow)*/ {
     //ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
 

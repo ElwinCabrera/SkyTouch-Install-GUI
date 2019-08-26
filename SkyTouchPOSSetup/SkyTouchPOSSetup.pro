@@ -30,8 +30,8 @@ SOURCES += \
     pages.cpp \
     network.cpp \
     installconfirmation.cpp \
-    warningbox.cpp \
-    registryhandler.cpp
+    registryhandler.cpp \
+    global.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +39,6 @@ HEADERS += \
     network.h \
     installconfirmation.h \
     global.h \
-    warningbox.h \
     registryhandler.h
 
 FORMS +=
