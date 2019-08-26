@@ -579,7 +579,6 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
 
 ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
     mainLayout = new QVBoxLayout;
-    regHan.setDefaultValues();
 
 
     policyTree = buildPolicyTree();
@@ -609,7 +608,7 @@ QTreeView* ConfigurationPage::buildPolicyTree(){
     model = new QStandardItemModel;
     //model->setHorizontalHeaderLabels({"Policy","Value"});
     QStandardItem *policyHeaderItem = new QStandardItem("Policy");
-    QStandardItem *valueHeaderItem = new QStandardItem("Value");
+    QStandardItem *valueHeaderItem = new QStandardItem("Current Value");
     model->setHorizontalHeaderItem(0,policyHeaderItem);
     model->setHorizontalHeaderItem(1, valueHeaderItem);
 
