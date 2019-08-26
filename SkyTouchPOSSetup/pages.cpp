@@ -707,8 +707,8 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noLogoff = new QStandardItem("Remove logoff");
-    QStandardItem *noLogoffRegVal = new QStandardItem(regHan.getCurrRegDataVal("Nologoff"));
-    QStandardItem *noLogoffRegKeyName = new QStandardItem("Nologoff");
+    QStandardItem *noLogoffRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoLogoff"));
+    QStandardItem *noLogoffRegKeyName = new QStandardItem("NoLogoff");
     QStandardItem *noLogoffDataType = new QStandardItem("");
 
     noLogoff->setCheckable(true);

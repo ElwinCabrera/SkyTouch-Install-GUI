@@ -6,7 +6,7 @@ RegistryHandler::RegistryHandler(){
 
     policyNameToKey.insert("NoControlPanel",hkcuPolicyKey+"\\Explorer");
     policyNameToKey.insert("HidePowerOptions",hkcuPolicyKey+"\\Explorer");
-    policyNameToKey.insert("Nologoff",hkcuPolicyKey+"\\Explorer");
+    policyNameToKey.insert("NoLogoff",hkcuPolicyKey+"\\Explorer");
     policyNameToKey.insert("NoAutoUpdate",hkcuPolicyKey+"\\Explorer");
     policyNameToKey.insert("TaskbarNoNotification",hkcuPolicyKey+"\\Explorer");
     policyNameToKey.insert("NoChangestartMenu",hkcuPolicyKey+"\\Explorer");
@@ -78,7 +78,7 @@ void RegistryHandler::setDefaultValues(){
     QSettings policyExplorerSettings(hkcuPolicyKey+"\\Explorer", QSettings::NativeFormat);
     policyExplorerSettings.setValue("NoControlPanel", 0); //Prohibit access to Control Panel and PC Settings
     policyExplorerSettings.setValue("HidePowerOptions", 0); // Remove and prevent access to the Shut Down, Restart, Sleep, and Hibernate commands
-    policyExplorerSettings.setValue("Nologoff", 0); // Remove logoff
+    policyExplorerSettings.setValue("NoLogoff", 0); // Remove logoff
     policyExplorerSettings.setValue("NoAutoUpdate", 0); // Windows automatic updates
     policyExplorerSettings.setValue("TaskbarNoNotification", 0); // Turn off all balloon notifications
     policyExplorerSettings.setValue("NoChangestartMenu", 0); // Prevent users from customizing their start screen
