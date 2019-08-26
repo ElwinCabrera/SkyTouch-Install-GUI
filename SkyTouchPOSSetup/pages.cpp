@@ -581,9 +581,10 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
     mainLayout = new QVBoxLayout;
 
 
-    policyTree = buildPolicyTree();
+    policyTree =  new QTreeView(this);
+    policyTree->setModel(new QStandardItemModel);
+    buildPolicyTree();
     policyTree->resizeColumnToContents(0);
-    policyTree->setModel(model);
 
     QPushButton *restoreDefaultBtn = new QPushButton("Restore Default");
     QPushButton *applyBtn = new QPushButton("Apply");
@@ -604,8 +605,9 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
 
 }
 
-QTreeView* ConfigurationPage::buildPolicyTree(){
-    model = new QStandardItemModel;
+void ConfigurationPage::buildPolicyTree(){
+    QStandardItemModel *model = (QStandardItemModel*) policyTree->model();
+    //model = new QStandardItemModel;
     //model->setHorizontalHeaderLabels({"Policy","Value"});
     QStandardItem *policyHeaderItem = new QStandardItem("Policy");
     QStandardItem *valueHeaderItem = new QStandardItem("Current Value");
@@ -617,28 +619,26 @@ QTreeView* ConfigurationPage::buildPolicyTree(){
     recommendedPolicies->setColumnCount(2);
     recommendedPolicies->setEditable(false);
 
-    controlPanelPolicies = new QStandardItem("Control Panel");
+    /*controlPanelPolicies = new QStandardItem("Control Panel");
     controlPanelPolicies->setEditable(false);
 
     systemPolicies = new QStandardItem("System");
-    systemPolicies->setEditable(false);
+    systemPolicies->setEditable(false);*/
 
     personalizationPolicies = new QStandardItem("Personalization");
     personalizationPolicies->setEditable(false);
 
-    populatePolicies();
+
+
 
 
 
     model->appendRow(recommendedPolicies);
-    model->appendRow(controlPanelPolicies);
-    model->appendRow(systemPolicies);
+    //model->appendRow(controlPanelPolicies);
+    //model->appendRow(systemPolicies);
     model->appendRow(personalizationPolicies);
 
-
-    QTreeView *tv = new QTreeView(this);
-    tv->setModel(model);
-    return tv;
+    populatePolicies();
 
 }
 
@@ -662,7 +662,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(autoStartProgramRegKeyName);
     row.append(autoStartProgramDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
     QStandardItem *noControlPanel = new QStandardItem("Prohibit access to Control Panel and PC Settings");
@@ -681,8 +680,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(noControlPanelRegKeyName);
     row.append(noControlPanelDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
-    controlPanelPolicies->appendRow(row);
 
 
 
@@ -702,7 +699,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(hidePowerOptionsRegKeyName);
     row.append(hidePowerOptionsDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
     QStandardItem *noLogoff = new QStandardItem("Remove logoff");
@@ -721,8 +717,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(noLogoffRegKeyName);
     row.append(noLogoffDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
-
 
 
     QStandardItem *disableCMD = new QStandardItem("Prevent access to the command prompt");
@@ -741,7 +735,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(disableCMDRegKeyName);
     row.append(disableCMDDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 
@@ -761,7 +754,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(disabletaskMgrRegKeyName);
     row.append(disabletaskMgrDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 
@@ -782,7 +774,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(disablelockWorkstationRegKeyName);
     row.append(disablelockWorkstationDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 
@@ -802,9 +793,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(removeChangePsswdRegKeyName);
     row.append(removeChangePsswdDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
-    controlPanelPolicies->appendRow(row);
-
 
 
     QStandardItem *noAutoUpdate = new QStandardItem("Remove Windows automatic updates");
@@ -823,8 +811,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(noAutoUpdateRegKeyName);
     row.append(noAutoUpdateDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
-    controlPanelPolicies->appendRow(row);
 
 
 
@@ -844,7 +830,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(taskbarNoNotificationRegKeyName);
     row.append(taskbarNoNotificationDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 
@@ -866,7 +851,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(noballoonFeatureAdsRegKeyName);
     row.append(noballoonFeatureAdsDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 
@@ -887,7 +871,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(noTileApplicationNotiRegKeyName);
     row.append(noTileApplicationNotiDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 
@@ -907,7 +890,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(NoCloudAppNotiRegKeyName);
     row.append(NoCloudAppNotiDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 
@@ -927,8 +909,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(lockTaskbarRegKeyName);
     row.append(lockTaskbarDataType);
     recommendedPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
-    controlPanelPolicies->appendRow(row);
 
 
 
@@ -948,7 +928,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(noMinimizingShortcutsRegKeyName);
     row.append(noMinimizingShortcutsDataType);
     recommendedPolicies->appendRow(row);
-    personalizationPolicies->appendRow(row);
 
 
 
@@ -1098,7 +1077,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(nolockscreenRegKeyName);
     row.append(nolockscreenDataType);
     personalizationPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 
@@ -1117,7 +1095,6 @@ void ConfigurationPage::populatePolicies(){
     row.append(useDefaultTileRegKeyName);
     row.append(useDefaultTileDataType);
     personalizationPolicies->appendRow(row);
-    systemPolicies->appendRow(row);
 
 
 }

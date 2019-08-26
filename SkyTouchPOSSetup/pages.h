@@ -74,14 +74,14 @@ public:
 
 
 private:
-    QTreeView* buildPolicyTree();
+    void buildPolicyTree();
     void populatePolicies();
 
 
     QVBoxLayout *mainLayout = nullptr;
     QTreeView *policyTree = nullptr;
 
-    QStandardItemModel *model = nullptr;
+    //QStandardItemModel *model = nullptr;
 
     QStandardItem *recommendedPolicies = nullptr;
     QStandardItem *controlPanelPolicies = nullptr;
