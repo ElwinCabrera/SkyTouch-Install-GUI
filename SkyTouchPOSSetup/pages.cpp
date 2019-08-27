@@ -1123,12 +1123,16 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
         bool ok = false;
         QString newInput = "";
 
+        QBrush brush;
+        brush.setColor(Qt::black);
+
 
         if(dataType == "Path"){
             newInput = QFileDialog::getOpenFileName(this, "Select Executable",QDir::homePath(),"Windows Executable Files (*.EXE, *.exe, *.DLL, *.dll)");
 
             if(newInput.isEmpty() || newInput.isNull()) return;
             ok = true;
+
 
         } else if(dataType == "Text"){
             newInput =  QInputDialog::getText(this,"Edit Message","Enter New Message", QLineEdit::Normal,"", &ok);
@@ -1142,7 +1146,12 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
             msgBox.setModal(true);
             msgBoxReturn = msgBox.exec();
 
-            if(msgBoxReturn == QMessageBox::Ok) childValueItem->setText(newInput);
+            if(msgBoxReturn == QMessageBox::Ok) {
+                brush.setColor(Qt::darkYellow);
+                childValueItem->setData(brush, Qt::ForegroundRole);
+                childValueItem->setText(newInput);
+
+            }
         }
 
     }
@@ -1197,6 +1206,7 @@ void ConfigurationPage::applySettings(){
     for(int row = 0; row < recommendedPolicies->rowCount(); ++row){
         QString policyName = recommendedPolicies->child(row, 2)->text();
         QString type = recommendedPolicies->child(row, 3)->text();
+        QBrush brush;
         if(recommendedPolicies->child(row,0)->checkState() == Qt::Checked){
 
             if(type == "Path" || type == "Text"){
@@ -1205,11 +1215,15 @@ void ConfigurationPage::applySettings(){
             } else {
                 regHan.setPolicyVal(policyName, 1);
             }
+            brush.setColor(Qt::darkGreen);
+
 
         } else {
             if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+            brush.setColor(Qt::black);
         }
         recommendedPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        recommendedPolicies->child(row, 1)->setData(brush, Qt::ForegroundRole);
     }
 
 
