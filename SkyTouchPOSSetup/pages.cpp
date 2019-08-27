@@ -1150,6 +1150,16 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
 }
 
 void ConfigurationPage::restoreDefault(){
+    QMessageBox msgBox;
+    msgBox.setText("Restore to Default Settings");
+    msgBox.setInformativeText("Doing this will reset ALL policies to its default settings. Are you sure?");
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.setModal(true);
+    int msgReturn = msgBox.exec();
+
+    if(msgReturn != QMessageBox::Ok) return;
+
     regHan.setDefaultValues();
     for(int row = 0; row < recommendedPolicies->rowCount(); ++row){
         QString policyName = recommendedPolicies->child(row,2)->text();
@@ -1164,15 +1174,26 @@ void ConfigurationPage::restoreDefault(){
     for(int row = 0; row < systemPolicies->rowCount(); ++row){
         QString policyName = systemPolicies->child(row,2)->text();
         systemPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
-    }
+    }*/
 
     for(int row = 0; row < personalizationPolicies->rowCount(); ++row){
         QString policyName = personalizationPolicies->child(row,2)->text();
         personalizationPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
-    }*/
+    }
 }
 
 void ConfigurationPage::applySettings(){
+    QMessageBox msgBox;
+    msgBox.setText("Apply Settings");
+    msgBox.setInformativeText("Doing this will apply ALL selected policies to for this user. Are you sure you want to continue?");
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.setModal(true);
+    int msgReturn = msgBox.exec();
+
+    if(msgReturn != QMessageBox::Ok) return;
+
+
     for(int row = 0; row < recommendedPolicies->rowCount(); ++row){
         QString policyName = recommendedPolicies->child(row, 2)->text();
         QString type = recommendedPolicies->child(row, 3)->text();
@@ -1227,7 +1248,7 @@ void ConfigurationPage::applySettings(){
             if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
         }
         systemPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
-    }
+    }*/
 
     for(int row = 0; row < personalizationPolicies->rowCount(); ++row){
         QString policyName = personalizationPolicies->child(row, 2)->text();
@@ -1245,7 +1266,7 @@ void ConfigurationPage::applySettings(){
             if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
         }
         personalizationPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
-    }*/
+    }
 
 }
 
