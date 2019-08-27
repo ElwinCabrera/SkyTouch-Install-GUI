@@ -25,7 +25,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
 
     QScrollArea *scrollArea = new QScrollArea;
 
-    scrollArea->setFixedSize(QSize(350, 325));
+    //scrollArea->setFixedSize(QSize(350, 325));
 
     mainLayout = new QVBoxLayout;
     QWidget *scrollAreaWidget = new QWidget;
@@ -38,7 +38,8 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
         auto itEnd = localFilesMap.end();
 
         QGroupBox *downloadGroup = new QGroupBox("Download "+si->getSoftwareName());
-        downloadGroup->setFixedWidth(312.5);
+
+        downloadGroup->setMinimumWidth(625);
         downloadGroup->setCheckable(true);
         downloadGroup->blockSignals(true);
         downloadGroup->setChecked(si->getDownloadMarked());
@@ -571,6 +572,7 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
 
 
 ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
+
     mainLayout = new QVBoxLayout;
 
 

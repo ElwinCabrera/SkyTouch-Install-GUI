@@ -3,10 +3,10 @@
 #include <QtWidgets>
 
 
-MainWindow::MainWindow(QWidget * /* parent unused */) /*: QMainWindow(parent), ui(new Ui::MainWindow)*/ {
+MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), ui(new Ui::MainWindow)*/ {
     //ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint);
-
+    resize(QSize(700, 500));
 
     network = new Network;
 
@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget * /* parent unused */) /*: QMainWindow(parent), u
     createMenu();
 
 
-    SoftwareInfo *si= new SoftwareInfo("CRE", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe");
+    SoftwareInfo *si= new SoftwareInfo("Cash Register Express", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe");
     softwareList.push_back(si);
 
     SoftwareInfo *si1= new SoftwareInfo("CRE1", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe" );
@@ -33,15 +33,14 @@ MainWindow::MainWindow(QWidget * /* parent unused */) /*: QMainWindow(parent), u
     softwarePage->initPage(softwareList, network);
 
     tabs->addTab(softwarePage, "Software");
-    tabs->addTab(new ConfigurationPage, "Configuration");
+    tabs->addTab(new ConfigurationPage(this), "Configuration");
     tabs->setTabPosition(QTabWidget::North);
 
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(menuBar);
     mainLayout->addWidget(tabs);
-    mainLayout->addStretch(100);
-    mainLayout->addSpacing(12);
+
     mainLayout->addWidget(statusBar);
     setLayout(mainLayout);
 
