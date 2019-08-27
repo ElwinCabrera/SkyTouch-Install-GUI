@@ -1128,7 +1128,7 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
 
 
         if(dataType == "Path"){
-            newInput = QFileDialog::getOpenFileName(this, "Select Executable",QDir::homePath(),"Windows Executable Files (*.EXE, *.exe, *.DLL, *.dll)");
+            newInput = QFileDialog::getOpenFileName(this, "Select Executable",QDir::homePath(),"Windows Executable(*.exe *.dll)");
 
             if(newInput.isEmpty() || newInput.isNull()) return;
             ok = true;
