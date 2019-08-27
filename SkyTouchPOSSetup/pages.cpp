@@ -615,7 +615,7 @@ void ConfigurationPage::buildPolicyTree(){
     model->setHorizontalHeaderItem(1, valueHeaderItem);
 
 
-    recommendedPolicies = new QStandardItem("Recommended Policies");
+    recommendedPolicies = new QStandardItem("Recommended Policies                                                               ");
     recommendedPolicies->setColumnCount(2);
     recommendedPolicies->setEditable(false);
 
@@ -683,7 +683,7 @@ void ConfigurationPage::populatePolicies(){
 
 
 
-    QStandardItem *hidePowerOptions = new QStandardItem("Remove and prevent access to the Shut Down, Restart, Sleep, and Hibernate commandss");
+    QStandardItem *hidePowerOptions = new QStandardItem("Remove and prevent access to Shut Down, Restart, Sleep, and Hibernate");
     QStandardItem *hidePowerOptionsRegVal = new QStandardItem(regHan.getCurrRegDataVal("HidePowerOptions"));
     QStandardItem *hidePowerOptionsRegKeyName = new QStandardItem("HidePowerOptions");
     QStandardItem *hidePowerOptionsDataType = new QStandardItem("");
