@@ -26,6 +26,8 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     QScrollArea *scrollArea = new QScrollArea;
 
     //scrollArea->setFixedSize(QSize(350, 325));
+    scrollArea->setMinimumHeight(380);
+    scrollArea->setMinimumWidth(650);
 
     mainLayout = new QVBoxLayout;
     QWidget *scrollAreaWidget = new QWidget;
@@ -173,7 +175,8 @@ void SoftwareDownloadPage::localFilesPage(){
 
 
     QScrollArea *scrollArea = new QScrollArea;
-    scrollArea->setFixedSize(QSize(350, 325));
+    scrollArea->setMinimumHeight(380);
+    scrollArea->setMinimumWidth(650);
     QWidget *scrollAreaWidget = new QWidget;
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
@@ -181,7 +184,7 @@ void SoftwareDownloadPage::localFilesPage(){
     for(LocalFile *lf: localFilesMap) {
 
         QGroupBox *gBox= new QGroupBox;
-        gBox->setFixedWidth(312.5);
+        gBox->setFixedWidth(625);
 
         gBox->setCheckable(true);
         if(lf->getInstallState()) {
@@ -265,7 +268,8 @@ void SoftwareDownloadPage::readyToInstallPage(){
     mainLayout = new QVBoxLayout;
 
     QScrollArea *scrollArea = new QScrollArea;
-    scrollArea->setFixedSize(QSize(350, 325));
+    scrollArea->setMinimumHeight(380);
+    scrollArea->setMinimumWidth(650);
     QWidget *scrollAreaWidget = new QWidget;
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
@@ -273,7 +277,7 @@ void SoftwareDownloadPage::readyToInstallPage(){
         if(si->getInstallReadyState()){
 
             QGroupBox *gBox= new QGroupBox;
-            gBox->setFixedWidth(312.5);
+            gBox->setFixedWidth(625);
 
             gBox->setCheckable(true);
 
@@ -294,12 +298,12 @@ void SoftwareDownloadPage::readyToInstallPage(){
 
     if(localFilesInInstallQ){
         //QGroupBox *gb = new QGroupBox;
-        //gb->setFixedWidth(312.5);
+        //gb->setFixedWidth(625);
         //gb->setDisabled(true);
 
         QLabel *l = new QLabel("From Local Files");
         l->setAlignment(Qt::AlignCenter);
-        l->setFixedWidth(312.5);
+        l->setFixedWidth(625);
         QHBoxLayout *lay = new QHBoxLayout;
 
         //lay->addWidget(l);
@@ -310,7 +314,7 @@ void SoftwareDownloadPage::readyToInstallPage(){
         for(LocalFile *lf: localFilesMap){
             if(lf->getReadyState() || lf->getInstallState()){
                 QGroupBox *gBox = new QGroupBox;
-                gBox->setFixedWidth(312.5);
+                gBox->setFixedWidth(625);
                 gBox->setCheckable(true);
                 gBox->setChecked(lf->getInstallState());
 
@@ -425,7 +429,8 @@ void SoftwareDownloadPage::activeDownloadsPage(){
     mainLayout = new QVBoxLayout;
 
     QScrollArea *scrollArea = new QScrollArea;
-    scrollArea->setFixedSize(QSize(350, 325));
+    scrollArea->setMinimumHeight(380);
+    scrollArea->setMinimumWidth(650);
     QWidget *scrollAreaWidget = new QWidget;
     QVBoxLayout *scrollAreaLayout = new QVBoxLayout;
 
@@ -440,7 +445,7 @@ void SoftwareDownloadPage::activeDownloadsPage(){
 
             QString s = "Downloading " + si->getSoftwareName();
             QGroupBox *groupBox = new QGroupBox(s);
-            //groupBox->setFixedWidth(312.5);
+            //groupBox->setFixedWidth(625);
 
             if(!si->downloadInProgress()){
                 si->setProgressListener(new ProgressListenner);
