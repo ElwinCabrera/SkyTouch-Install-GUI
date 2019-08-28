@@ -31,6 +31,7 @@ using std::set;
 using std::unordered_map;
 
 
+
 class ProgressListenner : public QObject
 {
     //Q_OBJECT
@@ -259,26 +260,41 @@ class UserLinkItem {
 
 class UserRegistryItem{
 public:
-    UserRegistryItem(QString key, QString valueName, QVariant data){
+    UserRegistryItem(QString key, QString valueName, QVariant data, QString dataType = "STRING", QString description = ""){
         this->key = key;
         this->valueName = valueName;
+
         this->data = data;
+        this->dataType = dataType;
+    this->descrption = description;
     }
     UserRegistryItem(){}
+
 
     void setKey(QString newKey) {key = newKey;}
     void setValueName(QString newValueName) {valueName = newValueName;}
     void setData(QVariant newData) { data = newData;}
+    void setDataType(QString type) {dataType = type;}
+    void setDesc(QString desc) {descrption = desc;}
+
+
 
     QString getKey() {return key;}
     QString getValueName() {return valueName;}
     QVariant getData() {return data;}
+    QString getDataType() {return dataType;}
+    QString getDescription(){return descrption;}
+
 
 private:
+
     QString key = "";
     QString valueName = "";
     QVariant data;
+    QString dataType = "";
+    QString descrption = "";
 };
+
 
 int messageBox(QString text, QString moreDetails);
 

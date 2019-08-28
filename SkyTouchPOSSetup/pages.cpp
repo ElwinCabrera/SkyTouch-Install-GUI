@@ -11,8 +11,14 @@ SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
 
 }
 
+SoftwareDownloadPage::~SoftwareDownloadPage()
+{
+
+}
+
 void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *network)
 {
+
     if(network) this->network = network;
     if(!softwareL.empty()) this->softwareList = softwareL;
 
@@ -135,6 +141,8 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
 
 
 }
+
+
 
 
 
@@ -605,6 +613,11 @@ ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
 
 }
 
+ConfigurationPage::~ConfigurationPage()
+{
+
+}
+
 void ConfigurationPage::buildPolicyTree(){
     QStandardItemModel *model = (QStandardItemModel*) policyTree->model();
     //model = new QStandardItemModel;
@@ -628,6 +641,9 @@ void ConfigurationPage::buildPolicyTree(){
     personalizationPolicies = new QStandardItem("Personalization");
     personalizationPolicies->setEditable(false);
 
+    customPolicies = new QStandardItem("Custom");
+    customPolicies->setEditable(false);
+
 
 
 
@@ -637,6 +653,7 @@ void ConfigurationPage::buildPolicyTree(){
     //model->appendRow(controlPanelPolicies);
     //model->appendRow(systemPolicies);
     model->appendRow(personalizationPolicies);
+    model->appendRow(customPolicies);
 
     populatePolicies();
 
@@ -649,7 +666,7 @@ void ConfigurationPage::populatePolicies(){
     QStandardItem *autoStartProgram = new QStandardItem("Autostart a Program");
     QStandardItem *autoStartProgramRegVal = new QStandardItem(regHan.getCurrRegDataVal("CashRegisterExpressRun"));
     QStandardItem *autoStartProgramRegKeyName = new QStandardItem("CashRegisterExpressRun");
-    QStandardItem *autoStartProgramDataType = new QStandardItem("Path");
+    QStandardItem *autoStartProgramDataType = new QStandardItem("PATH");
 
     autoStartProgram->setCheckable(true);
     autoStartProgram->setCheckState(Qt::Checked);
@@ -1099,6 +1116,8 @@ void ConfigurationPage::populatePolicies(){
 
 }
 
+
+
 void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
     qDebug() << "Double Clicked" << index.data().toString() << "row" << index.row() << "col" << index.column();
     qDebug() << "Parent" << index.parent().data().toString() << "row"<< index.parent().row() << "col" << index.parent().column();
@@ -1125,14 +1144,14 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
         brush.setColor(Qt::black);
 
 
-        if(dataType == "Path"){
+        if(dataType == "PATH"){
             newInput = QFileDialog::getOpenFileName(this, "Select Executable",QDir::homePath(),"Windows Executable(*.exe *.dll)");
 
             if(newInput.isEmpty() || newInput.isNull()) return;
             ok = true;
 
 
-        } else if(dataType == "Text"){
+        } else if(dataType == "STRING"){
             newInput =  QInputDialog::getText(this,"Edit Message","Enter New Message", QLineEdit::Normal,"", &ok);
         }
 

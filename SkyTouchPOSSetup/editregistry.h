@@ -23,11 +23,15 @@ private:
 
     QVBoxLayout* addNewRegItem();
     bool saved = false;
+
     UserRegistryItem *regItem = nullptr;
 
+    QLineEdit *descInput = nullptr;
     QLineEdit *keyTextInput = nullptr;
     QLineEdit *valueNameInput = nullptr;
     QLineEdit *valueInput = nullptr;
+
+    QRadioButton *pathBtn = nullptr;
     QRadioButton *stringBtn = nullptr;
     QRadioButton *numberBtn = nullptr;
     QRadioButton *binaryBtn = nullptr;
@@ -39,10 +43,9 @@ class UserEditReg : public QWidget
 {
     Q_OBJECT
 public:
-    explicit UserEditReg(QWidget *parent = nullptr);
+    explicit UserEditReg(QStandardItem *customPolicies, QWidget *parent = nullptr);
     ~UserEditReg();
-    void init();
-
+    //QSet getUserRegItems() {return userRegSet;}
 
 signals:
 
@@ -50,16 +53,22 @@ private slots:
     void addRegItem();
     void deleteRegInput();
 
+
 private:
-    QVBoxLayout* getRegInfoLayoutAndWidgets(QString key, QString valueName, QVariant data);
+    void init();
+    void populateUserPolicyEntries(UserRegistryItem *regItem);
+    QVBoxLayout* getRegInfoLayoutAndWidgets(QString key, QString valueName, QVariant data, QString desc);
+    void removeFromTree(QString policyName);
+
+    QStandardItem *customPolicies = nullptr;
 
     QVBoxLayout *mainLayout = nullptr;
     QVBoxLayout *scrollAreaLayout = nullptr;
     QScrollArea *scrollArea = nullptr;
     RegistryHandler regHan;
 
-    QList<UserRegistryItem*> userRegList;
-    QMap<QString, UserRegistryItem> m;
+    QSet<UserRegistryItem*> userRegSet;
+    QMap<QPushButton*, UserRegistryItem*> btnToItem;
 
 };
 

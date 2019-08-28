@@ -12,6 +12,8 @@ public:
     QString getCurrRegDataVal(QString val);
     QString getPolicyVal(QString policyName);
     void setPolicyVal(QString policyName, QVariant value);
+    bool addReg(QString key, QString policyName, QVariant value);
+    bool deleteKey(QString policyName);
     void setDefaultValues();
 
 

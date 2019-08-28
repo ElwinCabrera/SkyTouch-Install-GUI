@@ -179,6 +179,32 @@ void RegistryHandler::setPolicyVal(QString policyName, QVariant value)
     }
 }
 
+bool RegistryHandler::addReg(QString key, QString policyName, QVariant value){
+    auto it = policyNameToKey.find(policyName);
+
+    QSettings settings(key, QSettings::NativeFormat);
+
+    if(it == policyNameToKey.end()){
+      policyNameToKey.insert(policyName, key);
+      settings.setValue(policyName, value);
+      return true;
+    }
+    return false;
+}
+
+bool RegistryHandler::deleteKey(QString policyName){
+
+    auto it = policyNameToKey.find(policyName);
+
+    if(it != policyNameToKey.end()){
+        QSettings setting(it.value(), QSettings::NativeFormat);
+        setting.remove(it.value()+"\\"+policyName);
+        policyNameToKey.erase(it);
+    }
+}
+
+
+
 void RegistryHandler::setDefaultValues(){
 
     /************  HKCU\Software\Microsoft\Windows\CurrentVersion\Run ***********/

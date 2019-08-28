@@ -5,6 +5,7 @@
 
 #include "network.h"
 #include "installconfirmation.h"
+#include "editregistry.h"
 #include "registryhandler.h"
 #include "global.h"
 
@@ -13,9 +14,10 @@ class SoftwareDownloadPage : public QWidget {
     Q_OBJECT
 public:
     SoftwareDownloadPage(QWidget *parent = 0);
+    ~SoftwareDownloadPage();
     void initPage(vector<SoftwareInfo*> &softwareL, Network *network);
 
-   // ~SoftwareInstallationPage();
+
 
 public slots:
     void downloadButtonCliked();
@@ -63,13 +65,13 @@ class ConfigurationPage : public QWidget{
     Q_OBJECT
 public:
     ConfigurationPage(QWidget *parent = 0);
-    //~ConfigurationPage();
+    ~ConfigurationPage();
+    QStandardItem* getUserEntryItem() {return customPolicies;}
+
 public slots:
     void itemDoubleClicked(const QModelIndex &index);
     void restoreDefault();
     void applySettings();
-
-public:
 
 
 private:
@@ -77,20 +79,21 @@ private:
     void populatePolicies();
 
 
+    RegistryHandler regHan;
+    //UserEditReg userReg;
+    QMap<QString, QStandardItem*> policyNameToItemValue;
+
+
     QVBoxLayout *mainLayout = nullptr;
     QTreeView *policyTree = nullptr;
-
-    //QStandardItemModel *model = nullptr;
 
     QStandardItem *recommendedPolicies = nullptr;
     QStandardItem *controlPanelPolicies = nullptr;
     QStandardItem *systemPolicies = nullptr;
     QStandardItem *personalizationPolicies = nullptr;
+    QStandardItem *customPolicies = nullptr;
 
-    RegistryHandler regHan;
 
-    QMap<QString, QStandardItem*> policyNameToItemValue;
-    //QMap<QString, >
 };
 
 void clearLayotAndWidgets(QLayout * layout);

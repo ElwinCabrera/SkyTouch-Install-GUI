@@ -1,6 +1,4 @@
 #include "mainwindow.h"
-//#include "ui_mainwindow.h"
-#include <QtWidgets>
 
 
 MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), ui(new Ui::MainWindow)*/ {
@@ -9,6 +7,7 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     resize(QSize(700, 500));
 
     network = new Network;
+
 
     menuBar = new QMenuBar;
     statusBar = new QStatusBar;
@@ -28,12 +27,16 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     SoftwareInfo *si3= new SoftwareInfo("CRE3", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe" );
     softwareList.push_back(si3);
 
-    QTabWidget *tabs = new QTabWidget(this);
-    SoftwareDownloadPage *softwarePage= new SoftwareDownloadPage(this);
-    softwarePage->initPage(softwareList, network);
+    softwareTab= new SoftwareDownloadPage(this);
+    softwareTab->initPage(softwareList, network);
 
-    tabs->addTab(softwarePage, "Software");
-    tabs->addTab(new ConfigurationPage(this), "Configuration");
+    configTab = new ConfigurationPage(this);
+
+    editReg = new UserEditReg(configTab->getUserEntryItem());
+
+    QTabWidget *tabs = new QTabWidget(this);
+    tabs->addTab(softwareTab, "Software");
+    tabs->addTab(configTab, "Configuration");
     tabs->setTabPosition(QTabWidget::North);
 
 
@@ -122,6 +125,7 @@ void MainWindow::createMenu(){
 void MainWindow::exitApp()
 {
     qDebug() << "menu Exit pressed";
+    //check for downlaod progress
 
 }
 

@@ -1,7 +1,8 @@
 #include "editregistry.h"
 
-UserEditReg::UserEditReg(QWidget *parent)
+UserEditReg::UserEditReg(QStandardItem *customPolicies, QWidget *parent): QWidget(parent)
 {
+    this->customPolicies = customPolicies;
     init();
 
 }
@@ -30,13 +31,28 @@ void UserEditReg::init(){
 
     scrollAreaLayout = new QVBoxLayout;
 
-    for(UserRegistryItem *ri: userRegList){
+    for(UserRegistryItem *ri: userRegSet){
 
-        QVBoxLayout *contentsLayout = getRegInfoLayoutAndWidgets(ri->getKey(), ri->getValueName(), ri->getData());
+
+        QVBoxLayout *contentsLayout = getRegInfoLayoutAndWidgets(ri->getKey(), ri->getValueName(), ri->getData(), ri->getDescription());
+
         QGroupBox *gBox = new QGroupBox;
         gBox->setMinimumWidth(400);
+
+        QPushButton *deleteBtn = new QPushButton(tr("Delete"));
+        QHBoxLayout *btnLayout = new QHBoxLayout;
+        btnLayout->addWidget(deleteBtn);
+        btnLayout->addStretch(1);
+
+        contentsLayout->addLayout(btnLayout);
         gBox->setLayout(contentsLayout);
+
         scrollAreaLayout->addWidget(gBox);
+
+
+        btnToItem.insert(deleteBtn, ri);
+
+        connect(deleteBtn, &QPushButton::clicked, this, &UserEditReg::deleteRegInput);
 
     }
 
@@ -69,42 +85,95 @@ void UserEditReg::addRegItem()
 
     if(inputReg->getSaved()) {
         UserRegistryItem *regItem = inputReg->getRegItem();
-        userRegList.append(regItem);
+        userRegSet.insert(regItem);
+        //insert to registry and update standard item
+        regHan.addReg(regItem->getKey(), regItem->getValueName(), regItem->getData());
+        populateUserPolicyEntries(regItem);
         init();
     }
     delete inputReg;
 }
+void UserEditReg::populateUserPolicyEntries(UserRegistryItem *regItem){
+    QList<QStandardItem*> row;
+
+    QStandardItem *customName = new QStandardItem(regItem->getDescription());
+    QStandardItem *customNameRegVal = new QStandardItem(regHan.getCurrRegDataVal(regItem->getValueName()));
+    QStandardItem *customNameRegKeyName = new QStandardItem(regItem->getValueName());
+    QStandardItem *customNameDataType = new QStandardItem(regItem->getDataType());
+
+    customName->setCheckable(true);
+    customName->setCheckState(Qt::Checked);
+    customName->setEditable(false);
+    customNameRegVal->setEditable(false);
+
+    row.append(customName);
+    row.append(customNameRegVal);
+    row.append(customNameRegKeyName);
+    row.append(customNameDataType);
+    customPolicies->appendRow(row);
+
+}
 
 void UserEditReg::deleteRegInput()
 {
+    QObject* senderObj = sender();
+       if (senderObj->isWidgetType()){
+           QPushButton* button = qobject_cast<QPushButton*>(senderObj);
+           if (button){
+              auto it = btnToItem.find(button);
+              if(it != btnToItem.end()) {
+                  UserRegistryItem *item = it.value();
+                  auto regSetIt = userRegSet.find(item);
+                  userRegSet.erase(regSetIt);
+
+                  regHan.deleteKey(item->getValueName());
+                  removeFromTree(item->getValueName());
+                  delete item;
+                  init();
+
+              }
+           }
+       }
+}
+
+void UserEditReg::removeFromTree(QString policyName){
+    int row = 0;
+    for(; row < customPolicies->rowCount(); ++row){
+        if(customPolicies->child(row, 2)->text() == policyName) break;
+    }
+    customPolicies->removeRow(row);
 
 }
 
 
 
-QVBoxLayout* UserEditReg::getRegInfoLayoutAndWidgets(QString key, QString valueName, QVariant data){
+QVBoxLayout* UserEditReg::getRegInfoLayoutAndWidgets( QString key, QString valueName, QVariant data, QString desc){
 
     QLabel *keyLabel = new QLabel(tr("Key:"));
     QLabel *valueNameLabel = new QLabel(tr("Value Name:"));
     QLabel *valueLabel = new QLabel(tr("Data:"));
 
+    QLineEdit *descInput = new QLineEdit;
     QLineEdit *keyTextInput = new QLineEdit;
     QLineEdit *valueNameInput = new QLineEdit;
     QLineEdit *valueInput = new QLineEdit;
+
+    descInput->setText(desc);
     keyTextInput->setText(key);
     valueNameInput->setText(valueName);
     valueInput->setText(data.toString());
-    keyTextInput->setEnabled(false);
 
+    descInput->setEnabled(false);
+    keyTextInput->setEnabled(false);
     valueNameInput->setEnabled(false);
     valueInput->setEnabled(false);
 
 
-    QPushButton *deleteBtn = new QPushButton(tr("Delete"));
-    QHBoxLayout *btnLayout = new QHBoxLayout;
+//    QPushButton *deleteBtn = new QPushButton(tr("Delete"));
+//    QHBoxLayout *btnLayout = new QHBoxLayout;
 
-    btnLayout->addWidget(deleteBtn);
-    btnLayout->addStretch(1);
+//    btnLayout->addWidget(deleteBtn);
+//    btnLayout->addStretch(1);
 
     QVBoxLayout *contentsLayout = new QVBoxLayout;
     contentsLayout->addWidget(keyLabel);
@@ -116,9 +185,9 @@ QVBoxLayout* UserEditReg::getRegInfoLayoutAndWidgets(QString key, QString valueN
     contentsLayout->addWidget(valueLabel);
     contentsLayout->addWidget(valueInput);
 
-    contentsLayout->addLayout(btnLayout);
+    //contentsLayout->addLayout(btnLayout);
 
-    connect(deleteBtn, &QPushButton::clicked, this, &UserEditReg::deleteRegInput);
+    //connect(deleteBtn, &QPushButton::clicked, this, &UserEditReg::deleteRegInput);
 
     return contentsLayout;
 }
@@ -172,21 +241,30 @@ InputRegDialog::~InputRegDialog()
 
 void InputRegDialog::saveRegEntry()
 {
-    if(!numberBtn->isChecked() || !binaryBtn->isChecked() ||
-       !stringBtn->isChecked() || keyTextInput->text() == "" ||
-            valueNameInput->text() == "" || valueInput->text() == "")
+    if(( !numberBtn->isChecked() && !binaryBtn->isChecked() &&
+       !stringBtn->isChecked() && !pathBtn->isChecked() ) || (keyTextInput->text() == "" ||
+            valueNameInput->text() == "" || valueInput->text() == ""))
     {
         messageBox("Input Fields Empty", "Some or all imput fields are empty, cannot save");
         return;
     }
+    if(descInput->text() == "") {
+        int msgRet = messageBox("Saving Without Description", "Are you sure you want to save without a description?\nClick Ok to save without a description, or Close to continue editing.");
+        if(msgRet != QMessageBox::Ok) return;
+    }
+
     saved = true;
     QVariant data ;
 
     if(numberBtn->isChecked() || binaryBtn->isChecked()) data =  valueInput->text().toInt();
     else data = valueInput->text();
 
+    QString dataType;
+    if(stringBtn->isChecked()) dataType = "STRING";
+    if(pathBtn->isChecked()) dataType = "PATH";
+
     if(regItem == nullptr) {
-        regItem = new UserRegistryItem(keyTextInput->text(), valueNameInput->text(), data);
+        regItem = new UserRegistryItem(keyTextInput->text(), valueNameInput->text(), data, dataType, descInput->text());
         this->close();
     } else {
        saved = false;
@@ -210,30 +288,38 @@ void InputRegDialog::closeWin()
 
 QVBoxLayout* InputRegDialog::addNewRegItem(){
 
+    QLabel *descLabel = new QLabel(tr("Enter Description:"));
     QLabel *keyLabel = new QLabel(tr("Enter Key or subkey:"));
     QLabel *valueNameLabel = new QLabel(tr("Enter a Name for the Value:"));
     QLabel *valueLabel = new QLabel(tr("Enter the Value or Data:"));
 
+    descInput = new QLineEdit;
     keyTextInput = new QLineEdit;
     valueNameInput = new QLineEdit;
     valueInput = new QLineEdit;
 
+    descInput->setPlaceholderText("Description");
     keyTextInput->setPlaceholderText("Key");
     valueNameInput->setPlaceholderText("Name");
     valueInput->setPlaceholderText("Data");
 
 
     stringBtn = new QRadioButton(tr("Text (String)"));
+    pathBtn = new QRadioButton(tr("Path"));
     numberBtn = new QRadioButton(tr("Number (DWORD)"));
     binaryBtn = new QRadioButton(tr("Binary"));
 
     QHBoxLayout *radioBtnsLayout = new QHBoxLayout;
     radioBtnsLayout->addWidget(stringBtn);
+    radioBtnsLayout->addWidget(pathBtn);
     radioBtnsLayout->addWidget(numberBtn);
     radioBtnsLayout->addWidget(binaryBtn);
 
 
     QVBoxLayout *contentsLayout = new QVBoxLayout;
+    contentsLayout->addWidget(descLabel);
+    contentsLayout->addWidget(descInput);
+
     contentsLayout->addWidget(keyLabel);
     contentsLayout->addWidget(keyTextInput);
 

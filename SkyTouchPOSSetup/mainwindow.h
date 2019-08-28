@@ -29,6 +29,7 @@ class MainWindow : public QWidget //public QMainWindow
 public:
     explicit  MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    int testgetInt() {return 5;}
 
 private slots:
     void exitApp();
@@ -41,12 +42,13 @@ private:
     QMenuBar *menuBar = nullptr;
     QStatusBar *statusBar = nullptr;
 
-    SoftwareDownloadPage *softwareDownloadPage = nullptr;
+    SoftwareDownloadPage *softwareTab= nullptr;
+    ConfigurationPage *configTab = nullptr;
     Network *network = nullptr;
 
     vector< SoftwareInfo*> softwareList;
 
-    UserEditReg *editReg = new UserEditReg;
+    UserEditReg *editReg = nullptr;
 
     /**********Menus and actions for menu**********/
 
