@@ -75,6 +75,11 @@ void UserEditReg::addRegItem()
     delete inputReg;
 }
 
+void UserEditReg::deleteRegInput()
+{
+
+}
+
 
 
 QVBoxLayout* UserEditReg::getRegInfoLayoutAndWidgets(QString key, QString valueName, QVariant data){
@@ -99,6 +104,7 @@ QVBoxLayout* UserEditReg::getRegInfoLayoutAndWidgets(QString key, QString valueN
     QHBoxLayout *btnLayout = new QHBoxLayout;
 
     btnLayout->addWidget(deleteBtn);
+    btnLayout->addStretch(1);
 
     QVBoxLayout *contentsLayout = new QVBoxLayout;
     contentsLayout->addWidget(keyLabel);
@@ -112,8 +118,27 @@ QVBoxLayout* UserEditReg::getRegInfoLayoutAndWidgets(QString key, QString valueN
 
     contentsLayout->addLayout(btnLayout);
 
+    connect(deleteBtn, &QPushButton::clicked, this, &UserEditReg::deleteRegInput);
+
     return contentsLayout;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 InputRegDialog::InputRegDialog(QWidget *parent)
 {
@@ -147,8 +172,16 @@ InputRegDialog::~InputRegDialog()
 
 void InputRegDialog::saveRegEntry()
 {
+    if(!numberBtn->isChecked() || !binaryBtn->isChecked() ||
+       !stringBtn->isChecked() || keyTextInput->text() == "" ||
+            valueNameInput->text() == "" || valueInput->text() == "")
+    {
+        messageBox("Input Fields Empty", "Some or all imput fields are empty, cannot save");
+        return;
+    }
     saved = true;
     QVariant data ;
+
     if(numberBtn->isChecked() || binaryBtn->isChecked()) data =  valueInput->text().toInt();
     else data = valueInput->text();
 
@@ -166,6 +199,11 @@ void InputRegDialog::saveRegEntry()
 
 void InputRegDialog::closeWin()
 {
+    if(keyTextInput->text() != "" || valueNameInput->text() != "" || valueInput->text() != "") {
+        int msgRet = messageBox("Close Without Saving", "You are currently editing this are you sure you want to close without saving?");
+        if(msgRet == QMessageBox::Ok) this->close();
+    } else this->close();
+
 
 }
 
@@ -194,8 +232,6 @@ QVBoxLayout* InputRegDialog::addNewRegItem(){
     radioBtnsLayout->addWidget(numberBtn);
     radioBtnsLayout->addWidget(binaryBtn);
 
-    QPushButton *deleteBtn = new QPushButton(tr("Delete"));
-
 
     QVBoxLayout *contentsLayout = new QVBoxLayout;
     contentsLayout->addWidget(keyLabel);
@@ -208,7 +244,6 @@ QVBoxLayout* InputRegDialog::addNewRegItem(){
     contentsLayout->addWidget(valueInput);
 
     contentsLayout->addLayout(radioBtnsLayout);
-    contentsLayout->addWidget(deleteBtn);
 
     return contentsLayout;
 }

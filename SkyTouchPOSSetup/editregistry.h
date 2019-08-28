@@ -48,6 +48,7 @@ signals:
 
 private slots:
     void addRegItem();
+    void deleteRegInput();
 
 private:
     QVBoxLayout* getRegInfoLayoutAndWidgets(QString key, QString valueName, QVariant data);
@@ -58,6 +59,7 @@ private:
     RegistryHandler regHan;
 
     QList<UserRegistryItem*> userRegList;
+    QMap<QString, UserRegistryItem> m;
 
 };
 
