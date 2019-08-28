@@ -584,10 +584,10 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
 
 
 
-ConfigurationPage::ConfigurationPage(QWidget *parent) : QWidget(parent){
+ConfigurationPage::ConfigurationPage(RegistryHandler *regHan, QWidget *parent) : QWidget(parent){
 
     mainLayout = new QVBoxLayout;
-
+    this->regHan = regHan;
 
     policyTree =  new QTreeView(this);
     policyTree->setModel(new QStandardItemModel);
@@ -664,7 +664,7 @@ void ConfigurationPage::populatePolicies(){
     QList<QStandardItem*> row;
 
     QStandardItem *autoStartProgram = new QStandardItem("Autostart a Program");
-    QStandardItem *autoStartProgramRegVal = new QStandardItem(regHan.getCurrRegDataVal("CashRegisterExpressRun"));
+    QStandardItem *autoStartProgramRegVal = new QStandardItem(regHan->getCurrRegDataVal("CashRegisterExpressRun"));
     QStandardItem *autoStartProgramRegKeyName = new QStandardItem("CashRegisterExpressRun");
     QStandardItem *autoStartProgramDataType = new QStandardItem("PATH");
 
@@ -682,9 +682,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noControlPanel = new QStandardItem("Prohibit access to Control Panel and PC Settings");
-    QStandardItem *noControlPanelRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoControlPanel"));
+    QStandardItem *noControlPanelRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoControlPanel"));
     QStandardItem *noControlPanelRegKeyName = new QStandardItem("NoControlPanel");
-    QStandardItem *noControlPanelDataType = new QStandardItem("");
+    QStandardItem *noControlPanelDataType = new QStandardItem("DWORD");
 
     noControlPanel->setCheckable(true);
     noControlPanel->setCheckState(Qt::Checked);
@@ -701,9 +701,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *hidePowerOptions = new QStandardItem("Remove and prevent access to Shut Down, Restart, Sleep, and Hibernate");
-    QStandardItem *hidePowerOptionsRegVal = new QStandardItem(regHan.getCurrRegDataVal("HidePowerOptions"));
+    QStandardItem *hidePowerOptionsRegVal = new QStandardItem(regHan->getCurrRegDataVal("HidePowerOptions"));
     QStandardItem *hidePowerOptionsRegKeyName = new QStandardItem("HidePowerOptions");
-    QStandardItem *hidePowerOptionsDataType = new QStandardItem("");
+    QStandardItem *hidePowerOptionsDataType = new QStandardItem("DWORD");
 
     hidePowerOptions->setCheckable(true);
     hidePowerOptions->setCheckState(Qt::Checked);
@@ -719,9 +719,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noLogoff = new QStandardItem("Remove logoff");
-    QStandardItem *noLogoffRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoLogoff"));
+    QStandardItem *noLogoffRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoLogoff"));
     QStandardItem *noLogoffRegKeyName = new QStandardItem("NoLogoff");
-    QStandardItem *noLogoffDataType = new QStandardItem("");
+    QStandardItem *noLogoffDataType = new QStandardItem("DWORD");
 
     noLogoff->setCheckable(true);
     noLogoff->setCheckState(Qt::Checked);
@@ -737,9 +737,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *disableCMD = new QStandardItem("Prevent access to the command prompt");
-    QStandardItem *disableCMDRegVal = new QStandardItem(regHan.getCurrRegDataVal("DisableCMD"));
+    QStandardItem *disableCMDRegVal = new QStandardItem(regHan->getCurrRegDataVal("DisableCMD"));
     QStandardItem *disableCMDRegKeyName = new QStandardItem("DisableCMD");
-    QStandardItem *disableCMDDataType = new QStandardItem("");
+    QStandardItem *disableCMDDataType = new QStandardItem("DWORD");
 
     disableCMD->setCheckable(true);
     disableCMD->setCheckState(Qt::Checked);
@@ -756,9 +756,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *disabletaskMgr = new QStandardItem("Remove Task Manager");
-    QStandardItem *disabletaskMgrRegVal = new QStandardItem(regHan.getCurrRegDataVal("DisabletaskMgr"));
+    QStandardItem *disabletaskMgrRegVal = new QStandardItem(regHan->getCurrRegDataVal("DisabletaskMgr"));
     QStandardItem *disabletaskMgrRegKeyName = new QStandardItem("DisabletaskMgr");
-    QStandardItem *disabletaskMgrDataType = new QStandardItem("");
+    QStandardItem *disabletaskMgrDataType = new QStandardItem("DWORD");
 
     disabletaskMgr->setCheckable(true);
     disabletaskMgr->setCheckState(Qt::Checked);
@@ -776,9 +776,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *disablelockWorkstation = new QStandardItem("Remove Lock Computer");
-    QStandardItem *disablelockWorkstationRegVal = new QStandardItem(regHan.getCurrRegDataVal("DisablelockWorkstation"));
+    QStandardItem *disablelockWorkstationRegVal = new QStandardItem(regHan->getCurrRegDataVal("DisablelockWorkstation"));
     QStandardItem *disablelockWorkstationRegKeyName = new QStandardItem("DisablelockWorkstation");
-    QStandardItem *disablelockWorkstationDataType = new QStandardItem("");
+    QStandardItem *disablelockWorkstationDataType = new QStandardItem("DWORD");
 
     disablelockWorkstation->setCheckable(true);
     disablelockWorkstation->setCheckState(Qt::Checked);
@@ -795,9 +795,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *removeChangePsswd = new QStandardItem("Remove Change Passoword");
-    QStandardItem *removeChangePsswdRegVal = new QStandardItem(regHan.getCurrRegDataVal("Disablechangepassword"));
+    QStandardItem *removeChangePsswdRegVal = new QStandardItem(regHan->getCurrRegDataVal("Disablechangepassword"));
     QStandardItem *removeChangePsswdRegKeyName = new QStandardItem("Disablechangepassword");
-    QStandardItem *removeChangePsswdDataType = new QStandardItem("");
+    QStandardItem *removeChangePsswdDataType = new QStandardItem("DWORD");
 
     removeChangePsswd->setCheckable(true);
     removeChangePsswd->setCheckState(Qt::Checked);
@@ -813,9 +813,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noAutoUpdate = new QStandardItem("Remove Windows automatic updates");
-    QStandardItem *noAutoUpdateRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoAutoUpdate"));
+    QStandardItem *noAutoUpdateRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoAutoUpdate"));
     QStandardItem *noAutoUpdateRegKeyName = new QStandardItem("NoAutoUpdate");
-    QStandardItem *noAutoUpdateDataType = new QStandardItem("");
+    QStandardItem *noAutoUpdateDataType = new QStandardItem("DWORD");
 
     noAutoUpdate->setCheckable(true);
     noAutoUpdate->setCheckState(Qt::Checked);
@@ -832,9 +832,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *taskbarNoNotification = new QStandardItem("Turn off all balloon notifications");
-    QStandardItem *taskbarNoNotificationRegVal = new QStandardItem(regHan.getCurrRegDataVal("TaskbarNoNotification"));
+    QStandardItem *taskbarNoNotificationRegVal = new QStandardItem(regHan->getCurrRegDataVal("TaskbarNoNotification"));
     QStandardItem *taskbarNoNotificationRegKeyName = new QStandardItem("TaskbarNoNotification");
-    QStandardItem *taskbarNoNotificationDataType = new QStandardItem("");
+    QStandardItem *taskbarNoNotificationDataType = new QStandardItem("DWORD");
 
     taskbarNoNotification->setCheckable(true);
     taskbarNoNotification->setCheckState(Qt::Checked);
@@ -853,9 +853,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noballoonFeatureAds = new QStandardItem("Turn off all Balloon Featured Advertisements");
-    QStandardItem *noballoonFeatureAdsRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoballoonFeatureAdvertisements"));
+    QStandardItem *noballoonFeatureAdsRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoballoonFeatureAdvertisements"));
     QStandardItem *noballoonFeatureAdsRegKeyName = new QStandardItem("NoballoonFeatureAdvertisements");
-    QStandardItem *noballoonFeatureAdsDataType = new QStandardItem("");
+    QStandardItem *noballoonFeatureAdsDataType = new QStandardItem("DWORD");
 
     noballoonFeatureAds->setCheckable(true);
     noballoonFeatureAds->setCheckState(Qt::Checked);
@@ -873,9 +873,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noTileApplicationNoti = new QStandardItem("Turn off tile notifications");
-    QStandardItem *noTileApplicationNotiRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoTileApplicationNotification"));
+    QStandardItem *noTileApplicationNotiRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoTileApplicationNotification"));
     QStandardItem *noTileApplicationNotiRegKeyName = new QStandardItem("NoTileApplicationNotification");
-    QStandardItem *noTileApplicationNotiDataType = new QStandardItem("");
+    QStandardItem *noTileApplicationNotiDataType = new QStandardItem("DWORD");
 
     noTileApplicationNoti->setCheckable(true);
     noTileApplicationNoti->setCheckState(Qt::Checked);
@@ -892,9 +892,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *NoCloudAppNoti = new QStandardItem("Turn off notifications network usage");
-    QStandardItem *NoCloudAppNotiRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoCloudApplicationNotification"));
+    QStandardItem *NoCloudAppNotiRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoCloudApplicationNotification"));
     QStandardItem *NoCloudAppNotiRegKeyName = new QStandardItem("NoCloudApplicationNotification");
-    QStandardItem *NoCloudAppNotiDataType = new QStandardItem("");
+    QStandardItem *NoCloudAppNotiDataType = new QStandardItem("DWORD");
 
     NoCloudAppNoti->setCheckable(true);
     NoCloudAppNoti->setCheckState(Qt::Checked);
@@ -911,9 +911,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *lockTaskbar = new QStandardItem("Lock the taskBar");
-    QStandardItem *lockTaskbarRegVal = new QStandardItem(regHan.getCurrRegDataVal("LockTaskbar"));
+    QStandardItem *lockTaskbarRegVal = new QStandardItem(regHan->getCurrRegDataVal("LockTaskbar"));
     QStandardItem *lockTaskbarRegKeyName = new QStandardItem("LockTaskbar");
-    QStandardItem *lockTaskbarDataType = new QStandardItem("");
+    QStandardItem *lockTaskbarDataType = new QStandardItem("DWORD");
 
     lockTaskbar->setCheckable(true);
     lockTaskbar->setCheckState(Qt::Checked);
@@ -930,9 +930,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noMinimizingShortcuts = new QStandardItem("Turn off Aero Shake window minimizing mouse gesture");
-    QStandardItem *noMinimizingShortcutsRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoWindowMinimizingShortcuts"));
+    QStandardItem *noMinimizingShortcutsRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoWindowMinimizingShortcuts"));
     QStandardItem *noMinimizingShortcutsRegKeyName = new QStandardItem("NoWindowMinimizingShortcuts");
-    QStandardItem *noMinimizingShortcutsDataType = new QStandardItem("");
+    QStandardItem *noMinimizingShortcutsDataType = new QStandardItem("DWORD");
 
     noMinimizingShortcuts->setCheckable(true);
     noMinimizingShortcuts->setCheckState(Qt::Checked);
@@ -950,9 +950,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noChangestartMenu = new QStandardItem("Prevent users from customizing their start screen");
-    QStandardItem *noChangestartMenuRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoChangestartMenu"));
+    QStandardItem *noChangestartMenuRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoChangestartMenu"));
     QStandardItem *noChangestartMenuRegKeyName = new QStandardItem("NoChangestartMenu");
-    QStandardItem *noChangestartMenuDataType = new QStandardItem("");
+    QStandardItem *noChangestartMenuDataType = new QStandardItem("DWORD");
 
     noChangestartMenu->setCheckable(true);
     noChangestartMenu->setEditable(false);
@@ -969,9 +969,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noAddRemoveToolbar = new QStandardItem("Prevent users from adding or removing toolbars");
-    QStandardItem *noAddRemoveToolbarRegVal = new QStandardItem(regHan.getCurrRegDataVal("TaskbarNoAddRemoveToolbar"));
+    QStandardItem *noAddRemoveToolbarRegVal = new QStandardItem(regHan->getCurrRegDataVal("TaskbarNoAddRemoveToolbar"));
     QStandardItem *noAddRemoveToolbarRegKeyName = new QStandardItem("TaskbarNoAddRemoveToolbar");
-    QStandardItem *noAddRemoveToolbarDataType = new QStandardItem("");
+    QStandardItem *noAddRemoveToolbarDataType = new QStandardItem("DWORD");
 
     noAddRemoveToolbar->setCheckable(true);
     noAddRemoveToolbar->setEditable(false);
@@ -988,9 +988,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noSetTaskbar = new QStandardItem("Prevent changes to Taskbar and start menu Settings");
-    QStandardItem *noSetTaskbarRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoSetTaskbar"));
+    QStandardItem *noSetTaskbarRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoSetTaskbar"));
     QStandardItem *noSetTaskbarRegKeyName = new QStandardItem("NoSetTaskbar");
-    QStandardItem *noSetTaskbarDataType = new QStandardItem("");
+    QStandardItem *noSetTaskbarDataType = new QStandardItem("DWORD");
 
     noSetTaskbar->setCheckable(true);
     noSetTaskbar->setEditable(false);
@@ -1006,9 +1006,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *taskbarLockAll = new QStandardItem("Lock all taskbar settings");
-    QStandardItem *taskbarLockAllRegVal = new QStandardItem(regHan.getCurrRegDataVal("taskbarLockAll"));
+    QStandardItem *taskbarLockAllRegVal = new QStandardItem(regHan->getCurrRegDataVal("taskbarLockAll"));
     QStandardItem *taskbarLockAllRegKeyName = new QStandardItem("taskbarLockAll");
-    QStandardItem *taskbarLockAllDataType = new QStandardItem("");
+    QStandardItem *taskbarLockAllDataType = new QStandardItem("DWORD");
 
     taskbarLockAll->setCheckable(true);
     taskbarLockAll->setEditable(false);
@@ -1024,9 +1024,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noMovingToolbars = new QStandardItem("Prohibit adjusting desktop toolbars");
-    QStandardItem *noMovingToolbarsRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoMovingBands"));
+    QStandardItem *noMovingToolbarsRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoMovingBands"));
     QStandardItem *noMovingToolbarsRegKeyName = new QStandardItem("NoMovingBands");
-    QStandardItem *noMovingToolbarsDataType = new QStandardItem("");
+    QStandardItem *noMovingToolbarsDataType = new QStandardItem("DWORD");
 
     noMovingToolbars->setCheckable(true);
     noMovingToolbars->setEditable(false);
@@ -1043,9 +1043,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noChangingWallPaper = new QStandardItem("Prevent changing desktop background/wallpaper");
-    QStandardItem *noChangingWallPaperRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoChangingWallPaper"));
+    QStandardItem *noChangingWallPaperRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoChangingWallPaper"));
     QStandardItem *noChangingWallPaperRegKeyName = new QStandardItem("NoChangingWallPaper");
-    QStandardItem *noChangingWallPaperDataType = new QStandardItem("");
+    QStandardItem *noChangingWallPaperDataType = new QStandardItem("DWORD");
 
     noChangingWallPaper->setCheckable(true);
     noChangingWallPaper->setEditable(false);
@@ -1061,9 +1061,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *noChanginglockscreen = new QStandardItem("Prevent changing lock screen and logon image");
-    QStandardItem *noChanginglockscreenRegVal = new QStandardItem(regHan.getCurrRegDataVal("NoChanginglockscreen"));
+    QStandardItem *noChanginglockscreenRegVal = new QStandardItem(regHan->getCurrRegDataVal("NoChanginglockscreen"));
     QStandardItem *noChanginglockscreenRegKeyName = new QStandardItem("NoChanginglockscreen");
-    QStandardItem *noChanginglockscreenDataType = new QStandardItem("");
+    QStandardItem *noChanginglockscreenDataType = new QStandardItem("DWORD");
 
     noChanginglockscreen->setCheckable(true);
     noChanginglockscreen->setEditable(false);
@@ -1080,9 +1080,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *nolockscreen = new QStandardItem("Do not display the lock screen");
-    QStandardItem *nolockscreenRegVal = new QStandardItem(regHan.getCurrRegDataVal("Nolockscreen"));
+    QStandardItem *nolockscreenRegVal = new QStandardItem(regHan->getCurrRegDataVal("Nolockscreen"));
     QStandardItem *nolockscreenRegKeyName = new QStandardItem("Nolockscreen");
-    QStandardItem *nolockscreenDataType = new QStandardItem("");
+    QStandardItem *nolockscreenDataType = new QStandardItem("DWORD");
 
     nolockscreen->setCheckable(true);
     nolockscreen->setEditable(false);
@@ -1098,9 +1098,9 @@ void ConfigurationPage::populatePolicies(){
 
 
     QStandardItem *useDefaultTile = new QStandardItem("Apply the default account picture to all users");
-    QStandardItem *useDefaultTileRegVal = new QStandardItem(regHan.getCurrRegDataVal("UseDefaultTile"));
+    QStandardItem *useDefaultTileRegVal = new QStandardItem(regHan->getCurrRegDataVal("UseDefaultTile"));
     QStandardItem *useDefaultTileRegKeyName = new QStandardItem("UseDefaultTile");
-    QStandardItem *useDefaultTileDataType = new QStandardItem("");
+    QStandardItem *useDefaultTileDataType = new QStandardItem("DWORD");
 
     useDefaultTile->setCheckable(true);
     useDefaultTile->setEditable(false);
@@ -1173,28 +1173,28 @@ void ConfigurationPage::itemDoubleClicked(const QModelIndex &index){
 
 void ConfigurationPage::restoreDefault(){
 
-    int msgReturn =messageBox("Restore to Default Settings", "Doing this will reset ALL policies to its default settings. Are you sure?");
+    int msgReturn =messageBox("Restore to Default Settings", "Doing this will reset ALL policies EXCEPT custum policies to its default settings.\nAre you sure you want to continue?");
     if(msgReturn != QMessageBox::Ok) return;
 
-    regHan.setDefaultValues();
+    regHan->setDefaultValues();
     for(int row = 0; row < recommendedPolicies->rowCount(); ++row){
         QString policyName = recommendedPolicies->child(row,2)->text();
-        recommendedPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        recommendedPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
     }
 
     /*for(int row = 0; row < controlPanelPolicies->rowCount(); ++row){
         QString policyName = controlPanelPolicies->child(row,2)->text();
-        controlPanelPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        controlPanelPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
     }
 
     for(int row = 0; row < systemPolicies->rowCount(); ++row){
         QString policyName = systemPolicies->child(row,2)->text();
-        systemPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        systemPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
     }*/
 
     for(int row = 0; row < personalizationPolicies->rowCount(); ++row){
         QString policyName = personalizationPolicies->child(row,2)->text();
-        personalizationPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        personalizationPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
     }
 }
 
@@ -1210,20 +1210,20 @@ void ConfigurationPage::applySettings(){
         QBrush brush;
         if(recommendedPolicies->child(row,0)->checkState() == Qt::Checked){
 
-            if(type == "Path" || type == "Text"){
+            if(type == "PATH" || type == "STRING"){
                 QString pathOrText = recommendedPolicies->child(row, 1)->text();
-                regHan.setPolicyVal(policyName, pathOrText);
+                regHan->setPolicyVal(policyName, pathOrText);
             } else {
-                regHan.setPolicyVal(policyName, 1);
+                regHan->setPolicyVal(policyName, 1);
             }
             brush.setColor(Qt::darkGreen);
 
 
         } else {
-            if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+            if(type != "PATH" && type != "STRING") regHan->setPolicyVal(policyName, 0);
             brush.setColor(Qt::black);
         }
-        recommendedPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        recommendedPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
         recommendedPolicies->child(row, 1)->setData(brush, Qt::ForegroundRole);
     }
 
@@ -1235,15 +1235,15 @@ void ConfigurationPage::applySettings(){
 
             if(type == "Path" || type == "Text"){
                 QString pathOrText = controlPanelPolicies->child(row, 1)->text();
-                regHan.setPolicyVal(policyName, pathOrText);
+                regHan->setPolicyVal(policyName, pathOrText);
             } else {
-                regHan.setPolicyVal(policyName, 1);
+                regHan->setPolicyVal(policyName, 1);
             }
 
         } else {
-            if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+            if(type != "Path" && type != "Text") regHan->setPolicyVal(policyName, 0);
         }
-        controlPanelPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        controlPanelPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
     }
 
 
@@ -1254,33 +1254,62 @@ void ConfigurationPage::applySettings(){
 
             if(type == "Path" || type == "Text"){
                 QString pathOrText = systemPolicies->child(row, 1)->text();
-                regHan.setPolicyVal(policyName, pathOrText);
+                regHan->setPolicyVal(policyName, pathOrText);
             } else {
-                regHan.setPolicyVal(policyName, 1);
+                regHan->setPolicyVal(policyName, 1);
             }
 
         } else {
-            if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+            if(type != "Path" && type != "Text") regHan->setPolicyVal(policyName, 0);
         }
-        systemPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        systemPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
     }*/
 
     for(int row = 0; row < personalizationPolicies->rowCount(); ++row){
         QString policyName = personalizationPolicies->child(row, 2)->text();
         QString type = personalizationPolicies->child(row, 3)->text();
+        QBrush brush;
         if(personalizationPolicies->child(row,0)->checkState() == Qt::Checked){
 
-            if(type == "Path" || type == "Text"){
+            if(type == "PATH" || type == "STRING"){
                 QString pathOrText = personalizationPolicies->child(row, 1)->text();
-                regHan.setPolicyVal(policyName, pathOrText);
+                regHan->setPolicyVal(policyName, pathOrText);
             } else {
-                regHan.setPolicyVal(policyName, 1);
+                regHan->setPolicyVal(policyName, 1);
             }
+            brush.setColor(Qt::darkGreen);
+
 
         } else {
-            if(type != "Path" && type != "Text") regHan.setPolicyVal(policyName, 0);
+            if(type != "PATH" && type != "STRING") regHan->setPolicyVal(policyName, 0);
+            brush.setColor(Qt::black);
         }
-        personalizationPolicies->child(row,1)->setText(regHan.getCurrRegDataVal(policyName));
+        personalizationPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
+        personalizationPolicies->child(row, 1)->setData(brush, Qt::ForegroundRole);
+    }
+
+
+    for(int row = 0; row < customPolicies->rowCount(); ++row){
+        QString policyName = customPolicies->child(row, 2)->text();
+        QString type = customPolicies->child(row, 3)->text();
+        QBrush brush;
+        if(customPolicies->child(row,0)->checkState() == Qt::Checked){
+
+            if(type == "PATH" || type == "STRING"){
+                QString pathOrText = customPolicies->child(row, 1)->text();
+                regHan->setPolicyVal(policyName, pathOrText);
+            } else {
+                regHan->setPolicyVal(policyName, 1);
+            }
+            brush.setColor(Qt::darkGreen);
+
+
+        } else {
+            if(type != "PATH" && type != "STRING") regHan->setPolicyVal(policyName, 0);
+            brush.setColor(Qt::black);
+        }
+        customPolicies->child(row,1)->setText(regHan->getCurrRegDataVal(policyName));
+        customPolicies->child(row, 1)->setData(brush, Qt::ForegroundRole);
     }
 
 }

@@ -64,7 +64,7 @@ private:
 class ConfigurationPage : public QWidget{
     Q_OBJECT
 public:
-    ConfigurationPage(QWidget *parent = 0);
+    ConfigurationPage(RegistryHandler *regHan = nullptr, QWidget *parent = 0);
     ~ConfigurationPage();
     QStandardItem* getUserEntryItem() {return customPolicies;}
 
@@ -79,8 +79,7 @@ private:
     void populatePolicies();
 
 
-    RegistryHandler regHan;
-    //UserEditReg userReg;
+    RegistryHandler *regHan;
     QMap<QString, QStandardItem*> policyNameToItemValue;
 
 

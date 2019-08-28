@@ -43,7 +43,7 @@ class UserEditReg : public QWidget
 {
     Q_OBJECT
 public:
-    explicit UserEditReg(QStandardItem *customPolicies, QWidget *parent = nullptr);
+    explicit UserEditReg(QStandardItem *customPolicies, RegistryHandler *regHan = nullptr, QWidget *parent = nullptr);
     ~UserEditReg();
     //QSet getUserRegItems() {return userRegSet;}
 
@@ -65,7 +65,8 @@ private:
     QVBoxLayout *mainLayout = nullptr;
     QVBoxLayout *scrollAreaLayout = nullptr;
     QScrollArea *scrollArea = nullptr;
-    RegistryHandler regHan;
+
+    RegistryHandler *regHan = nullptr;
 
     QSet<UserRegistryItem*> userRegSet;
     QMap<QPushButton*, UserRegistryItem*> btnToItem;

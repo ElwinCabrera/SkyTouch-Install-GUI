@@ -260,7 +260,7 @@ class UserLinkItem {
 
 class UserRegistryItem{
 public:
-    UserRegistryItem(QString key, QString valueName, QVariant data, QString dataType = "STRING", QString description = ""){
+    UserRegistryItem(QString key, QString valueName, QVariant data, QString dataType = "DWORD", QString description = ""){
         this->key = key;
         this->valueName = valueName;
 

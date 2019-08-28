@@ -9,6 +9,7 @@
 #include "global.h"
 #include "network.h"
 #include "editregistry.h"
+#include "registryhandler.h"
 
 QT_BEGIN_NAMESPACE
 class QListWidget;
@@ -45,6 +46,7 @@ private:
     SoftwareDownloadPage *softwareTab= nullptr;
     ConfigurationPage *configTab = nullptr;
     Network *network = nullptr;
+    RegistryHandler *regHan = nullptr;
 
     vector< SoftwareInfo*> softwareList;
 

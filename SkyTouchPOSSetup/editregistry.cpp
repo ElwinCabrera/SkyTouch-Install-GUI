@@ -1,8 +1,9 @@
 #include "editregistry.h"
 
-UserEditReg::UserEditReg(QStandardItem *customPolicies, QWidget *parent): QWidget(parent)
+UserEditReg::UserEditReg(QStandardItem *customPolicies, RegistryHandler *regHan, QWidget *parent): QWidget(parent)
 {
     this->customPolicies = customPolicies;
+    this->regHan = regHan;
     init();
 
 }
@@ -18,8 +19,8 @@ void UserEditReg::init(){
         mainLayout = nullptr;
     }
     //resize(QSize(390,250));
-    setMinimumHeight(250);
-    setMinimumWidth(390);
+    setMinimumHeight(450);
+    setMinimumWidth(450);
 
     //setMaximumHeight(400);
 
@@ -87,7 +88,7 @@ void UserEditReg::addRegItem()
         UserRegistryItem *regItem = inputReg->getRegItem();
         userRegSet.insert(regItem);
         //insert to registry and update standard item
-        regHan.addReg(regItem->getKey(), regItem->getValueName(), regItem->getData());
+        regHan->addReg(regItem->getKey(), regItem->getValueName(), regItem->getData());
         populateUserPolicyEntries(regItem);
         init();
     }
@@ -97,7 +98,7 @@ void UserEditReg::populateUserPolicyEntries(UserRegistryItem *regItem){
     QList<QStandardItem*> row;
 
     QStandardItem *customName = new QStandardItem(regItem->getDescription());
-    QStandardItem *customNameRegVal = new QStandardItem(regHan.getCurrRegDataVal(regItem->getValueName()));
+    QStandardItem *customNameRegVal = new QStandardItem(regHan->getCurrRegDataVal(regItem->getValueName()));
     QStandardItem *customNameRegKeyName = new QStandardItem(regItem->getValueName());
     QStandardItem *customNameDataType = new QStandardItem(regItem->getDataType());
 
@@ -126,7 +127,7 @@ void UserEditReg::deleteRegInput()
                   auto regSetIt = userRegSet.find(item);
                   userRegSet.erase(regSetIt);
 
-                  regHan.deleteKey(item->getValueName());
+                  regHan->deleteKey(item->getValueName());
                   removeFromTree(item->getValueName());
                   delete item;
                   init();
@@ -260,8 +261,10 @@ void InputRegDialog::saveRegEntry()
     else data = valueInput->text();
 
     QString dataType;
+
     if(stringBtn->isChecked()) dataType = "STRING";
-    if(pathBtn->isChecked()) dataType = "PATH";
+    else if(pathBtn->isChecked()) dataType = "PATH";
+    else dataType = "DWORD";
 
     if(regItem == nullptr) {
         regItem = new UserRegistryItem(keyTextInput->text(), valueNameInput->text(), data, dataType, descInput->text());

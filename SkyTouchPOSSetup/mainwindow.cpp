@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     resize(QSize(700, 500));
 
     network = new Network;
+    regHan = new RegistryHandler;
 
 
     menuBar = new QMenuBar;
@@ -30,9 +31,9 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     softwareTab= new SoftwareDownloadPage(this);
     softwareTab->initPage(softwareList, network);
 
-    configTab = new ConfigurationPage(this);
+    configTab = new ConfigurationPage(regHan,this);
 
-    editReg = new UserEditReg(configTab->getUserEntryItem());
+    editReg = new UserEditReg(configTab->getUserEntryItem(),regHan);
 
     QTabWidget *tabs = new QTabWidget(this);
     tabs->addTab(softwareTab, "Software");
