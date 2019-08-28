@@ -1,5 +1,6 @@
 #include "editregistry.h"
 
+
 UserEditReg::UserEditReg(QStandardItem *customPolicies, RegistryHandler *regHan, QWidget *parent): QWidget(parent)
 {
     this->customPolicies = customPolicies;
