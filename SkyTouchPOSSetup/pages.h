@@ -93,7 +93,7 @@ private:
     //QMap<QString, >
 };
 
-void clearPage(QLayout * layout);
+void clearLayotAndWidgets(QLayout * layout);
 void startProcess(QObject *parent, QString programPath, QString fileName );
 
 #endif // PAGES_H

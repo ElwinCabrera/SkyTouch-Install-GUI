@@ -17,7 +17,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
     if(!softwareL.empty()) this->softwareList = softwareL;
 
     if(mainLayout) {
-        clearPage(mainLayout);
+        clearLayotAndWidgets(mainLayout);
         clearGlobalWidgets();
     }
     mainLayout = new QVBoxLayout;
@@ -168,7 +168,7 @@ void SoftwareDownloadPage::downloadButtonCliked(){
 void SoftwareDownloadPage::localFilesPage(){
 
     if(mainLayout) {
-        clearPage(mainLayout);
+        clearLayotAndWidgets(mainLayout);
         clearGlobalWidgets();
     }
     mainLayout = new QVBoxLayout;
@@ -262,7 +262,7 @@ void SoftwareDownloadPage::viewDownloadProg(){
 void SoftwareDownloadPage::readyToInstallPage(){
 
     if(mainLayout) {
-        clearPage(mainLayout);
+        clearLayotAndWidgets(mainLayout);
         clearGlobalWidgets();
     }
     mainLayout = new QVBoxLayout;
@@ -423,7 +423,7 @@ void SoftwareDownloadPage::startInstalls(){
 void SoftwareDownloadPage::activeDownloadsPage(){
 
     if(mainLayout) {
-        clearPage(mainLayout);
+        clearLayotAndWidgets(mainLayout);
         clearGlobalWidgets();
     }
     mainLayout = new QVBoxLayout;
@@ -545,7 +545,7 @@ void SoftwareDownloadPage::stopDownloads()
 
         for(SoftwareInfo *si: softwareList) si->stopDownload();
 
-        //clearPage(mainLayout);
+        //clearLayotAndWidgets(mainLayout);
         vector<SoftwareInfo*> a;
         initPage(a, NULL);
 
@@ -1267,22 +1267,5 @@ void ConfigurationPage::applySettings(){
 }
 
 
-void clearPage(QLayout * layout) {
-   if (! layout) return;
 
-    while (auto item = layout->takeAt(0)) {
-        delete item->widget();
-        clearPage(item->layout());
-   }
-   delete layout;
-}
-
-void startProcess(QObject *parent, QString programPath, QString fileName ) {
-
-    QProcess *process = new QProcess(parent);
-    process->start(programPath);
-
-    if(!process->waitForStarted()) messageBox("Could not start " + fileName, "");
-
-}
 

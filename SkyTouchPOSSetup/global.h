@@ -253,8 +253,37 @@ private:
 
 };
 
+class UserLinkItem {
+    QList<SoftwareInfo*> userSoftwareList;
+};
+
+class UserRegistryItem{
+public:
+    UserRegistryItem(QString key, QString valueName, QVariant data){
+        this->key = key;
+        this->valueName = valueName;
+        this->data = data;
+    }
+    UserRegistryItem(){}
+
+    void setKey(QString newKey) {key = newKey;}
+    void setValueName(QString newValueName) {valueName = newValueName;}
+    void setData(QVariant newData) { data = newData;}
+
+    QString getKey() {return key;}
+    QString getValueName() {return valueName;}
+    QVariant getData() {return data;}
+
+private:
+    QString key = "";
+    QString valueName = "";
+    QVariant data;
+};
+
 int messageBox(QString text, QString moreDetails);
 
+void clearLayotAndWidgets(QLayout * layout);
+void startProcess(QObject *parent, QString programPath, QString fileName );
 
 
 #endif // GLOBAL_H

@@ -75,7 +75,7 @@ void MainWindow::createMenuActions(){
     addToWinRegistryAct = new QAction(tr("&Windows Registry"),this);
     addToWinRegistryAct->setShortcuts(QKeySequence::New);
     addToWinRegistryAct->setStatusTip(tr("Add, Edit, Delete a windows registry file"));
-    //connect(addToWinRegistryAct, &QAction::triggered, this, &MainWindow::modifyWindowsReg);
+    connect(addToWinRegistryAct, &QAction::triggered, this, &MainWindow::modifyWindowsReg);
 
     optionsAct = new QAction(tr("&Options"),this);
     optionsAct->setShortcuts(QKeySequence::New);
@@ -122,6 +122,12 @@ void MainWindow::createMenu(){
 void MainWindow::exitApp()
 {
     qDebug() << "menu Exit pressed";
+
+}
+
+void MainWindow::modifyWindowsReg()
+{
+    editReg->show();
 
 }
 

@@ -8,6 +8,7 @@
 #include "pages.h"
 #include "global.h"
 #include "network.h"
+#include "editregistry.h"
 
 QT_BEGIN_NAMESPACE
 class QListWidget;
@@ -31,6 +32,7 @@ public:
 
 private slots:
     void exitApp();
+    void modifyWindowsReg();
 
 private:
     void createMenuActions();
@@ -43,6 +45,8 @@ private:
     Network *network = nullptr;
 
     vector< SoftwareInfo*> softwareList;
+
+    UserEditReg *editReg = new UserEditReg;
 
     /**********Menus and actions for menu**********/
 
