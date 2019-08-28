@@ -1,7 +1,8 @@
 #include "global.h"
 
-int messageBox(QString text, QString moreDetails){
+int messageBox(QString text, QString moreDetails, QString windowTitle ){
     QMessageBox msgBox;
+    msgBox.setWindowTitle(windowTitle);
     msgBox.setText(text);
     msgBox.setInformativeText(moreDetails);
     msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);

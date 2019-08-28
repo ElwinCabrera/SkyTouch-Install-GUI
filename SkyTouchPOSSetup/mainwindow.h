@@ -35,6 +35,8 @@ public:
 private slots:
     void exitApp();
     void modifyWindowsReg();
+    void aboutMenu();
+    void aboutSkyTouchMenu();
 
 private:
     void createMenuActions();
