@@ -94,12 +94,12 @@ void MainWindow::createMenuActions(){
     aboutAct = new QAction(tr("&About"),this);
     aboutAct->setShortcuts(QKeySequence::New);
     aboutAct->setStatusTip(tr("About this application"));
-    //connect(aboutAct, &QAction::triggered, this, &MainWindow::about);
+    connect(aboutAct, &QAction::triggered, this, &MainWindow::aboutMenu);
 
     aboutSkyTouchAct = new QAction(tr("&About SkyTouch"), this);
     aboutSkyTouchAct->setShortcuts(QKeySequence::New);
     aboutSkyTouchAct->setStatusTip(tr("About SkyTouch"));
-    //connect(aboutSkyTouchAct, &QAction::triggered, this, &MainWindow::aboutSkyTouch);
+    connect(aboutSkyTouchAct, &QAction::triggered, this, &MainWindow::aboutSkyTouchMenu);
 
 
 }
@@ -136,7 +136,16 @@ void MainWindow::modifyWindowsReg()
 
 }
 
-//void MainWindow::addMenuBar(){
+void MainWindow::aboutMenu()
+{
+    QString detailedDesc = "This application was custumized to fit the need for SkyTouch, LLC to help inprove their work productivity\nPlease email any questions or concers to elwincab0@gmail.com\n\nVersion 0.0.1";
+    messageBox("Created by Elwin Cabrera",detailedDesc, "About");
+}
 
+void MainWindow::aboutSkyTouchMenu()
+{
+    QString detailedDesc = "SkyTouch is an independent company servicing and installing Point of Sale (POS) systems in various small buisnesses around the east coast.";
+    messageBox("SkyTouch, LLC",detailedDesc, "About SkyTouch");
 
-//}
+}
+

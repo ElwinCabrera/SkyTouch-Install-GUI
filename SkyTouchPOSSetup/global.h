@@ -296,10 +296,10 @@ private:
 };
 
 
-int messageBox(QString text, QString moreDetails);
+int messageBox(QString text, QString moreDetails, QString windowTitle = "");
 
 void clearLayotAndWidgets(QLayout * layout);
-void startProcess(QObject *parent, QString programPath, QString fileName );
+void startProcess(QObject *parent, QString programPath, QString fileName  );
 
 
 #endif // GLOBAL_H
