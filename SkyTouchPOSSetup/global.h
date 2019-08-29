@@ -254,9 +254,6 @@ private:
 
 };
 
-class UserLinkItem {
-    QList<SoftwareInfo*> userSoftwareList;
-};
 
 class UserRegistryItem{
 public:

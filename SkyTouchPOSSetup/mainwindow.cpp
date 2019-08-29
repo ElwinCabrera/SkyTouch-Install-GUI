@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     configTab = new ConfigurationPage(regHan,this);
 
     editReg = new UserEditReg(configTab->getUserEntryItem(),regHan);
+    editLink = new UserEditLinks;
 
     QTabWidget *tabs = new QTabWidget(this);
     tabs->addTab(softwareTab, "Software");
@@ -74,7 +75,7 @@ void MainWindow::createMenuActions(){
     linksAct = new QAction(tr("&Download Links"),this);
     linksAct->setShortcuts(QKeySequence::New);
     linksAct->setStatusTip(tr("Add, Edit, Delete a download link"));
-    //connect(linksAct, &QAction::triggered, this, &MainWindow::modifyDownloadLinks);
+    connect(linksAct, &QAction::triggered, this, &MainWindow::modifyDownloadLinks);
 
     addToWinRegistryAct = new QAction(tr("&Windows Registry"),this);
     addToWinRegistryAct->setShortcuts(QKeySequence::New);
@@ -134,6 +135,11 @@ void MainWindow::modifyWindowsReg()
 {
     editReg->show();
 
+}
+
+void MainWindow::modifyDownloadLinks()
+{
+    editLink->show();
 }
 
 void MainWindow::aboutMenu()
