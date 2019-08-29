@@ -16,6 +16,8 @@ public:
     SoftwareDownloadPage(QWidget *parent = 0);
     ~SoftwareDownloadPage();
     void initPage(vector<SoftwareInfo*> &softwareL, Network *network);
+    bool onInitPage () {return onMainPage;}
+
 
 
 
@@ -34,6 +36,7 @@ private:
     bool readyToInstall;
     bool downloadConfirmed;
     bool localFilesInInstallQ;
+    bool onMainPage = false;
 
     QVBoxLayout *mainLayout = nullptr;
     Network *network = nullptr;

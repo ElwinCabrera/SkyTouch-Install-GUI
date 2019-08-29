@@ -134,6 +134,7 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
    // mainLayout->addSpacing(200);
     setLayout(mainLayout);
 
+    onMainPage = true;
     connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::downloadButtonCliked);
     connect(searchForLocalButton, &QPushButton::clicked, this , &SoftwareDownloadPage::localFilesPage);
     connect(viewDownloadProgButton, &QPushButton::clicked, this, &SoftwareDownloadPage::viewDownloadProg);
@@ -232,6 +233,7 @@ void SoftwareDownloadPage::localFilesPage(){
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
+    onMainPage = false;
     connect(addToInstallListBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::addFileToInstallList);
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
@@ -359,6 +361,7 @@ void SoftwareDownloadPage::readyToInstallPage(){
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
+    onMainPage = false;
     connect(startInstallsBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::startInstalls);
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
@@ -501,6 +504,7 @@ void SoftwareDownloadPage::activeDownloadsPage(){
     mainLayout->addStretch(1);
     setLayout(mainLayout);
 
+    onMainPage = false;
     connect(stopDownloadBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::stopDownloads);
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
@@ -581,6 +585,23 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
     readyToInstallButton = nullptr;
     stopDownloadBtn = nullptr;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

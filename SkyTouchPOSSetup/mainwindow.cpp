@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     configTab = new ConfigurationPage(regHan,this);
 
     editReg = new UserEditReg(configTab->getUserEntryItem(),regHan);
-    editLink = new UserEditLinks;
+    editLink = new UserEditLinks(softwareList, softwareTab);
 
     QTabWidget *tabs = new QTabWidget(this);
     tabs->addTab(softwareTab, "Software");

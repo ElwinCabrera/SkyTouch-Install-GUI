@@ -2,6 +2,7 @@
 #define USEREDITLINKS_H
 
 #include "global.h"
+#include "pages.h"
 
 
 class InputLinkDialog: public QDialog{
@@ -56,7 +57,7 @@ class UserEditLinks : public QWidget
 {
     Q_OBJECT
 public:
-    explicit UserEditLinks(QWidget *parent = nullptr);
+    explicit UserEditLinks(vector<SoftwareInfo*> &softwareList, SoftwareDownloadPage *sPage = nullptr, QWidget *parent = nullptr);
     ~UserEditLinks();
 
 signals:
@@ -67,16 +68,21 @@ private slots:
 
 
 private:
+
     void init();
+    void deleteInGlobalList(SoftwareInfo *si);
     QVBoxLayout* getLinkInfoLayoutAndWidgets(SoftwareInfo *si);
 
 
-    QVBoxLayout *mainLayout = nullptr;
-    QVBoxLayout *scrollAreaLayout = nullptr;
-    QScrollArea *scrollArea = nullptr;
+    SoftwareDownloadPage *sPage = nullptr;  //do not delete
+    vector<SoftwareInfo*> globalSoftwareList; // do not delete
 
-    QSet<SoftwareInfo*> userSoftwreLinks;
-    QMap<QPushButton*, SoftwareInfo*> btnToLink;
+    QVBoxLayout *mainLayout = nullptr;     // delete on exit
+    QVBoxLayout *scrollAreaLayout = nullptr; // delete on exit
+    QScrollArea *scrollArea = nullptr; // delete on exit
+
+    QSet<SoftwareInfo*> userSoftwreLinks; // delete on exit
+    QMap<QPushButton*, SoftwareInfo*> btnToLink; // delete on exit
 };
 
 #endif // USEREDITLINKS_H

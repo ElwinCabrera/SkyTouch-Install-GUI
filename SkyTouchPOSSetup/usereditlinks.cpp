@@ -1,9 +1,10 @@
 #include "usereditlinks.h"
 
-UserEditLinks::UserEditLinks(QWidget *parent): QWidget(parent)
+UserEditLinks::UserEditLinks(vector<SoftwareInfo*> &softwareList, SoftwareDownloadPage *sPage , QWidget *parent): QWidget(parent)
 {
+    this->sPage = sPage;
+    this->globalSoftwareList = softwareList;
     init();
-
 }
 
 UserEditLinks::~UserEditLinks()
@@ -88,6 +89,11 @@ void UserEditLinks::addLink()
         //update the UI screan on the softeare Tab
         //populateUserPolicyEntries(input);
         init();
+        globalSoftwareList.push_back(newSoftwareLink);
+        if(sPage && sPage->onInitPage()) {
+            vector<SoftwareInfo*> tmp;
+            sPage->initPage(globalSoftwareList, nullptr);
+        }
     }
     delete input;
 }
@@ -102,16 +108,26 @@ void UserEditLinks::deleteLinkInput()
               auto it = btnToLink.find(button);
               if(it != btnToLink.end()) {
                   SoftwareInfo *si = it.value();
-                  auto linkSetIt = userSoftwreLinks.find(si);
-                  userSoftwreLinks.erase(linkSetIt);
-                  //update the UI screan on the softeare Tab
-                  //removeFromTree(item->getValueName());
+                  userSoftwreLinks.erase(userSoftwreLinks.find(si));
+                  deleteInGlobalList(si);
+
                   delete si;
                   init();
+
+                  if(sPage && sPage->onInitPage()){
+                      vector<SoftwareInfo*> tmp;
+                      sPage->initPage(globalSoftwareList, nullptr);
+                  }
 
               }
            }
        }
+}
+
+void UserEditLinks::deleteInGlobalList(SoftwareInfo *si){
+    for(int i = 0; globalSoftwareList.size(); ++i){
+        if(globalSoftwareList.at(i) == si) globalSoftwareList.erase(globalSoftwareList.begin() + i);
+    }
 }
 
 
