@@ -32,7 +32,8 @@ SOURCES += \
     installconfirmation.cpp \
     registryhandler.cpp \
     global.cpp \
-    editregistry.cpp
+    usereditlinks.cpp \
+    usereditregistry.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
     installconfirmation.h \
     global.h \
     registryhandler.h \
-    editregistry.h
+    usereditlinks.h \
+    usereditregistry.h
 
 FORMS +=
 

@@ -8,7 +8,7 @@
 #include "pages.h"
 #include "global.h"
 #include "network.h"
-#include "editregistry.h"
+#include "usereditregistry.h"
 #include "registryhandler.h"
 
 QT_BEGIN_NAMESPACE
