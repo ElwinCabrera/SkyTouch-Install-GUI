@@ -20,18 +20,21 @@ class InstallConfirmation : public QDialog
     Q_OBJECT
 
 public:
-    InstallConfirmation(QWidget *parent , vector<SoftwareInfo*> softwareL);
-    uint64_t totalFileSize(vector<SoftwareInfo*> softwareL);
+    InstallConfirmation(QSet<SoftwareInfo*> &softwareList, Network *network= nullptr, QWidget *parent = nullptr );
+    uint64_t totalFileSize();
     bool getConfirmation() {return confirm; }
 
 
 private:
-     QListWidget *softwareListWidget;
-     bool confirm ;
-     Network network;
+    bool confirm = false;
+    void okButtonCliked();
+    void cancelButtonClicked();
 
-     void okButtonCliked();
-     void cancelButtonClicked();
+    QSet<SoftwareInfo*> softwareList;
+    QListWidget *softwareListWidget;
+    Network *network;
+
+
 };
 
 #endif // INSTALLCONFIRMATION_H

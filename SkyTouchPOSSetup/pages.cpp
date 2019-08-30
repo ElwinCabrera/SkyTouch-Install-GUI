@@ -2,13 +2,16 @@
 
 #include "pages.h"
 
-SoftwareDownloadPage::SoftwareDownloadPage(QWidget *parent) : QWidget(parent){
+SoftwareDownloadPage::SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Network *network, QWidget *parent) : QWidget(parent){
     downloadConfirmed = false;
     readyToInstall = false;
     localFilesInInstallQ = false;
 
-    populateLocalFilesMap();
+    this->softwareList = softwareList;
+    this->network = network;
 
+    populateLocalFilesMap();
+    initPage();
 }
 
 SoftwareDownloadPage::~SoftwareDownloadPage()
@@ -16,11 +19,8 @@ SoftwareDownloadPage::~SoftwareDownloadPage()
 
 }
 
-void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *network)
+void SoftwareDownloadPage::initPage()
 {
-
-    if(network) this->network = network;
-    if(!softwareL.empty()) this->softwareList = softwareL;
 
     if(mainLayout) {
         clearLayotAndWidgets(mainLayout);
@@ -143,6 +143,13 @@ void SoftwareDownloadPage::initPage(vector<SoftwareInfo*> &softwareL, Network *n
 
 }
 
+void SoftwareDownloadPage::removeFromList(SoftwareInfo *si){
+    auto it = softwareList.find(si);
+
+    if(it != softwareList.end()) softwareList.erase(it);
+}
+
+
 
 
 
@@ -157,7 +164,7 @@ void SoftwareDownloadPage::downloadButtonCliked(){
     }
 
     if(minimumOneChecked){
-        InstallConfirmation confirmWindow(this, softwareList);
+        InstallConfirmation confirmWindow(softwareList, network, this);
         confirmWindow.setModal(true);
         confirmWindow.exec();
 
@@ -380,8 +387,8 @@ void SoftwareDownloadPage::backToInitPage(){
         if(si->getNetworkReply() && si->downloadInProgress() )
             disconnect(si->getNetworkReply(), &QNetworkReply::downloadProgress, si->getProgressListener(), &ProgressListenner::onDownloadProgress);
     }
-    vector<SoftwareInfo*> tmp;
-    initPage(tmp, NULL);
+
+    initPage();
 }
 
 void SoftwareDownloadPage::finishedDownloading(){
@@ -557,9 +564,7 @@ void SoftwareDownloadPage::stopDownloads()
 
         for(SoftwareInfo *si: softwareList) si->stopDownload();
 
-        //clearLayotAndWidgets(mainLayout);
-        vector<SoftwareInfo*> a;
-        initPage(a, NULL);
+        initPage();
 
     }
 

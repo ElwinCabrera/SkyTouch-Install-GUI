@@ -3,8 +3,10 @@
 #include <QtWidgets>
 
 
-InstallConfirmation::InstallConfirmation(QWidget * /* parent unused */, vector<SoftwareInfo*> softwareL) {
+InstallConfirmation::InstallConfirmation(QSet<SoftwareInfo*> &softwareList, Network *network, QWidget * /* parent unused */) {
     resize(QSize(600, 300));
+    this->softwareList = softwareList;
+    this->network = network;
 
     QGroupBox *confirmInstallGroup = new QGroupBox(tr("Programs to be Installed..."));
     softwareListWidget = new QListWidget;
@@ -13,7 +15,7 @@ InstallConfirmation::InstallConfirmation(QWidget * /* parent unused */, vector<S
 
 
 
-    for(SoftwareInfo *si: softwareL){
+    for(SoftwareInfo *si: softwareList){
         if(si->getDownloadMarked()) {
             //Creating a new list widget item whose parent is the softwareListWidget itself
             QListWidgetItem *item = new QListWidgetItem(softwareListWidget);
@@ -29,7 +31,7 @@ InstallConfirmation::InstallConfirmation(QWidget * /* parent unused */, vector<S
     }
 
     QLabel *totalSizeLabel = new QLabel;
-    uint64_t fileSize = totalFileSize(softwareL);
+    uint64_t fileSize = totalFileSize();
     totalSizeLabel->setText("Total Size: " + QString::number(fileSize) + "MiB");
 
 
@@ -64,16 +66,16 @@ InstallConfirmation::InstallConfirmation(QWidget * /* parent unused */, vector<S
 
 }
 
-uint64_t InstallConfirmation::totalFileSize(vector<SoftwareInfo*> softwareL)
+uint64_t InstallConfirmation::totalFileSize()
 {
 
     uint64_t totalSize = 0;
-    for(SoftwareInfo *si: softwareL){
+    for(SoftwareInfo *si: softwareList){
         if(si->getDownloadMarked() ){
-            if(si->getVersionSelect32()) network.head(si->get32BitURL());
-            if(si->getVersionSelect64()) network.head(si->get64BitURL());
+            if(si->getVersionSelect32()) network->head(si->get32BitURL());
+            if(si->getVersionSelect64()) network->head(si->get64BitURL());
 
-            totalSize += network.getFileLength();
+            totalSize += network->getFileLength();
         }
     }
     return totalSize / (1024 * 1024); // converting to megabytes
@@ -84,10 +86,9 @@ uint64_t InstallConfirmation::totalFileSize(vector<SoftwareInfo*> softwareL)
 void InstallConfirmation::okButtonCliked() {
     confirm = true;
     this->close();
-
 }
 
 void InstallConfirmation::cancelButtonClicked() {
-    confirm = false;
+    confirm = false; // this is redundant but just in case
     this->close();
 }

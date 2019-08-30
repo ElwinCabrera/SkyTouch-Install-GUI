@@ -52,7 +52,7 @@ private:
     Network *network = nullptr;
     RegistryHandler *regHan = nullptr;
 
-    vector< SoftwareInfo*> softwareList;
+    QSet< SoftwareInfo*> softwareList;
 
     UserEditReg *editReg = nullptr;
     UserEditLinks *editLink = nullptr;

@@ -57,7 +57,7 @@ class UserEditLinks : public QWidget
 {
     Q_OBJECT
 public:
-    explicit UserEditLinks(vector<SoftwareInfo*> &softwareList, SoftwareDownloadPage *sPage = nullptr, QWidget *parent = nullptr);
+    explicit UserEditLinks(QSet<SoftwareInfo*> &softwareList, SoftwareDownloadPage *sPage = nullptr, QWidget *parent = nullptr);
     ~UserEditLinks();
 
 signals:
@@ -70,12 +70,11 @@ private slots:
 private:
 
     void init();
-    void deleteInGlobalList(SoftwareInfo *si);
     QVBoxLayout* getLinkInfoLayoutAndWidgets(SoftwareInfo *si);
 
 
     SoftwareDownloadPage *sPage = nullptr;  //do not delete
-    vector<SoftwareInfo*> globalSoftwareList; // do not delete
+    QSet<SoftwareInfo*> softwareList; // do not delete
 
     QVBoxLayout *mainLayout = nullptr;     // delete on exit
     QVBoxLayout *scrollAreaLayout = nullptr; // delete on exit

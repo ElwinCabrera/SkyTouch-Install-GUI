@@ -1,9 +1,9 @@
 #include "usereditlinks.h"
 
-UserEditLinks::UserEditLinks(vector<SoftwareInfo*> &softwareList, SoftwareDownloadPage *sPage , QWidget *parent): QWidget(parent)
+UserEditLinks::UserEditLinks(QSet<SoftwareInfo*> &softwareList, SoftwareDownloadPage *sPage , QWidget *parent): QWidget(parent)
 {
     this->sPage = sPage;
-    this->globalSoftwareList = softwareList;
+    this->softwareList = softwareList;
     init();
 }
 
@@ -85,15 +85,19 @@ void UserEditLinks::addLink()
 
     if(input->getSaved()) {
         SoftwareInfo *newSoftwareLink = input->getNewLink();
+
         userSoftwreLinks.insert(newSoftwareLink);
-        //update the UI screan on the softeare Tab
-        //populateUserPolicyEntries(input);
-        init();
-        globalSoftwareList.push_back(newSoftwareLink);
+        softwareList.insert(newSoftwareLink);
+
         if(sPage && sPage->onInitPage()) {
-            vector<SoftwareInfo*> tmp;
-            sPage->initPage(globalSoftwareList, nullptr);
+            sPage->addToList(newSoftwareLink);
+            sPage->initPage();
         }
+
+        init();
+
+
+
     }
     delete input;
 }
@@ -107,27 +111,23 @@ void UserEditLinks::deleteLinkInput()
            if (button){
               auto it = btnToLink.find(button);
               if(it != btnToLink.end()) {
+
                   SoftwareInfo *si = it.value();
                   userSoftwreLinks.erase(userSoftwreLinks.find(si));
-                  deleteInGlobalList(si);
+                  softwareList.erase(softwareList.find(si));
 
+                  if(sPage && sPage->onInitPage()){
+                      sPage->removeFromList(si);
+                      sPage->initPage();
+                  }
                   delete si;
                   init();
 
-                  if(sPage && sPage->onInitPage()){
-                      vector<SoftwareInfo*> tmp;
-                      sPage->initPage(globalSoftwareList, nullptr);
-                  }
+
 
               }
            }
        }
-}
-
-void UserEditLinks::deleteInGlobalList(SoftwareInfo *si){
-    for(int i = 0; globalSoftwareList.size(); ++i){
-        if(globalSoftwareList.at(i) == si) globalSoftwareList.erase(globalSoftwareList.begin() + i);
-    }
 }
 
 

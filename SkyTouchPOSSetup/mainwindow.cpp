@@ -17,19 +17,18 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
 
 
     SoftwareInfo *si= new SoftwareInfo("Cash Register Express", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe");
-    softwareList.push_back(si);
+    softwareList.insert(si);
 
     SoftwareInfo *si1= new SoftwareInfo("CRE1", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe" );
-    softwareList.push_back(si1);
+    softwareList.insert(si1);
 
     SoftwareInfo *si2= new SoftwareInfo("CRE2", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe" );
-    softwareList.push_back(si2);
+    softwareList.insert(si2);
 
     SoftwareInfo *si3= new SoftwareInfo("CRE3", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe" );
-    softwareList.push_back(si3);
+    softwareList.insert(si3);
 
-    softwareTab= new SoftwareDownloadPage(this);
-    softwareTab->initPage(softwareList, network);
+    softwareTab= new SoftwareDownloadPage(softwareList,network,this);
 
     configTab = new ConfigurationPage(regHan,this);
 

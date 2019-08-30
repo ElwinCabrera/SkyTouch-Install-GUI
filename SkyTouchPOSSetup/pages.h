@@ -13,10 +13,12 @@
 class SoftwareDownloadPage : public QWidget {
     Q_OBJECT
 public:
-    SoftwareDownloadPage(QWidget *parent = 0);
+    SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Network *network = nullptr,QWidget *parent = 0);
     ~SoftwareDownloadPage();
-    void initPage(vector<SoftwareInfo*> &softwareL, Network *network);
+    void initPage();
     bool onInitPage () {return onMainPage;}
+    void addToList(SoftwareInfo *si){softwareList.insert(si);}
+    void removeFromList(SoftwareInfo *si);
 
 
 
@@ -46,7 +48,7 @@ private:
     QPushButton *stopDownloadBtn = nullptr;
 
 
-    vector<SoftwareInfo*> softwareList;
+    QSet<SoftwareInfo*> softwareList;
     QMap<QString,LocalFile*> localFilesMap;
 
     void activeDownloadsPage();
