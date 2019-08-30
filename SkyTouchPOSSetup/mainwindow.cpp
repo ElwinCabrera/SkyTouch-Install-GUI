@@ -84,7 +84,7 @@ void MainWindow::createMenuActions(){
     optionsAct = new QAction(tr("&Options"),this);
     optionsAct->setShortcuts(QKeySequence::New);
     optionsAct->setStatusTip(tr("Application Options"));
-    //connect(optionsAct, &QAction::triggered, this, &MainWindow::appOptions);
+    connect(optionsAct, &QAction::triggered, this, &MainWindow::appOptions);
 
     reportBugAct = new QAction(tr("&Report Bugs"),this);
     reportBugAct->setShortcuts(QKeySequence::New);
