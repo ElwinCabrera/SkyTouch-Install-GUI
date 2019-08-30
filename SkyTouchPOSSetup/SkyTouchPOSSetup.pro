@@ -35,7 +35,8 @@ SOURCES += \
     usereditlinks.cpp \
     usereditregistry.cpp \
     optionsmenu.cpp \
-    addfilesmenu.cpp
+    addfilesmenu.cpp \
+    reportbugsmenu.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,7 +48,8 @@ HEADERS += \
     usereditlinks.h \
     usereditregistry.h \
     optionsmenu.h \
-    addfilesmenu.h
+    addfilesmenu.h \
+    reportbugsmenu.h
 
 FORMS +=
 

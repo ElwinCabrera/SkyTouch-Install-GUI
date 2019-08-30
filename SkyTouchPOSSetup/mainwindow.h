@@ -13,6 +13,7 @@
 #include "usereditlinks.h"
 #include "optionsmenu.h"
 #include "addfilesmenu.h"
+#include "reportbugsmenu.h"
 
 QT_BEGIN_NAMESPACE
 class QListWidget;
@@ -41,6 +42,7 @@ private slots:
     void modifyWindowsReg();
     void modifyDownloadLinks();
     void appOptions();
+    void reportBugsMenu();
     void aboutMenu();
     void aboutSkyTouchMenu();
 
@@ -62,6 +64,7 @@ private:
     UserEditLinks *editLink = nullptr;
     OptionsMenu *options = nullptr;
     AddFilesMenu *addFilesMenu = nullptr;
+    ReportBugsMenu *reportBugs = nullptr;
 
 
     /**********Menus and actions for menu**********/

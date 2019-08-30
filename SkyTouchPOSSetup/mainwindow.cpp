@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     editLink = new UserEditLinks(softwareTab);
     addFilesMenu = new AddFilesMenu(softwareTab);
     options = new OptionsMenu;
+    reportBugs = new ReportBugsMenu;
 
 
 
@@ -93,7 +94,7 @@ void MainWindow::createMenuActions(){
     reportBugAct = new QAction(tr("&Report Bugs"),this);
     reportBugAct->setShortcuts(QKeySequence::New);
     //reportBugAct->setStatusTip(tr("Application Options"));
-    //connect(reportBugAct, &QAction::triggered, this, &MainWindow::reportBugs);
+    connect(reportBugAct, &QAction::triggered, this, &MainWindow::reportBugsMenu);
 
     aboutAct = new QAction(tr("&About"),this);
     aboutAct->setShortcuts(QKeySequence::New);
@@ -166,6 +167,12 @@ void MainWindow::appOptions(){
 
 
     options->show();
+}
+
+void MainWindow::reportBugsMenu()
+{
+    reportBugs->show();
+
 }
 
 void MainWindow::aboutMenu()
