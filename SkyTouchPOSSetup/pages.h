@@ -16,9 +16,12 @@ public:
     SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Network *network = nullptr,QWidget *parent = 0);
     ~SoftwareDownloadPage();
     void initPage();
-    bool onInitPage () {return onMainPage;}
-    void addToList(SoftwareInfo *si){softwareList.insert(si);}
+
+    void addToList(SoftwareInfo *si);
     void removeFromList(SoftwareInfo *si);
+
+    void addToLocalFileMap(QString fileName,LocalFile *newLf);
+    void removeFromLocalFileMap(QString fileName);
 
 
 
@@ -39,6 +42,7 @@ private:
     bool downloadConfirmed;
     bool localFilesInInstallQ;
     bool onMainPage = false;
+    bool onLocalFilesPage = false;
 
     QVBoxLayout *mainLayout = nullptr;
     Network *network = nullptr;

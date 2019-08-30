@@ -57,8 +57,9 @@ class UserEditLinks : public QWidget
 {
     Q_OBJECT
 public:
-    explicit UserEditLinks(QSet<SoftwareInfo*> &softwareList, SoftwareDownloadPage *sPage = nullptr, QWidget *parent = nullptr);
+    explicit UserEditLinks(SoftwareDownloadPage *sPage = nullptr, QWidget *parent = nullptr);
     ~UserEditLinks();
+    void setCloseBtn(bool set) {closeBtnEnable = set; init();}
 
 signals:
 
@@ -68,13 +69,12 @@ private slots:
 
 
 private:
-
+    bool closeBtnEnable = true;
     void init();
     QVBoxLayout* getLinkInfoLayoutAndWidgets(SoftwareInfo *si);
 
 
     SoftwareDownloadPage *sPage = nullptr;  //do not delete
-    QSet<SoftwareInfo*> softwareList; // do not delete
 
     QVBoxLayout *mainLayout = nullptr;     // delete on exit
     QVBoxLayout *scrollAreaLayout = nullptr; // delete on exit

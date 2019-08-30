@@ -37,7 +37,8 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     tabs->setTabPosition(QTabWidget::North);
 
     editReg = new UserEditReg(configTab->getUserEntryItem(),regHan);
-    editLink = new UserEditLinks(softwareList, softwareTab);
+    editLink = new UserEditLinks(softwareTab);
+    addFilesMenu = new AddFilesMenu(softwareTab);
     options = new OptionsMenu;
 
 
@@ -61,11 +62,13 @@ MainWindow::~MainWindow()
 }
 
 
+
+
 void MainWindow::createMenuActions(){
     browseFilesAct = new QAction(tr("&Add Local Files"), this);
     browseFilesAct->setShortcuts(QKeySequence::New);
     browseFilesAct->setStatusTip(tr("Search for local files to be installed"));
-    //connect(browseFilesAct, &QAction::triggered, this, &MainWindow::browseFiles);
+    connect(browseFilesAct, &QAction::triggered, this, &MainWindow::browseFilesMenu);
 
     exitAct = new QAction(tr("&Exit"), this);
     exitAct->setShortcuts(QKeySequence::New);
@@ -123,6 +126,12 @@ void MainWindow::createMenu(){
     helpMenu->addAction(aboutSkyTouchAct);
 }
 
+void MainWindow::browseFilesMenu()
+{
+    addFilesMenu->setParent(nullptr);
+    addFilesMenu->setCloseBtn(true);
+    addFilesMenu->show();
+}
 
 void MainWindow::exitApp()
 {
@@ -133,17 +142,25 @@ void MainWindow::exitApp()
 
 void MainWindow::modifyWindowsReg()
 {
+    editReg->setParent(nullptr);
+    editReg->setCloseBtn(true);
     editReg->show();
 
 }
 
 void MainWindow::modifyDownloadLinks()
 {
+    editLink->setParent(nullptr);
+    editLink->setCloseBtn(true);
     editLink->show();
 }
 
 void MainWindow::appOptions(){
     //options->addTab(nullptr, "Settings");
+    addFilesMenu->setCloseBtn(false);
+    editLink->setCloseBtn(false);
+    editReg->setCloseBtn(false);
+    options->addTab(addFilesMenu, "Add Files");
     options->addTab(editLink, "Edit Links");
     options->addTab(editReg, "Edit Registry");
 

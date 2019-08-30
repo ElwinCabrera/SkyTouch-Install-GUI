@@ -11,6 +11,7 @@ public:
     InputRegDialog(QWidget *parent = nullptr);
     ~InputRegDialog();
 
+
     UserRegistryItem *getRegItem() {return regItem;}
     bool getSaved(){return saved;}
 
@@ -45,7 +46,7 @@ class UserEditReg : public QWidget
 public:
     explicit UserEditReg(QStandardItem *customPolicies, RegistryHandler *regHan = nullptr, QWidget *parent = nullptr);
     ~UserEditReg();
-    //QSet getUserRegItems() {return userRegSet;}
+    void setCloseBtn(bool set) {closeBtnEnable = set; init();}
 
 signals:
 
@@ -55,6 +56,7 @@ private slots:
 
 
 private:
+    bool closeBtnEnable = true;
     void init();
     void populateUserPolicyEntries(UserRegistryItem *regItem);
     QVBoxLayout* getRegInfoLayoutAndWidgets(QString key, QString valueName, QVariant data, QString desc);

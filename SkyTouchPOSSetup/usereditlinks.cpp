@@ -1,9 +1,8 @@
 #include "usereditlinks.h"
 
-UserEditLinks::UserEditLinks(QSet<SoftwareInfo*> &softwareList, SoftwareDownloadPage *sPage , QWidget *parent): QWidget(parent)
+UserEditLinks::UserEditLinks(SoftwareDownloadPage *sPage , QWidget *parent): QWidget(parent)
 {
     this->sPage = sPage;
-    this->softwareList = softwareList;
     init();
 }
 
@@ -11,6 +10,7 @@ UserEditLinks::~UserEditLinks()
 {
 
 }
+
 
 void UserEditLinks::init(){
     if(mainLayout) {
@@ -65,7 +65,7 @@ void UserEditLinks::init(){
     QPushButton *addBtn = new QPushButton(tr("Add New"));
 
     QHBoxLayout *btnLayout = new QHBoxLayout;
-    btnLayout->addWidget(closeBtn);
+    if(closeBtnEnable) btnLayout->addWidget(closeBtn);
     //btnLayout->addWidget(saveBtn);
     btnLayout->addWidget(addBtn);
 
@@ -87,12 +87,8 @@ void UserEditLinks::addLink()
         SoftwareInfo *newSoftwareLink = input->getNewLink();
 
         userSoftwreLinks.insert(newSoftwareLink);
-        softwareList.insert(newSoftwareLink);
 
-        if(sPage && sPage->onInitPage()) {
-            sPage->addToList(newSoftwareLink);
-            sPage->initPage();
-        }
+        if(sPage) sPage->addToList(newSoftwareLink);
 
         init();
 
@@ -114,12 +110,10 @@ void UserEditLinks::deleteLinkInput()
 
                   SoftwareInfo *si = it.value();
                   userSoftwreLinks.erase(userSoftwreLinks.find(si));
-                  softwareList.erase(softwareList.find(si));
 
-                  if(sPage && sPage->onInitPage()){
-                      sPage->removeFromList(si);
-                      sPage->initPage();
-                  }
+                  if(sPage) sPage->removeFromList(si);
+
+
                   delete si;
                   init();
 

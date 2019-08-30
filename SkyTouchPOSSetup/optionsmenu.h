@@ -15,6 +15,7 @@ signals:
 
 public slots:
 
+
 private:
     QTabWidget *tabs = nullptr;
 };

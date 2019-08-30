@@ -135,6 +135,7 @@ void SoftwareDownloadPage::initPage()
     setLayout(mainLayout);
 
     onMainPage = true;
+    onLocalFilesPage = false;
     connect(downloadButton, &QPushButton::clicked, this, &SoftwareDownloadPage::downloadButtonCliked);
     connect(searchForLocalButton, &QPushButton::clicked, this , &SoftwareDownloadPage::localFilesPage);
     connect(viewDownloadProgButton, &QPushButton::clicked, this, &SoftwareDownloadPage::viewDownloadProg);
@@ -143,10 +144,42 @@ void SoftwareDownloadPage::initPage()
 
 }
 
+void SoftwareDownloadPage::addToList(SoftwareInfo *si){
+    auto it = softwareList.find(si);
+
+    if(it == softwareList.end()) {
+        softwareList.insert(si);
+        if(onMainPage) initPage();
+    }
+}
+
 void SoftwareDownloadPage::removeFromList(SoftwareInfo *si){
     auto it = softwareList.find(si);
 
-    if(it != softwareList.end()) softwareList.erase(it);
+    if(it != softwareList.end()) {
+        softwareList.erase(it);
+        if(onMainPage) initPage();
+    }
+}
+
+void SoftwareDownloadPage::addToLocalFileMap(QString fileName, LocalFile *newLf) {
+    auto it = localFilesMap.find(fileName);
+
+    if(it == localFilesMap.end()) {
+        localFilesMap.insert(fileName, newLf);
+        if(onLocalFilesPage) localFilesPage();
+    }
+
+}
+
+void SoftwareDownloadPage::removeFromLocalFileMap(QString fileName)
+{
+    auto it = localFilesMap.find(fileName);
+
+    if(it != localFilesMap.end()) {
+        localFilesMap.erase(it);
+        if(onLocalFilesPage) localFilesPage();
+     }
 }
 
 
@@ -241,6 +274,7 @@ void SoftwareDownloadPage::localFilesPage(){
     setLayout(mainLayout);
 
     onMainPage = false;
+    onLocalFilesPage = true;
     connect(addToInstallListBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::addFileToInstallList);
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
@@ -369,6 +403,7 @@ void SoftwareDownloadPage::readyToInstallPage(){
     setLayout(mainLayout);
 
     onMainPage = false;
+    onLocalFilesPage = false;
     connect(startInstallsBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::startInstalls);
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 
@@ -512,6 +547,7 @@ void SoftwareDownloadPage::activeDownloadsPage(){
     setLayout(mainLayout);
 
     onMainPage = false;
+    onLocalFilesPage = false;
     connect(stopDownloadBtn, &QPushButton::clicked, this, &SoftwareDownloadPage::stopDownloads);
     connect(backButton, &QPushButton::clicked, this, &SoftwareDownloadPage::backToInitPage);
 

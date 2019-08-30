@@ -67,7 +67,7 @@ void UserEditReg::init(){
     QPushButton *addBtn = new QPushButton(tr("Add New"));
 
     QHBoxLayout *btnLayout = new QHBoxLayout;
-    btnLayout->addWidget(closeBtn);
+    if(closeBtnEnable) btnLayout->addWidget(closeBtn);
     //btnLayout->addWidget(saveBtn);
     btnLayout->addWidget(addBtn);
 

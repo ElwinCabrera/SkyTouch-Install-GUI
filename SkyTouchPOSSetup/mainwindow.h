@@ -12,6 +12,7 @@
 #include "registryhandler.h"
 #include "usereditlinks.h"
 #include "optionsmenu.h"
+#include "addfilesmenu.h"
 
 QT_BEGIN_NAMESPACE
 class QListWidget;
@@ -35,6 +36,7 @@ public:
     int testgetInt() {return 5;}
 
 private slots:
+    void browseFilesMenu();
     void exitApp();
     void modifyWindowsReg();
     void modifyDownloadLinks();
@@ -59,6 +61,7 @@ private:
     UserEditReg *editReg = nullptr;
     UserEditLinks *editLink = nullptr;
     OptionsMenu *options = nullptr;
+    AddFilesMenu *addFilesMenu = nullptr;
 
 
     /**********Menus and actions for menu**********/
