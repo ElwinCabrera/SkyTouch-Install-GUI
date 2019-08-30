@@ -2,6 +2,7 @@
 #define REPORTBUGSMENU_H
 
 #include "global.h"
+#include "SmtpClient/SmtpMime"
 
 class ReportBugsMenu : public QWidget
 {

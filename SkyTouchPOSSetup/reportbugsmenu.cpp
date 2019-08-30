@@ -31,10 +31,29 @@ void ReportBugsMenu::sendInfo()
         messageBox("Input Fields empty","");
         return;
     }
+    SmtpClient smtp("smtp.gmail.com", 465, SmtpClient::SslConnection);
+    smtp.setUser("your_email_address@gmail.com");
+    smtp.setPassword("your_password");
+
+    MimeMessage message;
+
+    message.setSender(new EmailAddress("your_email_address@gmail.com", "Your Name"));
+    message.addRecipient(new EmailAddress("recipient@host.com", "Recipient's Name"));
+    message.setSubject("Bug Report - SkyTouch");
+
+    MimeText text;
+    text.setText(bugDescInput->toPlainText());
+
+    message.addPart(&text);
+
+    smtp.connectToHost();
+    smtp.login();
+    smtp.sendMail(message);
+    smtp.quit();
 
     sent = true;
 
-    messageBox("Thank you for the input.","");
+    messageBox("Bug Report Sent","Thank you for the input.");
     this->close();
 }
 
