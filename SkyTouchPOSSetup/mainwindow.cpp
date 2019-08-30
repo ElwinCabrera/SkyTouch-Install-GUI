@@ -29,16 +29,17 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     softwareList.insert(si3);
 
     softwareTab= new SoftwareDownloadPage(softwareList,network,this);
-
     configTab = new ConfigurationPage(regHan,this);
-
-    editReg = new UserEditReg(configTab->getUserEntryItem(),regHan);
-    editLink = new UserEditLinks(softwareList, softwareTab);
 
     QTabWidget *tabs = new QTabWidget(this);
     tabs->addTab(softwareTab, "Software");
     tabs->addTab(configTab, "Configuration");
     tabs->setTabPosition(QTabWidget::North);
+
+    editReg = new UserEditReg(configTab->getUserEntryItem(),regHan);
+    editLink = new UserEditLinks(softwareList, softwareTab);
+    options = new OptionsMenu;
+
 
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -141,6 +142,15 @@ void MainWindow::modifyDownloadLinks()
     editLink->show();
 }
 
+void MainWindow::appOptions(){
+    //options->addTab(nullptr, "Settings");
+    options->addTab(editLink, "Edit Links");
+    options->addTab(editReg, "Edit Registry");
+
+
+    options->show();
+}
+
 void MainWindow::aboutMenu()
 {
     QString detailedDesc = "This application was custumized to fit the need for SkyTouch, LLC to help inprove their work productivity\nPlease email any questions or concers to elwincab0@gmail.com\n\nVersion 0.0.1";
@@ -153,4 +163,5 @@ void MainWindow::aboutSkyTouchMenu()
     messageBox("SkyTouch, LLC",detailedDesc, "About SkyTouch");
 
 }
+
 

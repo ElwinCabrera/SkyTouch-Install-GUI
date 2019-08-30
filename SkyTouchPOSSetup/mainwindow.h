@@ -11,6 +11,7 @@
 #include "usereditregistry.h"
 #include "registryhandler.h"
 #include "usereditlinks.h"
+#include "optionsmenu.h"
 
 QT_BEGIN_NAMESPACE
 class QListWidget;
@@ -37,6 +38,7 @@ private slots:
     void exitApp();
     void modifyWindowsReg();
     void modifyDownloadLinks();
+    void appOptions();
     void aboutMenu();
     void aboutSkyTouchMenu();
 
@@ -56,6 +58,7 @@ private:
 
     UserEditReg *editReg = nullptr;
     UserEditLinks *editLink = nullptr;
+    OptionsMenu *options = nullptr;
 
 
     /**********Menus and actions for menu**********/
