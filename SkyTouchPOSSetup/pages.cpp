@@ -294,7 +294,7 @@ void SoftwareDownloadPage::populateLocalFilesMap(){
     while (dirIt.hasNext()) {
         dirIt.next();
         if (QFileInfo(dirIt.filePath()).isFile()) {
-            if(QFileInfo(dirIt.filePath()).suffix() == "exe") {
+            if(QFileInfo(dirIt.filePath()).suffix() == "exe" || QFileInfo(dirIt.filePath()).suffix() == "dll" || QFileInfo(dirIt.filePath()).suffix() == "msi") {
                 hasLocalFiles = true;
 
                 qDebug()<< dirIt.filePath();
@@ -525,7 +525,7 @@ void SoftwareDownloadPage::activeDownloadsPage(){
 
                 QHBoxLayout *layout = new QHBoxLayout;
                 layout->addWidget(si->getProgressListener()->pBar);
-                //layout->addStretch(1);
+                layout->addStretch(1);
                 groupBox->setLayout(layout);
                 scrollAreaLayout->addWidget(groupBox);
             }
@@ -569,10 +569,9 @@ void SoftwareDownloadPage::startDownloads()
 {
     for(SoftwareInfo *si : softwareList){
 
-        QString fileName = "";
-        if(si->getVersionSelect64()) fileName = si->getFileName64();
-        else fileName = si->getFileName32();
-        //fileName += ".exe";
+        QString fileName = si->getSoftwareName();
+        if(si->getVersionSelect64()) fileName += "_x64";
+        fileName += ".exe";
         auto it = localFilesMap.find(fileName);
 
         if(si->getDownloadMarked() && it == localFilesMap.end()) {
