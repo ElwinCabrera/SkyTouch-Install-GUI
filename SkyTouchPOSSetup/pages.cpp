@@ -3,7 +3,6 @@
 #include "pages.h"
 
 SoftwareDownloadPage::SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Network *network, QWidget *parent) : QWidget(parent){
-    downloadConfirmed = false;
     readyToInstall = false;
     localFilesInInstallQ = false;
 
@@ -98,9 +97,11 @@ void SoftwareDownloadPage::initPage()
 
 
     QPushButton *searchForLocalButton = new QPushButton(tr("Search For Local Files"));
+    if(!hasLocalFiles) searchForLocalButton->setDisabled(true);
 
 
     viewDownloadProgButton = new QPushButton(tr("Show Downlaod Progress"));
+    if(!downloadsInProg()) viewDownloadProgButton->setDisabled(true);
 
 
 
@@ -184,10 +185,6 @@ void SoftwareDownloadPage::removeFromLocalFileMap(QString fileName)
 
 
 
-
-
-
-
 void SoftwareDownloadPage::downloadButtonCliked(){
     qDebug() <<  "startDownloadClicked";
     bool minimumOneChecked = false;
@@ -202,8 +199,8 @@ void SoftwareDownloadPage::downloadButtonCliked(){
         confirmWindow.exec();
 
         if(confirmWindow.getConfirmation()) {
-            downloadConfirmed = true;
             qDebug() << "download confirmed";
+            updateLocalFilesMap();
             activeDownloadsPage();
             startDownloads();
             stopDownloadBtn->setDisabled(false);
@@ -214,6 +211,13 @@ void SoftwareDownloadPage::downloadButtonCliked(){
     }
 }
 
+bool SoftwareDownloadPage::downloadsInProg(){
+    for(SoftwareInfo *si: softwareList) {
+        if(si->downloadInProgress()) return true;
+    }
+    return false;
+}
+
 void SoftwareDownloadPage::localFilesPage(){
 
     if(mainLayout) {
@@ -221,6 +225,7 @@ void SoftwareDownloadPage::localFilesPage(){
         clearGlobalWidgets();
     }
     mainLayout = new QVBoxLayout;
+    updateLocalFilesMap();
 
 
     QScrollArea *scrollArea = new QScrollArea;
@@ -290,6 +295,7 @@ void SoftwareDownloadPage::populateLocalFilesMap(){
         dirIt.next();
         if (QFileInfo(dirIt.filePath()).isFile()) {
             if(QFileInfo(dirIt.filePath()).suffix() == "exe") {
+                hasLocalFiles = true;
 
                 qDebug()<< dirIt.filePath();
 
@@ -304,6 +310,13 @@ void SoftwareDownloadPage::populateLocalFilesMap(){
             }
         }
     }
+}
+
+
+void SoftwareDownloadPage::updateLocalFilesMap(){
+    localFilesMap.clear();
+    hasLocalFiles = false;
+    populateLocalFilesMap();
 }
 
 void SoftwareDownloadPage::viewDownloadProg(){
@@ -416,7 +429,6 @@ void SoftwareDownloadPage::readyToInstallPage(){
 void SoftwareDownloadPage::backToInitPage(){
 
 
-    downloadConfirmed = false;
 
     for(SoftwareInfo *si: softwareList) {
         if(si->getNetworkReply() && si->downloadInProgress() )
@@ -625,6 +637,7 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
     viewDownloadProgButton = nullptr;
     readyToInstallButton = nullptr;
     stopDownloadBtn = nullptr;
+    searchForLocalButton = nullptr;
 }
 
 
@@ -798,7 +811,7 @@ void ConfigurationPage::populatePolicies(){
     recommendedPolicies->appendRow(row);
 
 
-    QStandardItem *disableCMD = new QStandardItem("Prevent access to the command prompt");
+    /*QStandardItem *disableCMD = new QStandardItem("Prevent access to the command prompt");
     QStandardItem *disableCMDRegVal = new QStandardItem(regHan->getCurrRegDataVal("DisableCMD"));
     QStandardItem *disableCMDRegKeyName = new QStandardItem("DisableCMD");
     QStandardItem *disableCMDDataType = new QStandardItem("DWORD");
@@ -813,7 +826,7 @@ void ConfigurationPage::populatePolicies(){
     row.append(disableCMDRegVal);
     row.append(disableCMDRegKeyName);
     row.append(disableCMDDataType);
-    recommendedPolicies->appendRow(row);
+    recommendedPolicies->appendRow(row);*/
 
 
 

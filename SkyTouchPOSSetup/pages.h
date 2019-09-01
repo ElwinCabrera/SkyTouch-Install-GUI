@@ -38,9 +38,9 @@ public slots:
 
 
 private:
-    bool readyToInstall;
-    bool downloadConfirmed;
-    bool localFilesInInstallQ;
+    bool readyToInstall = false;
+    bool localFilesInInstallQ = false;
+    bool hasLocalFiles = false;
     bool onMainPage = false;
     bool onLocalFilesPage = false;
 
@@ -50,6 +50,7 @@ private:
     QPushButton *viewDownloadProgButton = nullptr;
     QPushButton *readyToInstallButton = nullptr;
     QPushButton *stopDownloadBtn = nullptr;
+    QPushButton *searchForLocalButton = nullptr;
 
 
     QSet<SoftwareInfo*> softwareList;
@@ -57,12 +58,14 @@ private:
 
     void activeDownloadsPage();
     void startDownloads();
+    bool downloadsInProg();
     void stopDownloads();
     bool isDownloadInProgress();
     bool isReadyForInstall();
     void clearGlobalWidgets();
 
     void populateLocalFilesMap();
+    void updateLocalFilesMap();
 
 
 
