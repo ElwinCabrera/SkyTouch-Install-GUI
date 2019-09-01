@@ -288,8 +288,8 @@ void SoftwareDownloadPage::localFilesPage(){
 
 void SoftwareDownloadPage::populateLocalFilesMap(){
 
-    QString path = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() + "Downloads");
-    //QString path = QDir::toNativeSeparators(QDir::currentPath());
+    //QString path = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() + "Downloads");
+    QString path = QDir::toNativeSeparators(QDir::currentPath());
     QDirIterator dirIt(path,QDirIterator::Subdirectories);
     while (dirIt.hasNext()) {
         dirIt.next();
