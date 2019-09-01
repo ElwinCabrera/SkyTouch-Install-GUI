@@ -8,13 +8,17 @@
 #include <QObject>
 #include<QAction>
 
-#include <QSet>
 
+#include <QtConcurrent/QtConcurrentRun>
+#include <QFuture>
+#include <QFutureWatcher>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QAuthenticator>
 #include <QtNetwork/QNetworkProxy>
+
+#include <QSet>
 
 #include <vector>
 #include <unordered_map>
@@ -146,8 +150,38 @@ public slots:
       downloadSuccess = false; downloadInterrupt = true; downloadInProg = false; readyForInstall = false;
   }
 
+  void finishedFileIO(void){
+    qDebug() << "finished file I/O";
+  }
+
+  void fileIO(void){
+
+      if(reply == nullptr) return;
+
+      QFile *mFile = new QFile(filePath);
+      // Trying to open the file
+      if (!mFile->open(QIODevice::WriteOnly)){
+          qDebug() << "Could not open file";
+          delete mFile;
+          mFile = nullptr;
+      }
+
+      if(mFile) {
+          qDebug() << "file is open attempting to write";
+          mFile->write(reply->readAll());
+          //QByteArray arr = reply->readAll();
+          mFile->write(reply->read(reply->size()));
+          mFile->flush();
+          mFile->close();
+          qDebug() << "Finished writing to file. file closed.";
+
+      }
+      if(reply) reply->deleteLater();
+  }
+
   void finishedDownload(){
     qDebug() << "finished Downloading in software info";
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
     markedForDownlaod = false;
     downloadInProg = false;
@@ -160,46 +194,24 @@ public slots:
         pl = nullptr;
     }
 
-    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-
-    if(reply == NULL) return;
-
+    QFutureWatcher<void> futureWatcher;
+    connect(&futureWatcher, SIGNAL(finished()), this, SLOT(finishedFileIO()));
 
 
-    //QString targetFolder = QDir::homePath() + QDir::separator()+ "Downloads";
-    //QString targetFolder = QDir::currentPath();
+    QFuture<void> future = QtConcurrent::run(this, &SoftwareInfo::fileIO);
 
-    //QString fileName = softwareName;
-    //if(version64BitSelect) fileName += "_x64";
-    //fileName += ".exe";
-
-    //QString filePath = targetFolder + QDir::separator() + fileName;
-    //filePath = QDir::toNativeSeparators(filePath);
-
-    QFile *mFile = new QFile(filePath);
-    // Trying to open the file
-    if (!mFile->open(QIODevice::WriteOnly)){
-        qDebug() << "Could not open file";
-        delete mFile;
-        mFile = nullptr;
-    }
-
-    if(mFile) {
-        qDebug() << "file is open attempting to write";
-        mFile->write(reply->readAll());
-        //mFile->write(reply->read(reply->size()));
-        mFile->flush();
-        mFile->close();
-        qDebug() << "Finished writing to file. file closed.";
-
-    }
+    futureWatcher.setFuture(future);
 
 
-    if(reply) reply->deleteLater();
   }
 
 
+
+
 private:
+
+
+
   QString softwareName = "";
   QString url32BitVer = "";
   QString url64BitVer = "";
