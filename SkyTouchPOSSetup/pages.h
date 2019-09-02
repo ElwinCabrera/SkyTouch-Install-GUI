@@ -8,7 +8,7 @@
 #include "usereditregistry.h"
 #include "registryhandler.h"
 #include "global.h"
-
+#include "softwareinfo.h"
 
 class SoftwareDownloadPage : public QWidget {
     Q_OBJECT
@@ -91,7 +91,7 @@ private:
     void populatePolicies();
 
 
-    RegistryHandler *regHan;
+    RegistryHandler *regHan = nullptr;
     QMap<QString, QStandardItem*> policyNameToItemValue;
 
 

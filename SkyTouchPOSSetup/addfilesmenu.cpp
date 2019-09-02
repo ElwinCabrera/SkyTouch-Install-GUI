@@ -8,6 +8,24 @@ AddFilesMenu::AddFilesMenu(SoftwareDownloadPage *sPage , QWidget *parent) : QWid
 
 AddFilesMenu::~AddFilesMenu()
 {
+    qDebug() << "AddFilesMenu Destructor";
+
+    for(LocalFile *lf: localFilesSet){
+        if(lf) delete lf;
+    }
+    localFilesSet.clear();
+
+
+    for(auto it = btnToFile.begin(); it != btnToFile.end(); ++it){
+        if(it.key()) delete it.key();
+        if(it.value()) delete it.value();
+    }
+    btnToFile.clear();
+
+    /*if(mainLayout) delete mainLayout;
+    if(scrollAreaLayout) delete scrollAreaLayout;
+    if(scrollArea) delete scrollArea;*/
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
 
 }
 

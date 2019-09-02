@@ -8,7 +8,19 @@ UserEditLinks::UserEditLinks(SoftwareDownloadPage *sPage , QWidget *parent): QWi
 
 UserEditLinks::~UserEditLinks()
 {
+    qDebug() << "UserEditLinks Destructor";
+    for(SoftwareInfo *si: userSoftwreLinks){
+        if(si) delete si;
+    }
+    userSoftwreLinks.clear();
 
+    for(auto it = btnToLink.begin(); it != btnToLink.end(); ++it){
+        if(it.key()) delete it.key();
+        if(it.value()) delete it.value();
+    }
+    btnToLink.clear();
+
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
 }
 
 
@@ -194,7 +206,9 @@ InputLinkDialog::InputLinkDialog(QWidget *parent)
 
 InputLinkDialog::~InputLinkDialog()
 {
-
+    qDebug() << "InputLinkDialog Destructor";
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
+    //if(softwareLink) delete softwareLink;
 }
 
 void InputLinkDialog::init()

@@ -151,6 +151,11 @@ RegistryHandler::RegistryHandler(){
 
 }
 
+RegistryHandler::~RegistryHandler()
+{
+    qDebug() << "RegistryHandler Destructor";
+}
+
 QString RegistryHandler::getCurrRegDataVal(QString policyName){
 
     auto it = policyNameToKey.find(policyName);

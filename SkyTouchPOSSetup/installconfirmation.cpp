@@ -52,7 +52,7 @@ InstallConfirmation::InstallConfirmation(QSet<SoftwareInfo*> &softwareList, Netw
     buttonLayout->addWidget(buttonBox);
 
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout = new QVBoxLayout;
     mainLayout->addWidget(confirmInstallGroup);
     //mainLayout->addStretch(1000);
     mainLayout->addLayout(sizeLabelLayout);
@@ -63,6 +63,20 @@ InstallConfirmation::InstallConfirmation(QSet<SoftwareInfo*> &softwareList, Netw
     connect(buttonBox, &QDialogButtonBox::accepted, this, &InstallConfirmation::okButtonCliked);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &InstallConfirmation::cancelButtonClicked);
 
+
+}
+
+InstallConfirmation::~InstallConfirmation()
+{
+    qDebug() << "InstallConfirmation Destructor";
+
+    /*for(SoftwareInfo *si: softwareList){
+        auto it = softwareList.find(si);
+        softwareList.erase(it);
+        if(si) delete si;
+    }*/
+    //if(softwareListWidget) delete softwareListWidget;
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
 
 }
 

@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "pages.h"
-
+#include "softwareinfo.h"
 
 class InputLinkDialog: public QDialog{
     Q_OBJECT

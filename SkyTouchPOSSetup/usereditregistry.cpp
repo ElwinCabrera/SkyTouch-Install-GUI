@@ -11,7 +11,19 @@ UserEditReg::UserEditReg(QStandardItem *customPolicies, RegistryHandler *regHan,
 
 UserEditReg::~UserEditReg()
 {
+    qDebug() << "UserEditReg Destructor";
 
+    for(UserRegistryItem *uri: userRegSet){
+       if(uri) delete uri;
+    }
+    userRegSet.clear();
+
+    for(auto it = btnToItem.begin(); it != btnToItem.end(); ++it){
+        if(it.value()) delete it.value();
+    }
+    btnToItem.clear();
+
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
 }
 
 void UserEditReg::init(){
@@ -213,7 +225,7 @@ QVBoxLayout* UserEditReg::getRegInfoLayoutAndWidgets( QString key, QString value
 
 InputRegDialog::InputRegDialog(QWidget *parent)
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout = new QVBoxLayout;
     QVBoxLayout *contentsLayout = addNewRegItem();
 
 
@@ -236,7 +248,10 @@ InputRegDialog::InputRegDialog(QWidget *parent)
 
 InputRegDialog::~InputRegDialog()
 {
+    qDebug() << "InputRegDialog Destructor";
 
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
+    //if(regItem) delete regItem;
 }
 
 

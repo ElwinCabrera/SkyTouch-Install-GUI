@@ -41,6 +41,7 @@ SOURCES += \
     installconfirmation.cpp \
     registryhandler.cpp \
     global.cpp \
+    softwareinfo.cpp \
     usereditlinks.cpp \
     usereditregistry.cpp \
     optionsmenu.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     installconfirmation.h \
     global.h \
     registryhandler.h \
+    softwareinfo.h \
     usereditlinks.h \
     usereditregistry.h \
     optionsmenu.h \

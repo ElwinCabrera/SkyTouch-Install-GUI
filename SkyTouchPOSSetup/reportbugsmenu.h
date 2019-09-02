@@ -2,6 +2,7 @@
 #define REPORTBUGSMENU_H
 
 #include "global.h"
+#include "softwareinfo.h"
 #include "SmtpClient/SmtpMime"
 
 class ReportBugsMenu : public QWidget
@@ -9,6 +10,7 @@ class ReportBugsMenu : public QWidget
     Q_OBJECT
 public:
     explicit ReportBugsMenu(QWidget *parent = nullptr);
+    ~ReportBugsMenu();
     bool isSent() {return sent;}
 
 signals:

@@ -2,7 +2,7 @@
 #define OPTIONSMENU_H
 
 #include "global.h"
-
+#include "softwareinfo.h"
 class OptionsMenu : public QWidget
 {
     Q_OBJECT
@@ -17,6 +17,7 @@ public slots:
 
 
 private:
+    QVBoxLayout *mainLayout = nullptr;
     QTabWidget *tabs = nullptr;
 };
 

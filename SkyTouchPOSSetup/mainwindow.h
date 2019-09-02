@@ -8,6 +8,7 @@
 #include "pages.h"
 #include "global.h"
 #include "network.h"
+#include "softwareinfo.h"
 #include "usereditregistry.h"
 #include "registryhandler.h"
 #include "usereditlinks.h"
@@ -66,6 +67,7 @@ private:
     AddFilesMenu *addFilesMenu = nullptr;
     ReportBugsMenu *reportBugs = nullptr;
 
+    QVBoxLayout *mainLayout = nullptr;
 
     /**********Menus and actions for menu**********/
 

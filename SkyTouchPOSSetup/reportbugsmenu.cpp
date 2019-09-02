@@ -25,6 +25,13 @@ ReportBugsMenu::ReportBugsMenu(QWidget *parent) : QWidget(parent)
 
 }
 
+ReportBugsMenu::~ReportBugsMenu()
+{
+    qDebug() << "ReportBugsMenu Destructor";
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
+
+}
+
 void ReportBugsMenu::sendInfo()
 {
     if( bugDescInput->toPlainText().isEmpty()){

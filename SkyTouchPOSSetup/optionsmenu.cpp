@@ -5,7 +5,7 @@ OptionsMenu::OptionsMenu(QWidget *parent) : QWidget(parent)
     tabs = new QTabWidget;
     tabs->setTabPosition(QTabWidget::North);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout = new QVBoxLayout;
 
     QPushButton *closeBtn = new QPushButton(tr("Close"));
     QHBoxLayout *btnLayout = new QHBoxLayout;
@@ -21,7 +21,9 @@ OptionsMenu::OptionsMenu(QWidget *parent) : QWidget(parent)
 
 OptionsMenu::~OptionsMenu()
 {
-
+    qDebug() << "OptionsMenu Destructor";
+    //if(tabs) delete tabs;
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
 }
 
 void OptionsMenu::addTab(QWidget *widget, QString tabName)

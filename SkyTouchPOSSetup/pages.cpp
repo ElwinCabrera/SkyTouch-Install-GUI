@@ -16,6 +16,20 @@ SoftwareDownloadPage::SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Ne
 SoftwareDownloadPage::~SoftwareDownloadPage()
 {
 
+    qDebug() << "SoftwareDownloadPage Destructor";
+
+    /*for(SoftwareInfo *si: softwareList){
+        auto it = softwareList.find(si);
+        softwareList.erase(it);
+        if(si) delete si;
+    }*/
+
+    for(auto it = localFilesMap.begin(); it != localFilesMap.end(); ++it){
+        if(it.value()) delete it.value();
+    }
+    localFilesMap.clear();
+
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
 }
 
 void SoftwareDownloadPage::initPage()
@@ -690,6 +704,14 @@ ConfigurationPage::ConfigurationPage(RegistryHandler *regHan, QWidget *parent) :
 
 ConfigurationPage::~ConfigurationPage()
 {
+    qDebug() << "ConfigurationPage Destructor";
+    for(auto it = policyNameToItemValue.begin(); it != policyNameToItemValue.end(); ++it){
+        QStandardItem *i = it.value();
+        policyNameToItemValue.erase(it);
+        if(i) delete  i;
+    }
+    //if(regHan) delete regHan;
+    if(mainLayout) clearLayotAndWidgets(mainLayout);
 
 }
 

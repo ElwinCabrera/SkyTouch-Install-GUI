@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
 
 
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout = new QVBoxLayout;
     mainLayout->addWidget(menuBar);
     mainLayout->addWidget(tabs);
 
@@ -60,6 +60,44 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
 MainWindow::~MainWindow()
 {
     //delete ui;
+
+    qDebug() << "MainWindow Destructor";
+
+    for(SoftwareInfo *si: softwareList){
+        if(si) delete si;
+    }
+    softwareList.clear();
+    //if(menuBar) delete menuBar;
+    //if(statusBar) delete statusBar;
+
+
+   if(softwareTab) delete softwareTab;
+   if(configTab) delete configTab;
+   if(network) delete network;
+   if(regHan) delete regHan;
+
+   if(editReg) delete editReg;
+   if(editLink) delete editLink;
+   if(options) delete options;
+   if(addFilesMenu) delete addFilesMenu;
+   if(reportBugs) delete reportBugs;
+
+   if(fileMenu) delete fileMenu;
+   if(browseFilesAct) delete browseFilesAct;
+   if(exitAct) delete exitAct;
+
+   if(editMenu) delete editMenu;
+   if(linksAct) delete linksAct;
+   if(addToWinRegistryAct) delete addToWinRegistryAct;
+   if(optionsAct) delete optionsAct;
+   if(helpMenu) delete helpMenu;
+   if(reportBugAct) delete reportBugAct;
+   if(aboutAct) delete aboutAct;
+   if(aboutSkyTouchAct) delete aboutSkyTouchAct;
+
+
+   if(mainLayout) clearLayotAndWidgets(mainLayout);
+
 }
 
 

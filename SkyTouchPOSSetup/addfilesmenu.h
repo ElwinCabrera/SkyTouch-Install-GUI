@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "pages.h"
+#include "softwareinfo.h"
 
 class AddFilesMenu : public QWidget
 {

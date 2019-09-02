@@ -3,6 +3,7 @@
 
 
 #include "network.h"
+#include "softwareinfo.h"
 #include "global.h"
 
 using std::pair;
@@ -21,6 +22,7 @@ class InstallConfirmation : public QDialog
 
 public:
     InstallConfirmation(QSet<SoftwareInfo*> &softwareList, Network *network= nullptr, QWidget *parent = nullptr );
+    ~InstallConfirmation();
     uint64_t totalFileSize();
     bool getConfirmation() {return confirm; }
 
@@ -30,9 +32,10 @@ private:
     void okButtonCliked();
     void cancelButtonClicked();
 
+    QVBoxLayout *mainLayout = nullptr;
     QSet<SoftwareInfo*> softwareList;
     QListWidget *softwareListWidget;
-    Network *network;
+    Network *network = nullptr;
 
 
 };

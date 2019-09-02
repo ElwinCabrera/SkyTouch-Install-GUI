@@ -3,13 +3,14 @@
 
 
 #include "global.h"
-
+#include "softwareinfo.h"
 
 class Network : public QObject
 {
     Q_OBJECT
 public:
     Network(QWidget *parent = nullptr);
+    ~Network();
 
 
     int getFileLength();
@@ -43,9 +44,9 @@ public slots:
 
 
 private:
-    QNetworkAccessManager *manager;
-    int lastFileLength;
-    QNetworkReply *lastReply;
+    int lastFileLength ;
+    QNetworkAccessManager *manager = nullptr;
+    QNetworkReply *lastReply= nullptr;
 
 
     //vector<QProgressBar*> pBars;
