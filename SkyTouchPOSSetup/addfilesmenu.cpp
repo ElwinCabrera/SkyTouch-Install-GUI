@@ -18,7 +18,6 @@ AddFilesMenu::~AddFilesMenu()
 
     for(auto it = btnToFile.begin(); it != btnToFile.end(); ++it){
         if(it.key()) delete it.key();
-        if(it.value()) delete it.value();
     }
     btnToFile.clear();
 

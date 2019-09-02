@@ -16,6 +16,7 @@ SoftwareInfo::SoftwareInfo(QString softwareName, QString url32BitVer, QString ur
 
 SoftwareInfo::~SoftwareInfo()
 {
+    qDebug() << "SoftwareInfo Destructor";
     if(pl) delete pl;
     if(reply) delete reply;
 }

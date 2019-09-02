@@ -19,7 +19,7 @@ UserEditReg::~UserEditReg()
     userRegSet.clear();
 
     for(auto it = btnToItem.begin(); it != btnToItem.end(); ++it){
-        if(it.value()) delete it.value();
+        if(it.key()) delete it.key();
     }
     btnToItem.clear();
 

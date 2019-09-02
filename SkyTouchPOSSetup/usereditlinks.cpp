@@ -11,12 +11,13 @@ UserEditLinks::~UserEditLinks()
     qDebug() << "UserEditLinks Destructor";
     for(SoftwareInfo *si: userSoftwreLinks){
         if(si) delete si;
+        si = nullptr;
     }
     userSoftwreLinks.clear();
 
     for(auto it = btnToLink.begin(); it != btnToLink.end(); ++it){
         if(it.key()) delete it.key();
-        if(it.value()) delete it.value();
+        //if(it.value()) delete it.value();
     }
     btnToLink.clear();
 
