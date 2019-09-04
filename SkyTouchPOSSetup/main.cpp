@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("SkyTouch POS Setup");
     QCoreApplication::setApplicationVersion("0.0.1");
 
+
     MainWindow w;
     w.show();
 

@@ -23,6 +23,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+#RC_FILE = SkyTouchPOSSetup.rc
+RC_ICONS = icon2.ico
+
 SMTP_LIBRARY_LOCATION = $$PWD/../build-SMTPEmail-Desktop-Release
 
 win32:CONFIG(release, debug|release): LIBS += -L$$SMTP_LIBRARY_LOCATION/release/ -lSMTPEmail
