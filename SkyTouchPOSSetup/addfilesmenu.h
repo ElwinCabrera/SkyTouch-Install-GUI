@@ -9,7 +9,7 @@ class AddFilesMenu : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AddFilesMenu(SoftwareDownloadPage *sPage = nullptr , QWidget *parent = nullptr);
+    explicit AddFilesMenu(SoftwareDownloadPage *sPage = nullptr ,  QStatusBar *statusBar= nullptr,QWidget *parent = nullptr);
     ~AddFilesMenu();
     void setCloseBtn(bool set) {closeBtnEnable = set; init();}
 
@@ -25,6 +25,7 @@ private:
     QVBoxLayout* getLinkInfoLayoutAndWidgets(LocalFile *lf);
 
     SoftwareDownloadPage *sPage= nullptr;
+    QStatusBar *statusBar;
 
     QSet<LocalFile*> localFilesSet;
     QMap<QPushButton*, LocalFile*> btnToFile;

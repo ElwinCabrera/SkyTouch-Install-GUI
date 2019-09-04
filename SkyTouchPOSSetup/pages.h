@@ -13,7 +13,7 @@
 class SoftwareDownloadPage : public QWidget {
     Q_OBJECT
 public:
-    SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Network *network = nullptr,QWidget *parent = 0);
+    SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Network *network = nullptr, QStatusBar *statusBar = nullptr, QWidget *parent = nullptr);
     ~SoftwareDownloadPage();
     void initPage();
 
@@ -47,6 +47,8 @@ private:
     QVBoxLayout *mainLayout = nullptr;
     Network *network = nullptr;
 
+    QStatusBar *statusBar = nullptr;
+
     QPushButton *viewDownloadProgButton = nullptr;
     QPushButton *readyToInstallButton = nullptr;
     QPushButton *stopDownloadBtn = nullptr;
@@ -55,6 +57,7 @@ private:
 
     QSet<SoftwareInfo*> softwareList;
     QMap<QString,LocalFile*> localFilesMap;
+    QMap<QString,bool> localFileDeletedMap;
 
     void activeDownloadsPage();
     void startDownloads();
@@ -76,7 +79,7 @@ private:
 class ConfigurationPage : public QWidget{
     Q_OBJECT
 public:
-    ConfigurationPage(RegistryHandler *regHan = nullptr, QWidget *parent = 0);
+    ConfigurationPage(RegistryHandler *regHan = nullptr, QStatusBar *statusBar = nullptr, QWidget *parent = nullptr);
     ~ConfigurationPage();
     QStandardItem* getUserEntryItem() {return customPolicies;}
 
@@ -92,6 +95,7 @@ private:
 
 
     RegistryHandler *regHan = nullptr;
+    QStatusBar *statusBar = nullptr;
     QMap<QString, QStandardItem*> policyNameToItemValue;
 
 

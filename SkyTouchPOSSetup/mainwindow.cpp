@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
 
     menuBar = new QMenuBar;
     statusBar = new QStatusBar;
+
     createMenuActions();
     createMenu();
 
@@ -28,8 +29,8 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     SoftwareInfo *si3= new SoftwareInfo("CRE3", "http://download2.pcamerica.com/12.9/CRE_Setup.exe", "http://download2.pcamerica.com/12.9/CRE_Setup_x64.exe" );
     softwareList.insert(si3);
 
-    softwareTab= new SoftwareDownloadPage(softwareList,network,this);
-    configTab = new ConfigurationPage(regHan,this);
+    softwareTab= new SoftwareDownloadPage(softwareList,network,statusBar,this);
+    configTab = new ConfigurationPage(regHan,statusBar,this);
 
     QTabWidget *tabs = new QTabWidget(this);
     tabs->addTab(softwareTab, "Software");
@@ -52,9 +53,8 @@ MainWindow::MainWindow(QWidget *  /* parent unused */) /*: QMainWindow(parent), 
     setLayout(mainLayout);
 
     setWindowTitle(tr("SkyTouch POS Setup"));
-    statusBar->showMessage(tr("Ready"));
-
-
+    statusBar->showMessage(tr("Ready"),2000);
+    statusBar->showMessage(tr("Ready2"),1000);
 }
 
 MainWindow::~MainWindow()
@@ -65,6 +65,7 @@ MainWindow::~MainWindow()
 
     for(SoftwareInfo *si: softwareList){
         if(si) delete si;
+        si = nullptr;
     }
     softwareList.clear();
     //if(menuBar) delete menuBar;
@@ -147,7 +148,7 @@ void MainWindow::createMenuActions(){
 
 }
 void MainWindow::createMenu(){
-
+    statusBar->showMessage(tr("Creating Menu"), 1000);
     fileMenu = menuBar->addMenu(tr("&File"));
     fileMenu->addAction(browseFilesAct);
     fileMenu->addSeparator();

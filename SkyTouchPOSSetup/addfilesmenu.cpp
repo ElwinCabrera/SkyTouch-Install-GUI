@@ -1,8 +1,9 @@
 #include "addfilesmenu.h"
 
-AddFilesMenu::AddFilesMenu(SoftwareDownloadPage *sPage , QWidget *parent) : QWidget(parent)
+AddFilesMenu::AddFilesMenu(SoftwareDownloadPage *sPage, QStatusBar *statusBar,QWidget *parent) : QWidget(parent)
 {
     this->sPage = sPage;
+    this->statusBar = statusBar;
     init();
 }
 

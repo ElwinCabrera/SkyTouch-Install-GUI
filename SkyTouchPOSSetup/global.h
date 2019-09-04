@@ -36,7 +36,6 @@ using std::unordered_map;
 
 
 
-
 class LocalFile: public QObject{
 
 public:
@@ -72,7 +71,7 @@ class ProgressListenner : public QObject
     //Q_OBJECT
 public:
    ProgressListenner() : _lastKnownReceived(0), _lastKnownTotal(0){}
-   ~ProgressListenner() {if(pBar) delete pBar;}
+   //~ProgressListenner() {if(pBar) {delete pBar; pBar = nullptr;}}
 
    qint64 _lastKnownReceived;
    qint64 _lastKnownTotal;

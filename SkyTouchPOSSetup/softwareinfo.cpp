@@ -17,8 +17,15 @@ SoftwareInfo::SoftwareInfo(QString softwareName, QString url32BitVer, QString ur
 SoftwareInfo::~SoftwareInfo()
 {
     qDebug() << "SoftwareInfo Destructor";
-    if(pl) delete pl;
-    if(reply) delete reply;
+    if(pl) {
+        delete pl;
+        pl= nullptr;
+    }
+    /*if(reply && !reply->isFinished()) {
+        delete reply;
+        reply = nullptr;
+    }*/
+
 }
 
 void SoftwareInfo::debugInfo(){
@@ -57,6 +64,12 @@ void SoftwareInfo::downloadStart() {
 
 void SoftwareInfo::stopDownload() {
     if(!downloadInProg) return ;
+    if(reply) {
+        disconnect(reply, &QNetworkReply::downloadProgress, pl, &ProgressListenner::onDownloadProgress);
+        disconnect(reply,0,0,0);
+        reply->abort();
+        reply->deleteLater();
+    }
     downloadSuccess = false;
     downloadInterrupt = true;
     downloadInProg = false;
@@ -95,6 +108,7 @@ void SoftwareInfo::fileIO(){
 void SoftwareInfo::finishedDownload(){
     qDebug() << "finished Downloading in software info";
     //QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+
 
     markedForDownlaod = false;
     downloadInProg = false;

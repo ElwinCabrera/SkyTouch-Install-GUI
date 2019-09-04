@@ -2,12 +2,14 @@
 
 #include "pages.h"
 
-SoftwareDownloadPage::SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Network *network, QWidget *parent) : QWidget(parent){
+SoftwareDownloadPage::SoftwareDownloadPage(QSet<SoftwareInfo*> &softwareList, Network *network, QStatusBar *statusBar, QWidget *parent) : QWidget(parent){
+    statusBar->showMessage(tr("Seting up Software Page"),1);
     readyToInstall = false;
     localFilesInInstallQ = false;
 
     this->softwareList = softwareList;
     this->network = network;
+    this->statusBar = statusBar;
 
     populateLocalFilesMap();
     initPage();
@@ -30,6 +32,7 @@ SoftwareDownloadPage::~SoftwareDownloadPage()
     localFilesMap.clear();
 
     if(mainLayout) clearLayotAndWidgets(mainLayout);
+
 }
 
 void SoftwareDownloadPage::initPage()
@@ -155,6 +158,8 @@ void SoftwareDownloadPage::initPage()
     connect(searchForLocalButton, &QPushButton::clicked, this , &SoftwareDownloadPage::localFilesPage);
     connect(viewDownloadProgButton, &QPushButton::clicked, this, &SoftwareDownloadPage::viewDownloadProg);
     connect(readyToInstallButton, &QPushButton::clicked, this, &SoftwareDownloadPage::readyToInstallPage);
+
+    statusBar->showMessage("Ready", 1);
 
 
 }
@@ -310,11 +315,11 @@ void SoftwareDownloadPage::populateLocalFilesMap(){
         if (QFileInfo(dirIt.filePath()).isFile()) {
             if(QFileInfo(dirIt.filePath()).suffix() == "exe" || QFileInfo(dirIt.filePath()).suffix() == "dll" || QFileInfo(dirIt.filePath()).suffix() == "msi") {
                 hasLocalFiles = true;
+                statusBar->showMessage("Found '"+dirIt.fileName()+"' ",1000);
 
-                qDebug()<< dirIt.filePath();
+                qDebug() << dirIt.filePath();
 
-                QMap<QString,LocalFile*>::iterator it = localFilesMap.find(dirIt.fileName());
-
+                auto it = localFilesMap.find(dirIt.fileName());
 
                 if(it == localFilesMap.end()) {
                     LocalFile *lf = new LocalFile(dirIt.fileName(), dirIt.filePath(),false);
@@ -328,7 +333,8 @@ void SoftwareDownloadPage::populateLocalFilesMap(){
 
 
 void SoftwareDownloadPage::updateLocalFilesMap(){
-    localFilesMap.clear();
+    statusBar->showMessage(tr("Checking for existing files"),1);
+    //localFilesMap.clear();
     hasLocalFiles = false;
     populateLocalFilesMap();
 }
@@ -454,7 +460,7 @@ void SoftwareDownloadPage::backToInitPage(){
 
 void SoftwareDownloadPage::finishedDownloading(){
     qDebug() << "finished Downloading in SoftwareDownloadsPage";
-
+    statusBar->showMessage(tr("A download has finished"),1000);
 
     if(readyToInstallButton != nullptr ) {
         readyToInstallButton->setDisabled(false);
@@ -476,7 +482,7 @@ void SoftwareDownloadPage::addFileToInstallList(){
             if(lf->getReadyState()) {
                 qDebug() << lf->getFileName()<<" is ready to be installed";
                 localFilesInInstallQ = true;
-                //break;
+                statusBar->showMessage("Added '" + lf->getFileName() + "' to install queue",1000);
             }
         }
 
@@ -484,7 +490,7 @@ void SoftwareDownloadPage::addFileToInstallList(){
 }
 
 void SoftwareDownloadPage::startInstalls(){
-
+    statusBar->showMessage(tr("Started Installs"));
     for(SoftwareInfo *si: softwareList){
         if(si->getInstallMarked()) startProcess(this,si->getFilePath(), si->getSoftwareName());
 
@@ -587,6 +593,7 @@ void SoftwareDownloadPage::startDownloads()
         if(si->getVersionSelect64()) fileName += "_x64";
         fileName += ".exe";
         auto it = localFilesMap.find(fileName);
+        if(si->getDownloadMarked()) statusBar->showMessage("Started downloading '" + fileName + "'", 1000);
 
         if(si->getDownloadMarked() && it == localFilesMap.end()) {
 
@@ -624,9 +631,15 @@ void SoftwareDownloadPage::stopDownloads()
     int msgRet = messageBox("Are you sure you want to cancel ALL downloads?", "");
     if(msgRet == QMessageBox::Ok) {
 
-        for(SoftwareInfo *si: softwareList) si->stopDownload();
+        for(SoftwareInfo *si: softwareList) {
+            QString fileName = si->getFileName32();
+            if(si->getVersionSelect64()) fileName = si->getFileName64();
+            statusBar->showMessage("Stopped downloading '" + fileName + "'", 1000);
+            si->stopDownload();
+        }
 
         initPage();
+        //backToInitPage();
 
     }
 
@@ -642,8 +655,18 @@ bool SoftwareDownloadPage::isDownloadInProgress(){
 }
 
 bool SoftwareDownloadPage::isReadyForInstall(){
-    if(localFilesInInstallQ) return true;
-    for(SoftwareInfo *si: softwareList) if(si->getInstallReadyState()) return true;
+    if(localFilesInInstallQ) {
+        statusBar->showMessage(tr("Local files are ready to be installed"),3000);
+        return true;
+    }
+    for(SoftwareInfo *si: softwareList) {
+        if(si->getInstallReadyState()){
+            QString fileName = si->getFileName32();
+            if(si->getVersionSelect64()) fileName = si->getFileName64();
+            statusBar->showMessage(" '" + fileName + "' is ready to be installed",1000);
+            return true;
+        }
+    }
     return false;
 }
 
@@ -673,10 +696,11 @@ void SoftwareDownloadPage::clearGlobalWidgets(){
 
 
 
-ConfigurationPage::ConfigurationPage(RegistryHandler *regHan, QWidget *parent) : QWidget(parent){
+ConfigurationPage::ConfigurationPage(RegistryHandler *regHan,  QStatusBar *statusBar, QWidget *parent) : QWidget(parent){
 
     mainLayout = new QVBoxLayout;
     this->regHan = regHan;
+    this->statusBar = statusBar;
 
     policyTree =  new QTreeView(this);
     policyTree->setModel(new QStandardItemModel);

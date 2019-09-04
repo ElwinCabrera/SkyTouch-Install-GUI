@@ -23,13 +23,9 @@ Network::~Network()
 {
     qDebug() << "Network Destructor";
 
-    for(QNetworkReply *r: replys){
-        if(r) delete r;
-    }
     replys.clear();
 
     if(manager) delete manager;
-    if(lastReply) delete lastReply;
 
 }
 
