@@ -317,6 +317,7 @@ void SoftwareDownloadPage::populateLocalFilesMap(){
                 hasLocalFiles = true;
                 statusBar->showMessage("Found '"+dirIt.fileName()+"' ",1000);
 
+
                 qDebug() << dirIt.filePath();
 
                 auto it = localFilesMap.find(dirIt.fileName());
