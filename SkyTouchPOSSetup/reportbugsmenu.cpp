@@ -39,13 +39,13 @@ void ReportBugsMenu::sendInfo()
         return;
     }
     SmtpClient smtp("smtp.gmail.com", 465, SmtpClient::SslConnection);
-    smtp.setUser("your_email_address@gmail.com");
-    smtp.setPassword("your_password");
+    smtp.setUser("my email");
+    smtp.setPassword("my password");
 
     MimeMessage message;
 
-    message.setSender(new EmailAddress("your_email_address@gmail.com", "Your Name"));
-    message.addRecipient(new EmailAddress("recipient@host.com", "Recipient's Name"));
+    message.setSender(new EmailAddress("my email", "Elwin"));
+    message.addRecipient(new EmailAddress("their email", "Skytouch"));
     message.setSubject("Bug Report - SkyTouch");
 
     MimeText text;
@@ -67,7 +67,7 @@ void ReportBugsMenu::sendInfo()
 void ReportBugsMenu::closeThis()
 {
     if(!bugDescInput->toPlainText().isEmpty()){
-        int msgRet = messageBox("You are Currently editing, are you sure?","","Warning");
+        int msgRet = messageBox("Discard Editing?","You are currently editing, are you sure you want to discard?","Warning");
         if(msgRet == QMessageBox::Ok) this->close();
     } else {
         this->close();
