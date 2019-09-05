@@ -20,6 +20,7 @@ ReportBugsMenu::ReportBugsMenu(QWidget *parent) : QWidget(parent)
 
     setLayout(mainLayout);
 
+
     connect(buttonBox, &QDialogButtonBox::accepted, this, &ReportBugsMenu::sendInfo);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &ReportBugsMenu::closeThis);
 
