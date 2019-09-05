@@ -32,6 +32,7 @@ ReportBugsMenu::~ReportBugsMenu()
 
 }
 
+
 void ReportBugsMenu::sendInfo()
 {
     if( bugDescInput->toPlainText().isEmpty()){
