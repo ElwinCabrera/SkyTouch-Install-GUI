@@ -307,13 +307,13 @@ void SoftwareDownloadPage::localFilesPage(){
 
 void SoftwareDownloadPage::populateLocalFilesMap(){
 
-    //QString path = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() + "Downloads");
-    QString path = QDir::toNativeSeparators(QDir::currentPath());
+    QString path = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() + "Downloads");
+    //QString path = QDir::toNativeSeparators(QDir::currentPath());
     QDirIterator dirIt(path,QDirIterator::Subdirectories);
     while (dirIt.hasNext()) {
         dirIt.next();
         if (QFileInfo(dirIt.filePath()).isFile()) {
-            if(QFileInfo(dirIt.filePath()).suffix() == "exe" || QFileInfo(dirIt.filePath()).suffix() == "dll" || QFileInfo(dirIt.filePath()).suffix() == "msi") {
+            if(QFileInfo(dirIt.filePath()).suffix() == "exe" || QFileInfo(dirIt.filePath()).suffix() == "msi") {
                 hasLocalFiles = true;
                 statusBar->showMessage("Found '"+dirIt.fileName()+"' ",1000);
 

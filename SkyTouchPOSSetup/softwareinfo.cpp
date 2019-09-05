@@ -9,8 +9,8 @@ SoftwareInfo::SoftwareInfo(QString softwareName, QString url32BitVer, QString ur
     fileName64 = softwareName + "_x64.exe";
     fileName32 = softwareName + ".exe";
 
-    //filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() + fileName64);
-    filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName64);
+    filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() + fileName64);
+    //filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName64);
 
 }
 
@@ -47,11 +47,11 @@ void SoftwareInfo::onVersionSelect() {
     version32BitSelect = !version32BitSelect;
     version64BitSelect = !version64BitSelect;
 
-    //if(version32BitSelect) filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() +fileName32);
-    //if(version64BitSelect) filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() +fileName64);
+    if(version32BitSelect) filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() +fileName32);
+    if(version64BitSelect) filePath = QDir::toNativeSeparators(QDir::homePath() + QDir::separator() +"Downloads" + QDir::separator() +fileName64);
 
-    if(version32BitSelect) filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName32);
-    if(version64BitSelect) filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName64);
+    //if(version32BitSelect) filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName32);
+    //if(version64BitSelect) filePath = QDir::toNativeSeparators(QDir::currentPath() + QDir::separator() + fileName64);
 }
 
 void SoftwareInfo::downloadStart() {
@@ -66,7 +66,7 @@ void SoftwareInfo::stopDownload() {
     if(!downloadInProg) return ;
     if(reply) {
         disconnect(reply, &QNetworkReply::downloadProgress, pl, &ProgressListenner::onDownloadProgress);
-        disconnect(reply,0,0,0);
+        disconnect(reply,nullptr,nullptr,nullptr);
         reply->abort();
         reply->deleteLater();
     }

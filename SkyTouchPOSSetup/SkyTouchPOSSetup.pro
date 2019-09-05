@@ -26,10 +26,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 RC_ICONS = icon2.ico
 
 SMTP_LIBRARY_LOCATION = $$PWD/../build-SMTPEmail-Desktop-Release
-
-win32:CONFIG(release, debug|release): LIBS += -L$$SMTP_LIBRARY_LOCATION/release/ -lSMTPEmail
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$SMTP_LIBRARY_LOCATION/debug/ -lSMTPEmail
-else:unix: LIBS += -L$$SMTP_LIBRARY_LOCATION -lSMTPEmail
+LIBS += -L$$SMTP_LIBRARY_LOCATION/release/ -lSMTPEmail
+#win32:CONFIG(release, debug|release): LIBS += -L$$SMTP_LIBRARY_LOCATION/release/ -lSMTPEmail
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$SMTP_LIBRARY_LOCATION/debug/ -lSMTPEmail
+#else:unix: LIBS += -L$$SMTP_LIBRARY_LOCATION -lSMTPEmail
 
 INCLUDEPATH += $$SMTP_LIBRARY_LOCATION
 DEPENDPATH += $$SMTP_LIBRARY_LOCATION
